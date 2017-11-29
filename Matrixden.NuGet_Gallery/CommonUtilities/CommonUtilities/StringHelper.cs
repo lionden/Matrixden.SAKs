@@ -15,49 +15,23 @@ namespace Clouds.XunmallPos.Utils
     public static class StringHelper
     {
         /// <summary>
-        /// 检查字符串在字符类型和长度上是否满足要求
+        /// 检测一个字符串是否是Null或空或White Space.
         /// </summary>
-        /// <param name="strText">输入的字符串</param>
-        /// <param name="strExpression">正则表达式字符串</param>
-        /// <returns><c>true</c>If pass. Else<c>false.</c></returns>
-        public static bool CheckVaildInput(string strText, string strExpression)
+        /// <param name="source">待检测字符串</param>
+        /// <returns>如果是Null或空或White Space, 则返回<c>true</c>, 否则返回<c>fals</c>.</returns>
+        public static bool IsNullOrEmptyOrWhiteSpace(this string source)
         {
-            if (string.IsNullOrWhiteSpace(strText))
-            {
-                return false;
-            }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(strExpression))
-                {
-                    Regex regex = new Regex(strExpression, RegexOptions.IgnoreCase);
-                    MatchCollection matchSet = regex.Matches(strText);
-                    if (!(matchSet == null || matchSet.Count <= 0))
-                    {
-                        foreach (Match match in matchSet)
-                        {
-                            if (match.Value != strText)
-                            {
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
-            }
+            return string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source);
+        }
 
-            return false;
+        /// <summary>
+        /// 检测一个字符串既不是Null，也不是空和White Space.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static bool IsNotNullNorEmptyNorWhitespace(this string source)
+        {
+            return !source.IsNullOrEmptyOrWhiteSpace();
         }
 
         /// <summary>
@@ -65,26 +39,44 @@ namespace Clouds.XunmallPos.Utils
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmptyOrWhiteSpace(params string[] args)
+        public static bool ExistNullOrEmptyOrWhiteSpace(params string[] args)
         {
             if (args == null)
             {
                 return false;
             }
 
-            bool flag = false;
-            foreach (string arg in args)
-            {
-                if (IsNullOrEmptyOrWhiteSpace(arg))
-                {
-                    flag = true;
+            return args.Any(a => a.IsNullOrEmptyOrWhiteSpace());
+        }
 
-                    break;
-                }
+        /// <summary>
+        /// 检测多个字符串是否彼此相等,将null默认为不相等
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">当参数个数小于两个时</exception>
+        public static bool AreEquals(params string[] args)
+        {
+            if (args == null)
+            {
+                return false;
             }
 
-            return flag;
+            if (args.Length < 2)
+            {
+                throw new ArgumentException("参数个数至少为2.");
+            }
+
+            string specialValue = args[0];
+
+            return IsEqualWithSpecificValue(specialValue, args);
         }
+
+
+
+
+
+
 
         public static bool TryDecodeFromBase64(string encodedData, out string oriVal)
         {
@@ -138,43 +130,6 @@ namespace Clouds.XunmallPos.Utils
             string result = value.PadLeft(stringLength, '0');
 
             return result;
-        }
-
-        /// <summary>
-        /// 检测多个字符串是否彼此相等,将null默认为不相等
-        /// </summary>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static bool IsEqualWithEachOther(params string[] args)
-        {
-            if (args == null)
-            {
-                return false;
-            }
-
-            if (args.Length < 2)
-            {
-                throw new ArgumentException("参数个数至少为2.");
-            }
-
-            string specialValue = args[0];
-
-            return IsEqualWithSpecificValue(specialValue, args);
-        }
-
-        /// <summary>
-        /// 检测一个字符串是否是Null或空或White Space.
-        /// </summary>
-        /// <param name="value">待检测字符串</param>
-        /// <returns>如果是Null或空或White Space, 则返回<c>true</c>, 否则返回<c>fals</c>.</returns>
-        public static bool IsNullOrEmptyOrWhiteSpace(this string source)
-        {
-            return string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source);
-        }
-
-        public static bool IsNotNullNorEmptyNorWhitespace(this string source)
-        {
-            return !source.IsNullOrEmptyOrWhiteSpace();
         }
 
         /// <summary>
