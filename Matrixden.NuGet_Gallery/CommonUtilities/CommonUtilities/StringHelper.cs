@@ -1,34 +1,19 @@
 ﻿/*
  * StringHelper 是包含String处理方法的集合。
+ * 会吞掉所有异常, 返回默认值(或指定值)而代之.
  */
 namespace Clouds.XunmallPos.Utils
 {
-    using Clouds.XunmallPos.ErpBS.Resources;
-    using log4net;
     using Microsoft.International.Converters.PinYinConverter;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
 
     public static class StringHelper
     {
-        /// <summary>
-        /// 检查字符串中是否包含非法字符。
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="InvaildString"></param>
-        /// <returns></returns>
-        public static bool CheckInvaildCharacter(string input, string[] InvaildString)
-        {
-            throw new NotImplementedException();
-            //TODO:
-        }
-
         /// <summary>
         /// 检查字符串在字符类型和长度上是否满足要求
         /// </summary>
@@ -485,26 +470,6 @@ namespace Clouds.XunmallPos.Utils
             return rg.IsMatch(source);
         }
 
-        public static bool IsGUID(this string source)
-        {
-            if (source == null)
-            {
-                return false;
-            }
-
-            Guid result = new Guid();
-
-            return Guid.TryParse(source, out result);
-        }
-
-        public static Guid ToGuid(this string source)
-        {
-            Guid result;
-            if (!Guid.TryParse(source, out result))
-                result = default(Guid);
-            return result;
-        }
-
         public static bool MatchAll(this string source, params string[] pattern)
         {
             if (source == null)
@@ -525,66 +490,6 @@ namespace Clouds.XunmallPos.Utils
                 return true;
 
             return pattern.Any(p => Regex.IsMatch(source, p));
-        }
-
-        #region -- Safe Convert --
-
-        /// <summary>
-        /// Safe Convert a string value to an Int32 value.
-        /// </summary>
-        /// <param name="val">The string to be converted.</param>
-        /// <param name="defaultVal">The default value should be reutrned if error occured.</param>
-        /// <returns></returns>
-        public static int ToInt32(this string val, int defaultVal = default(int))
-        {
-            int r = 0;
-            if (int.TryParse(val, out r))
-                return r;
-            else
-                return defaultVal;
-        }
-
-        /// <summary>
-        /// Safe Convert a string value to a Decimal value.
-        /// </summary>
-        /// <param name="val">The string to be converted.</param>
-        /// <param name="defaultVal">The default value should be reutrned if error occured.</param>
-        /// <returns></returns>
-        public static decimal ToDecimal(this string val, decimal defaultVal = default(decimal))
-        {
-            decimal r = 0;
-            if (decimal.TryParse(val, out r))
-                return r;
-            else
-                return defaultVal;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="val"></param>
-        /// <param name="defaultVal"></param>
-        /// <returns></returns>
-        public static T ToT<T>(this string val, T defaultVal = default(T))
-        {
-            try
-            {
-                var converter = TypeDescriptor.GetConverter(typeof(T));
-                if (converter != null)
-                    return (T)converter.ConvertFrom(val);
-            }
-            catch { }
-
-            return defaultVal;
-        }
-
-        public static DateTime ToDateTime(this string val)
-        {
-            DateTime r = new DateTime();
-            DateTime.TryParse(val, out r);
-
-            return r;
         }
 
         public static string CaseWhen(this string ori, string defaultVal, params Tuple<string, string>[] keyVal)

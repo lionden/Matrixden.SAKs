@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿/**
+ * 
+ */
 
 namespace Clouds.XunmallPos.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class RSACryptoService
     {
         private RSACryptoServiceProvider _privateKeyRsaProvider;
@@ -32,6 +36,7 @@ namespace Clouds.XunmallPos.Utils
             {
                 throw new Exception("_privateKeyRsaProvider is null");
             }
+
             return Encoding.UTF8.GetString(_privateKeyRsaProvider.Decrypt(System.Convert.FromBase64String(cipherText), false));
         }
 
@@ -41,13 +46,13 @@ namespace Clouds.XunmallPos.Utils
             {
                 throw new Exception("_publicKeyRsaProvider is null");
             }
+
             return Convert.ToBase64String(_publicKeyRsaProvider.Encrypt(Encoding.UTF8.GetBytes(text), false));
         }
 
         private RSACryptoServiceProvider CreateRsaProviderFromPrivateKey(string privateKey)
         {
             var privateKeyBits = System.Convert.FromBase64String(privateKey);
-
             var RSA = new RSACryptoServiceProvider();
             var RSAparams = new RSAParameters();
 
@@ -115,6 +120,7 @@ namespace Clouds.XunmallPos.Utils
             {
                 count -= 1;
             }
+
             binr.BaseStream.Seek(-1, SeekOrigin.Current);
             return count;
         }
@@ -209,7 +215,6 @@ namespace Clouds.XunmallPos.Utils
 
                     return RSA;
                 }
-
             }
         }
 
