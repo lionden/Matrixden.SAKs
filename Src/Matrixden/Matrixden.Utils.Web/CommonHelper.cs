@@ -8,7 +8,6 @@
 
     public partial class CommonHelper
     {
-        private static List<KeyValuePair<string, string>> _paramList;
         private static readonly ILog log = LogProvider.GetCurrentClassLogger();
 
         /// <summary>

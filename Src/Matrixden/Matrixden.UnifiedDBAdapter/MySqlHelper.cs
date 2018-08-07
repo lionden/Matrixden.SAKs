@@ -433,7 +433,8 @@
         /// 执行sql command, 返回受影响函数.
         /// </summary>
         /// <param name="connectionString"></param>
-        /// <param name="cmd"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
         /// <returns></returns>
         public int InsertGetAffectedRows(string connectionString, string sql, List<DbParameter> parameters)
         {

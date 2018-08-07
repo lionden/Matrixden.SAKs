@@ -16,7 +16,14 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public enum DatabaseTypes
         {
-            MSSql, MySql
+            /// <summary>
+            /// Microsoft SQL Server
+            /// </summary>
+            MSSql,
+            /// <summary>
+            /// MySQL
+            /// </summary>
+            MySql
         }
 
         private DatabaseTypes databaseType;
@@ -25,9 +32,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         private string connectionString;
 
-        public DBHelper(string connectionString)
-            : this(DatabaseTypes.MSSql, connectionString)
-        { }
+        public DBHelper(string connectionString) : this(DatabaseTypes.MSSql, connectionString) { }
 
         public DBHelper(DatabaseTypes type, string connectionString)
         {
@@ -53,7 +58,7 @@ namespace Matrixden.UnifiedDBAdapter
             set { connectionString = value; }
         }
 
-        private IDBHelper dbHelper
+        private IDBHelper _DBHelper
         {
             get
             {
@@ -171,14 +176,13 @@ namespace Matrixden.UnifiedDBAdapter
         /// <summary>
         /// 执行 Transact-SQL 语句(带参数), 并返回受影响的行数。
         /// </summary>
-        /// <typeparam name="T">泛型实体</typeparam>
         /// <param name="connectionString">数据库连接串</param>
         /// <param name="sql">sql命令, 带参数</param>
-        /// <param name="t">实体</param>
+        /// <param name="param">实体</param>
         /// <returns>受影响的行数</returns>
         public int ExecuteNonQuery(string connectionString, string sql, object param = null)
         {
-            return dbHelper.ExecuteNonQuery(connectionString, sql, param);
+            return _DBHelper.ExecuteNonQuery(connectionString, sql, param);
         }
 
         /// <summary>
@@ -186,7 +190,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public int ExecuteNonQuery(CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteNonQuery(connectionString, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteNonQuery(connectionString, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -194,7 +198,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public int ExecuteNonQuery(int iTimeOut, CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteNonQuery(connectionString, iTimeOut, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteNonQuery(connectionString, iTimeOut, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -202,7 +206,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public int ExecuteNonQuery(DbTransaction trans, CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteNonQuery(trans, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteNonQuery(trans, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -213,7 +217,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// <returns>受影响的行数。</returns>
         public int ExecuteNonQuery(string cmdText, List<DbParameter> parameters)
         {
-            return dbHelper.ExecuteNonQuery(connectionString, cmdText, parameters);
+            return _DBHelper.ExecuteNonQuery(connectionString, cmdText, parameters);
         }
 
         /// <summary>
@@ -226,7 +230,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// <returns></returns>
         public int ExecuteNonQuery(string connectionString, CommandType cmdType, IEnumerable<string> cmdTexts, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteNonQuery(connectionString, cmdType, cmdTexts, cmdParms);
+            return _DBHelper.ExecuteNonQuery(connectionString, cmdType, cmdTexts, cmdParms);
         }
         /// <summary>
         /// 在事务中执行 Transact-SQL 语句并返回受影响的行数。
@@ -238,14 +242,14 @@ namespace Matrixden.UnifiedDBAdapter
         ///    /// <returns></returns>
         public int ExecuteNonQueryNew(string connectionString, CommandType cmdType, IEnumerable<string> cmdTexts, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteNonQueryNew(connectionString, cmdType, cmdTexts, cmdParms);
+            return _DBHelper.ExecuteNonQueryNew(connectionString, cmdType, cmdTexts, cmdParms);
         }
         /// <summary>
         /// 在事务中执行查询，返回DataSet
         /// </summary>
         public DataSet ExecuteQuery(DbTransaction trans, CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteQuery(trans, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteQuery(trans, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -253,7 +257,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public DataSet ExecuteQuery(CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteQuery(connectionString, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteQuery(connectionString, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -261,7 +265,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public DbDataReader ExecuteReader(DbTransaction trans, CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteReader(trans, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteReader(trans, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -269,7 +273,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public DbDataReader ExecuteReader(CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteReader(connectionString, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteReader(connectionString, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -277,7 +281,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public object ExecuteScalar(DbTransaction trans, CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteScalar(trans, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteScalar(trans, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -285,7 +289,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         public object ExecuteScalar(CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
         {
-            return dbHelper.ExecuteScalar(connectionString, cmdType, cmdText, cmdParms);
+            return _DBHelper.ExecuteScalar(connectionString, cmdType, cmdText, cmdParms);
         }
 
         /// <summary>
@@ -293,31 +297,31 @@ namespace Matrixden.UnifiedDBAdapter
         /// 该接口是为了获取每个用户在执行某段Insert代码时自身生成的自动增长的ID值，
         /// 防止因大量并发导致ID值获取错误，引起数据外键值错误
         /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="pSql"></param>
         /// <param name="tblName">表名</param>
         /// <returns>最新生成的ID值</returns>
         public int InsertGetLastId(string connectionString, string pSql, string tblName)
         {
-            return dbHelper.InsertGetLastId(connectionString, pSql, tblName);
+            return _DBHelper.InsertGetLastId(connectionString, pSql, tblName);
         }
 
         /// <summary>
         /// 执行sql command, 返回受影响的行数.
         /// 使用sql parameter传参, 防止sql注入.
         /// </summary>
-        /// <param name="connectionString">连接字符串</param>
-        /// <param name="cmd"></param>
+        /// <param name="sql">连接字符串</param>
+        /// <param name="parameters"></param>
         /// <returns></returns>
         public int InsertGetAffectedRows(string sql, List<DbParameter> parameters)
         {
-            return dbHelper.InsertGetAffectedRows(connectionString, sql, parameters);
+            return _DBHelper.InsertGetAffectedRows(connectionString, sql, parameters);
         }
 
         /// <summary>
         /// 分页获取数据
         /// </summary>
-        /// <param name="connectionString">连接字符串</param>
         /// <param name="tblName">表名</param>
-        /// <param name="fldName">字段名</param>
         /// <param name="pageSize">页大小</param>
         /// <param name="pageIndex">第几页</param>
         /// <param name="fldSort">排序字段</param>
@@ -325,7 +329,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// <param name="condition">条件(不需要where)</param>
         public DbDataReader GetPageList(string tblName, int pageSize, int pageIndex, string fldSort, bool sort, string condition)
         {
-            return dbHelper.GetPageList(connectionString, tblName, pageSize, pageIndex, fldSort, sort, condition);
+            return _DBHelper.GetPageList(connectionString, tblName, pageSize, pageIndex, fldSort, sort, condition);
         }
 
         /// <summary>
@@ -336,7 +340,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// <returns>数据条数</returns>
         public int GetCount(string tblName, string condition)
         {
-            return dbHelper.GetCount(connectionString, tblName, condition);
+            return _DBHelper.GetCount(connectionString, tblName, condition);
         }
 
         #endregion
@@ -349,7 +353,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// <returns></returns>
         public IEnumerable<dynamic> Query(string sql, object param = null)
         {
-            return dbHelper.Query(connectionString, sql, param);
+            return _DBHelper.Query(connectionString, sql, param);
         }
     }
 }

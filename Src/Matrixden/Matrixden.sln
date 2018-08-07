@@ -17,6 +17,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Security", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Web", "Matrixden.Utils.Web\Matrixden.Utils.Web.csproj", "{A323C69E-24D9-4C54-A860-958E357EB237}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.RedisSessionProvider", "Matrixden.RedisSessionProvider\Matrixden.RedisSessionProvider.csproj", "{E928CD91-C475-4314-A061-57A2F919ADE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.UnifiedDBAdapter", "Matrixden.UnifiedDBAdapter\Matrixden.UnifiedDBAdapter.csproj", "{015E7FAD-38EE-49F4-82FF-9F6B9AFA5AF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.DBUtilities", "Matrixden.DBUtilities\Matrixden.DBUtilities.csproj", "{03731E72-947F-4BC5-B22A-561641B46DB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.DBUtilities.Attributes", "Matrixden.DBUtilities.Attributes\Matrixden.DBUtilities.Attributes.csproj", "{40D9CB53-48E7-4616-991F-D988EA1D9A39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +59,22 @@ Global
 		{A323C69E-24D9-4C54-A860-958E357EB237}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A323C69E-24D9-4C54-A860-958E357EB237}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A323C69E-24D9-4C54-A860-958E357EB237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E928CD91-C475-4314-A061-57A2F919ADE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E928CD91-C475-4314-A061-57A2F919ADE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E928CD91-C475-4314-A061-57A2F919ADE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E928CD91-C475-4314-A061-57A2F919ADE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{015E7FAD-38EE-49F4-82FF-9F6B9AFA5AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{015E7FAD-38EE-49F4-82FF-9F6B9AFA5AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{015E7FAD-38EE-49F4-82FF-9F6B9AFA5AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{015E7FAD-38EE-49F4-82FF-9F6B9AFA5AF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03731E72-947F-4BC5-B22A-561641B46DB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03731E72-947F-4BC5-B22A-561641B46DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03731E72-947F-4BC5-B22A-561641B46DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03731E72-947F-4BC5-B22A-561641B46DB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40D9CB53-48E7-4616-991F-D988EA1D9A39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40D9CB53-48E7-4616-991F-D988EA1D9A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40D9CB53-48E7-4616-991F-D988EA1D9A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40D9CB53-48E7-4616-991F-D988EA1D9A39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

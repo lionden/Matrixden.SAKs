@@ -27,7 +27,7 @@ namespace Matrixden.UnifiedDBAdapter
         /// <summary>
         /// 获取分页SQL
         /// </summary>
-        /// <param name="strCondition">条件</param>
+        /// <param name="condition">条件</param>
         /// <param name="pageSize">每页显示条数</param>
         /// <param name="pageIndex">第几页</param>
         /// <param name="fldSort">排序字段（最后一个不需要填写正序还是倒序，例如：id asc, name）</param>
@@ -69,7 +69,6 @@ namespace Matrixden.UnifiedDBAdapter
         /// </summary>
         /// <param name="connectionString">连接字符串</param>
         /// <param name="tblName">表名</param>
-        /// <param name="fldName">字段名</param>
         /// <param name="pageSize">页大小</param>
         /// <param name="pageIndex">第几页</param>
         /// <param name="fldSort">排序字段</param>
@@ -98,10 +97,9 @@ namespace Matrixden.UnifiedDBAdapter
         /// <summary>
         /// 执行 Transact-SQL 语句(带参数), 并返回受影响的行数。
         /// </summary>
-        /// <typeparam name="T">泛型实体</typeparam>
         /// <param name="connectionString">数据库连接串</param>
         /// <param name="sql">sql命令, 带参数</param>
-        /// <param name="t">实体</param>
+        /// <param name="param">实体</param>
         /// <returns>受影响的行数</returns>
         public int ExecuteNonQuery(string connectionString, string sql, object param)
         {
@@ -393,7 +391,8 @@ namespace Matrixden.UnifiedDBAdapter
         /// 执行sql command, 返回受影响函数.
         /// </summary>
         /// <param name="connectionString"></param>
-        /// <param name="cmd"></param>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
         /// <returns></returns>
         public int InsertGetAffectedRows(string connectionString, string sql, List<DbParameter> parameters)
         {

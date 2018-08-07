@@ -19,10 +19,9 @@
         /// <summary>
         /// 执行 Transact-SQL 语句(带参数), 并返回受影响的行数。
         /// </summary>
-        /// <typeparam name="T">泛型实体</typeparam>
         /// <param name="connectionString">数据库连接串</param>
         /// <param name="sql">sql命令, 带参数</param>
-        /// <param name="t">实体</param>
+        /// <param name="param">实体</param>
         /// <returns>受影响的行数</returns>
         int ExecuteNonQuery(string connectionString, string sql, object param);
 
@@ -104,7 +103,6 @@
         /// </summary>
         /// <param name="connectionString">连接字符串</param>
         /// <param name="tblName">表名</param>
-        /// <param name="fldName">字段名</param>
         /// <param name="pageSize">页大小</param>
         /// <param name="pageIndex">第几页</param>
         /// <param name="fldSort">排序字段</param>
@@ -115,6 +113,7 @@
         /// <summary>
         /// 得到数据条数
         /// </summary>
+        /// <param name="connectionString"></param>
         /// <param name="tblName">表名</param>
         /// <param name="condition">条件(不需要where)</param>
         /// <returns>数据条数</returns>
@@ -127,6 +126,7 @@
         /// 防止因大量并发导致ID值获取错误，引起数据外键值错误
         /// </summary>
         /// <param name="connectionString">连接字符串</param>
+        /// <param name="pSql"></param>
         /// <param name="tblName">表名</param>
         /// <returns>最新生成的ID值</returns>
         int InsertGetLastId(string connectionString, string pSql, string tblName);
