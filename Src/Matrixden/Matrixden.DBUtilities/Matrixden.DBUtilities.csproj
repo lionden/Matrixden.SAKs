@@ -76,7 +76,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Matrixden.DBUtilities.Attributes\Matrixden.DBUtilities.Attributes.csproj">
       <Project>{40d9cb53-48e7-4616-991f-d988ea1d9a39}</Project>
-      <Name>Xunmall.Core.DBUtilities.Attributes</Name>
+      <Name>Matrixden.DBUtilities.Attributes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Matrixden.UnifiedDBAdapter\Matrixden.UnifiedDBAdapter.csproj">
       <Project>{015e7fad-38ee-49f4-82ff-9f6b9afa5af4}</Project>
