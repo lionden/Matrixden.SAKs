@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Clouds.Xunmall.Core.Utils.Models
+namespace Matrixden.Utils.Web.Models
 {
     public class ApiResult
     {

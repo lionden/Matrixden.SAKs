@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Xunmall.Core.Utils.Redis")]
+[assembly: AssemblyTitle("Matrixden.Utils.Redis")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 
