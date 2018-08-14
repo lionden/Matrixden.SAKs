@@ -151,11 +151,7 @@ namespace Matrixden.Utils.Web
 
             try
             {
-                HttpClientHandler httpClientHandler = new HttpClientHandler()
-                {
-                    UseCookies = true,
-                    CookieContainer = cookies
-                };
+                HttpClientHandler httpClientHandler = new HttpClientHandler();
                 using (var client = new HttpClient(httpClientHandler))
                 {
                     if (timeout != default(TimeSpan))
