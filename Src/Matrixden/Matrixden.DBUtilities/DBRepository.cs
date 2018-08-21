@@ -124,7 +124,7 @@ namespace Matrixden.DBUtilities
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
         /// <returns>返回的数据记录对象数组</returns>
-        public abstract IEnumerable<T> GetByCondition<T>(string strTableName, string strColumns = null, string strCondition = null, string strOrder = null) where T : class ,new();
+        public abstract IEnumerable<T> GetByCondition<T>(string strTableName, string strColumns = null, string strCondition = null, string strOrder = null) where T : class, new();
 
         /// <summary>
         /// 根据条件保存实体, 如果存在则更新, 否则插入.
@@ -171,7 +171,7 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T"></typeparam>
         /// <param name="table">实体对应的表名</param>
         /// <returns></returns>
-        public abstract string GenerateInsertSQLWithParameters<T>(string table) where T : class,new();
+        public abstract string GenerateInsertSQLWithParameters<T>(string table) where T : class, new();
 
         /// <summary>
         /// 根据实体生成Update SQL语句, 使用参数方式赋值.
@@ -179,16 +179,16 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T"></typeparam>
         /// <param name="table">实体对应的表名</param>
         /// <returns></returns>
-        public abstract string GenerateUpdateSQLWithParameters<T>(string table, string condition, T t) where T : class,new();
+        public abstract string GenerateUpdateSQLWithParameters<T>(string table, string condition, T t) where T : class, new();
 
         /// <summary>
         /// 根据实体生成Insert or Update SQL语句, 使用参数方式赋值.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public abstract string GenerateInsertOrUpdateSQLWithParameters<T>() where T : class,new();
+        public abstract string GenerateInsertOrUpdateSQLWithParameters<T>() where T : class, new();
 
-        public IEnumerable<T> GetBySqLCommand<T>(string sqlCommand) where T : class,new()
+        public IEnumerable<T> GetBySqLCommand<T>(string sqlCommand) where T : class, new()
         {
             try
             {
@@ -339,12 +339,12 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T">泛型，要插入的数据对象的类型</typeparam>
         /// <param name="item">要插入的数据对象</param>
         /// <returns>是否执行成功</returns>
-        public bool Add<T>(T item) where T : class, new()
+        public OperationResult Add<T>(T item) where T : class, new()
         {
             return Do<T>(tbn =>
             {
                 return Add<T>(tbn, item);
-            }).Result;
+            });
         }
 
         /// <summary>
@@ -354,7 +354,7 @@ namespace Matrixden.DBUtilities
         /// <param name="tableName">表名</param>
         /// <param name="items">实体值</param>
         /// <returns></returns>
-        public OperationResult AddBulk<T>(string tableName, IEnumerable<T> items) where T : class,new()
+        public OperationResult AddBulk<T>(string tableName, IEnumerable<T> items) where T : class, new()
         {
             var result = new OperationResult(DBOperationMessage.Fail);
             if (tableName.IsNullOrEmptyOrWhiteSpace() || items == null || items.Count() <= 0)
@@ -391,6 +391,21 @@ namespace Matrixden.DBUtilities
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 同时向数据库中添加多条数据.
+        /// </summary>
+        /// <typeparam name="T">泛型</typeparam>
+        /// <param name="tableName">表名</param>
+        /// <param name="items">实体值</param>
+        /// <returns></returns>
+        public OperationResult AddBulk<T>(IEnumerable<T> items) where T : class, new()
+        {
+            return Do<T>(tbn =>
+            {
+                return AddBulk<T>(tbn, items);
+            });
         }
 
         /// <summary>
@@ -1014,6 +1029,12 @@ namespace Matrixden.DBUtilities
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <returns></returns>
         protected bool Do<T>(Func<string, bool> func)
         {
             return Do<T>(tbn =>
@@ -1022,6 +1043,12 @@ namespace Matrixden.DBUtilities
             }).Result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <returns></returns>
         protected string Do<T>(Func<string, string> func)
         {
             return Do<T>(tbn =>
