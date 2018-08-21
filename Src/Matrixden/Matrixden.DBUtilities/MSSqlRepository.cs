@@ -9,6 +9,7 @@ namespace Matrixden.DBUtilities
     using Matrixden.UnifiedDBAdapter;
     using Matrixden.Utils;
     using Matrixden.Utils.Extensions;
+    using Matrixden.Utils.Models;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -49,49 +50,47 @@ namespace Matrixden.DBUtilities
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
         /// <returns>返回的数据记录对象数组</returns>
-        public override IEnumerable<T> GetByCondition<T>(string strTableName, string strColumns = null, string strCondition = null, string strOrder = null)
+        public override OperationResult GetByCondition<T>(string strColumns = null, string strCondition = null, string strOrder = null)
         {
-            var strSql = string.Empty;
-            try
+            return Do<T>(tbn =>
             {
-                if (strTableName.IsNullOrEmptyOrWhiteSpace())
+                var sbSql = new StringBuilder();
+                try
                 {
-                    return default(IEnumerable<T>);
-                }
+                    if (tbn.IsNullOrEmptyOrWhiteSpace())
+                        return new OperationResult(false);
 
-                if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
-                {
-                    StringBuilder sb = new StringBuilder(" ");
-                    foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
+                    if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
                     {
-                        sb.AppendFormat("{0},", property.Name);// property.Name + ",";    //添加属性列名称
+                        StringBuilder sb = new StringBuilder(" ");
+                        foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
+                        {
+                            sb.AppendFormat("{0},", property.Name);// property.Name + ",";    //添加属性列名称
+                        }
+
+                        strColumns = sb.Remove(sb.Length - 1, 1).ToString();
+                    }
+                    else
+                    {
+                        //TODO: check all the columns exist or not
                     }
 
-                    strColumns = sb.Remove(sb.Length - 1, 1).ToString();
+                    sbSql.AppendFormat("SELECT {0} FROM {1} WHERE (CASE COL_LENGTH('{1}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{2}' ", strColumns, tbn, DBColumn_StatusCode.DB_ROW_STATUS_DELETED);
+                    if (strCondition.IsNotNullNorEmptyNorWhitespace())
+                        sbSql.AppendFormat(" AND {0}", strCondition); //添加查询条件
+
+                    if (strOrder.IsNotNullNorEmptyNorWhitespace())
+                        sbSql.AppendFormat(" ORDER BY {0}", strOrder);
+
+                    return new OperationResult(GetBySqLCommand<T>(sbSql.ToString()));
                 }
-                else
+                catch (Exception ex)
                 {
-                    //TODO: check all the columns exist or not
+                    log.ErrorException("SQL Command: {0}.", ex, sbSql);
                 }
 
-                strSql = string.Format("SELECT {0} FROM {1} WHERE (CASE COL_LENGTH('{1}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{2}' ", strColumns, strTableName, DBColumn_StatusCode.DB_ROW_STATUS_DELETED);
-                if (strCondition.IsNotNullNorEmptyNorWhitespace())
-                {
-                    strSql += " AND " + strCondition; //添加查询条件
-                }
-                if (strOrder.IsNotNullNorEmptyNorWhitespace())
-                {
-                    strSql += " ORDER BY " + strOrder;
-                }
-
-                return GetBySqLCommand<T>(strSql);
-            }
-            catch (Exception ex)
-            {
-                log.ErrorException("SQL Command: {0}.", ex, strSql);
-            }
-
-            return default(IEnumerable<T>);
+                return new OperationResult(false);
+            });
         }
 
         /// <summary>
@@ -180,7 +179,7 @@ namespace Matrixden.DBUtilities
         /// </summary>
         /// <param name="table"></param>
         /// <param name="originalCount"></param>
-        /// <param name="originalLatestUpdateTime"></param>
+        /// <param name="originalLatestUpdateFlag"></param>
         /// <param name="conditionStr"></param>
         /// <returns></returns>
         public override bool IsTableDataChanged(string table, int originalCount, object originalLatestUpdateFlag, string conditionStr)
@@ -216,6 +215,8 @@ namespace Matrixden.DBUtilities
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="table">实体对应的表名</param>
+        /// <param name="condition"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
         public override string GenerateUpdateSQLWithParameters<T>(string table, string condition, T t)
         {

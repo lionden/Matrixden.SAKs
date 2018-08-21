@@ -119,12 +119,11 @@ namespace Matrixden.DBUtilities
         /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
         /// </summary>
         /// <typeparam name="T">泛型，返回的指定数据对象类型</typeparam>
-        /// <param name="strTableName">要查询的表名</param>
         /// <param name="strColumns">所选列(SQL语句)，如“[属性列1],[属性列2],……[属性列n]” (如果给空值或者null 等价于 *)</param>
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
         /// <returns>返回的数据记录对象数组</returns>
-        public abstract IEnumerable<T> GetByCondition<T>(string strTableName, string strColumns = null, string strCondition = null, string strOrder = null) where T : class, new();
+        public abstract OperationResult GetByCondition<T>(string strColumns = null, string strCondition = null, string strOrder = null) where T : class, new();
 
         /// <summary>
         /// 根据条件保存实体, 如果存在则更新, 否则插入.
@@ -397,7 +396,6 @@ namespace Matrixden.DBUtilities
         /// 同时向数据库中添加多条数据.
         /// </summary>
         /// <typeparam name="T">泛型</typeparam>
-        /// <param name="tableName">表名</param>
         /// <param name="items">实体值</param>
         /// <returns></returns>
         public OperationResult AddBulk<T>(IEnumerable<T> items) where T : class, new()
@@ -990,11 +988,11 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// 根据实体, 获取表名
+        /// 根据实体获取表名, 执行后续操作.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="succ"></param>
-        /// <param name="err"></param>
+        /// <param name="succ">解析成功时的函数</param>
+        /// <param name="err">解析表名失败时执行函数</param>
         /// <returns></returns>
         protected OperationResult Do<T>(Func<string, OperationResult> succ, Func<Exception, OperationResult> err)
         {
@@ -1015,10 +1013,10 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// 根据实体, 获取表名
+        /// 根据实体获取表名, 执行后续操作.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="func"></param>
+        /// <param name="func">解析成功时的函数</param>
         /// <returns></returns>
         protected OperationResult Do<T>(Func<string, OperationResult> func)
         {
@@ -1030,7 +1028,7 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// 
+        /// 根据实体获取表名, 执行后续操作. 返回<c>bool</c>类型结果.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="func"></param>
@@ -1044,7 +1042,7 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// 
+        /// 根据实体获取表名, 执行后续操作. 返回<c>string</c>类型操作信息.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="func"></param>
