@@ -155,6 +155,19 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
+        /// 更新一条数据记录
+        /// </summary>
+        /// <typeparam name="T">泛型，要更新的数据对象的类型</typeparam>
+        /// <param name="strTableName">表名</param>
+        /// <param name="item">要更新的数据对象</param>
+        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
+        /// <returns>是否执行成功</returns>
+        public override OperationResult Update<T>(string strSets, string strCondition)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// 根据特定条件查询表中是否含有该条数据.
         /// </summary>
         /// <param name="strDataTable"></param>

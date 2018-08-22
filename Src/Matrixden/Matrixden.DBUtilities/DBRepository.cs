@@ -143,6 +143,14 @@ namespace Matrixden.DBUtilities
         public abstract bool Update(string strTableName, string strSets, string strCondition);
 
         /// <summary>
+        /// 更新数据记录
+        /// </summary>
+        /// <param name="strSets">要更新的属性值(SQL语句)，如“[属性列1]=[值1], [属性列2]=[值2], ……[属性列n]=[值n]”. 无需包含[UpdateTime]字段.</param>
+        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
+        /// <returns></returns>
+        public abstract OperationResult Update<T>(string strSets, string strCondition);
+
+        /// <summary>
         /// 根据特定条件查询表中是否含有该条数据.
         /// </summary>
         /// <param name="strDataTable"></param>
@@ -994,7 +1002,7 @@ namespace Matrixden.DBUtilities
         /// <param name="succ">解析成功时的函数</param>
         /// <param name="err">解析表名失败时执行函数</param>
         /// <returns></returns>
-        protected OperationResult Do<T>(Func<string, OperationResult> succ, Func<Exception, OperationResult> err)
+        protected OperationResult DecodeTableName<T>(Func<string, OperationResult> succ, Func<Exception, OperationResult> err)
         {
             var tbn = string.Empty;
             var cas = typeof(T).GetCustomAttributes<TableAttribute>(false);
@@ -1020,7 +1028,7 @@ namespace Matrixden.DBUtilities
         /// <returns></returns>
         protected OperationResult Do<T>(Func<string, OperationResult> func)
         {
-            return Do<T>(func, ex =>
+            return DecodeTableName<T>(func, ex =>
             {
                 log.ErrorException("Error during get table name.", ex);
                 return new OperationResult(false);

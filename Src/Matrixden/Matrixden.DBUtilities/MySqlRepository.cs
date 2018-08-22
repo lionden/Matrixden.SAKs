@@ -144,6 +144,20 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
+        /// 更新数据记录
+        /// </summary>
+        /// <param name="strSets">要更新的属性值(SQL语句)，如“[属性列1]=[值1], [属性列2]=[值2], ……[属性列n]=[值n]”. 无需包含[UpdateTime]字段.</param>
+        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
+        /// <returns></returns>
+        public override OperationResult Update<T>(string strSets, string strCondition)
+        {
+            return Do<T>(tbn =>
+            {
+                return new OperationResult(Update(tbn, strSets, strCondition));
+            });
+        }
+
+        /// <summary>
         /// 根据特定条件查询表中是否含有该条数据.
         /// </summary>
         /// <param name="strDataTable"></param>
