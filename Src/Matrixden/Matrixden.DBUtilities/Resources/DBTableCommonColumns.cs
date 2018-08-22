@@ -23,4 +23,22 @@ namespace Matrixden.DBUtilities.Resources
         public const string Status = "Status";
         public const string Remark = "Remark";
     }
+
+    /// <summary>
+    /// 数据库表通用字段枚举
+    /// </summary>
+    public enum DBTableCommonColumnsEnum
+    {
+        ID,
+        Id,
+        id,
+        CreateMan,
+        CreateTime,
+        UpdateMan,
+        UpdateTime,
+        DeleteMan,
+        DeleteTime,
+        Status,
+        Remark
+    }
 }
