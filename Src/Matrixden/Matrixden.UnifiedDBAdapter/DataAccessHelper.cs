@@ -153,6 +153,12 @@
             return dataSet.Tables[0];
         }
 
+        /// <summary>
+        /// 根据指定条件, 获取数据行数.
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public int GetCount(string tableName, string condition)
         {
             return DataBaseHelper.GetCount(tableName, condition);

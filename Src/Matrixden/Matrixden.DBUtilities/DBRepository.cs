@@ -26,7 +26,6 @@
 
 namespace Matrixden.DBUtilities
 {
-    using Matrixden.DBUtilities;
     using Matrixden.DBUtilities.Attributes;
     using Matrixden.DBUtilities.Logging;
     using Matrixden.DBUtilities.Resources;
@@ -202,6 +201,12 @@ namespace Matrixden.DBUtilities
         /// <returns></returns>
         public abstract string GenerateInsertOrUpdateSQLWithParameters<T>() where T : class, new();
 
+        /// <summary>
+        /// 执行SQL语句, 返回数据集
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sqlCommand"></param>
+        /// <returns></returns>
         public IEnumerable<T> GetBySqLCommand<T>(string sqlCommand) where T : class, new()
         {
             try
@@ -218,6 +223,11 @@ namespace Matrixden.DBUtilities
             return default(IEnumerable<T>);
         }
 
+        /// <summary>
+        /// 通过Sql语句，返回记录，返回格式string[]一维数据
+        /// </summary>
+        /// <param name="sqlCommand"></param>
+        /// <returns></returns>
         public string[] GetArrayBySqlCommand(string sqlCommand)
         {
             try
@@ -233,6 +243,11 @@ namespace Matrixden.DBUtilities
             return default(string[]);
         }
 
+        /// <summary>
+        /// 执行SQL, 返回第一行第一列数据结果
+        /// </summary>
+        /// <param name="sqlCommand"></param>
+        /// <returns></returns>
         public string ExecuteSqlReturnString(string sqlCommand)
         {
             try
@@ -542,6 +557,42 @@ namespace Matrixden.DBUtilities
             }).Result;
         }
 
+        /// <summary>
+        /// 依据给定条件, 按格式拼接语句, 获取数据集行数. SQL拼接格式: SELECT COUNT(<c>countColumn</c>) FROM <c>table</c> WHERE <c>condition</c>;
+        /// </summary>
+        /// <param name="countColumn">计数列</param>
+        /// <param name="table">给定表, 可以是多表关联</param>
+        /// <param name="condition">给定条件</param>
+        /// <returns></returns>
+        public int Count(string countColumn, string table, string condition)
+        {
+            if (StringHelper.IsNullOrEmptyOrWhiteSpace(countColumn, table, condition))
+            {
+                log.DebugFormat("给定值存在空.\r\ncountColumn:{0};\r\ntable:{1};\r\ncondition:{2}.", countColumn, table, condition);
+
+                return 0;
+            }
+
+            return ExecuteSqlReturnString($"SELECT COUNT({countColumn}) FROM {table} WHERE {condition};").ToInt32();
+        }
+
+        /// <summary>
+        /// 根据指定条件, 获取数据集行数
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public int Count<T>(string condition)
+        {
+            return Do<T, int>(tbn =>
+             {
+                 return Count("*", tbn, condition);
+             });
+        }
+
+        /// <summary>
+        /// 检测数据库连接是否正常
+        /// </summary>
         public void TryTestDBConnection()
         {
             DataAccess.GetDataSet("SHOW TABLES");
@@ -552,7 +603,7 @@ namespace Matrixden.DBUtilities
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
-        /// <param name="item"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
         public string GenerateInsertSQLFromObject<T>(string strTableName, T t) where T : class, new()
         {
@@ -809,8 +860,7 @@ namespace Matrixden.DBUtilities
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
-        /// <param name="item"></param>
-        /// <param name="strCondition"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
         public Tuple<string, List<DbParameter>> GenerateUpdateSQLWithParametersFromObject<T>(string strTableName, T t) where T : class, new()
         {
@@ -1068,6 +1118,21 @@ namespace Matrixden.DBUtilities
             {
                 return new OperationResult(func(tbn));
             }).Message;
+        }
+
+        /// <summary>
+        /// 根据实体获取表名, 执行后续操作.
+        /// </summary>
+        /// <typeparam name="U"></typeparam>
+        /// <typeparam name="K"></typeparam>
+        /// <param name="func">解析成功时的函数</param>
+        /// <returns></returns>
+        protected K Do<U, K>(Func<string, K> func)
+        {
+            return (K)Do<U>(tbn =>
+            {
+                return new OperationResult(func(tbn));
+            }).Data;
         }
     }
 }
