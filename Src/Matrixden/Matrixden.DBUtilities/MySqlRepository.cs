@@ -175,6 +175,22 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
+        /// 根据特定条件查询表中是否含有该条数据.
+        /// </summary>
+        /// <param name="strCondition">数据库查询条件, 不含where关键字</param>
+        /// <returns></returns>
+        public override bool IsDataRowExist<T>(string strCondition)
+        {
+            if (strCondition.IsNullOrEmptyOrWhiteSpace())
+                return false;
+
+            return Do<T>(tbn =>
+            {
+                return IsDataRowExist(tbn, strCondition);
+            });
+        }
+
+        /// <summary>
         /// 此方法仅用于逻辑删除的数据库表, 即仅有增, 改, 查操作权限的表.
         /// 对带有物理删除的数据库表, 不适用.
         /// 如果在校验过程中, 发生UnExpected结果, 直接返回True.
