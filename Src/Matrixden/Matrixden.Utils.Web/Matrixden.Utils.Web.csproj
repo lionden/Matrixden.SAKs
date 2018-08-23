@@ -92,6 +92,10 @@
       <Project>{16899ad5-222b-4e7b-8cf6-38ebc4e3f7d2}</Project>
       <Name>Matrixden.Utils.Serialization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Matrixden.Utils\Matrixden.Utils.csproj">
+      <Project>{3fbe0a85-b0b8-49d1-b077-5340a2fc02d7}</Project>
+      <Name>Matrixden.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
