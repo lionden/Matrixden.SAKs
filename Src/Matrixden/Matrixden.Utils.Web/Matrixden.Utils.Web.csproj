@@ -46,6 +46,7 @@
     <Compile Include="RedisSessionProvider.cs" />
     <Compile Include="Resources\Constants.cs" />
     <Compile Include="UnifiedRequestHelper.cs" />
+    <Compile Include="UnifiedResponseHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
