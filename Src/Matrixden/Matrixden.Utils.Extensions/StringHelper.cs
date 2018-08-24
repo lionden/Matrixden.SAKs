@@ -12,6 +12,9 @@ using System.Web;
 
 namespace Matrixden.Utils.Extensions
 {
+    /// <summary>
+    /// <c>string</c>扩展方法.
+    /// </summary>
     public static class StringHelper
     {
         private static readonly ILog log = LogProvider.GetCurrentClassLogger();

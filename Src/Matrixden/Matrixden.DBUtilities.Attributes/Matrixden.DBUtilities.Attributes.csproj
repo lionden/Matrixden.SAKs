@@ -49,6 +49,12 @@
     <Compile Include="SqlSerializableAttribute.cs" />
     <Compile Include="TableAttribute.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj">
+      <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
+      <Name>Matrixden.Utils.Extensions</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
