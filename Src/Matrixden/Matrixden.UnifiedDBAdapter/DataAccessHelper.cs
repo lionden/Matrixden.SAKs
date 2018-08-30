@@ -127,6 +127,12 @@
             return dataSet;
         }
 
+        /// <summary>
+        /// 通过执行Sql语句返回DataSet数据集
+        /// </summary>
+        /// <param name="sql">SQL语句</param>
+        /// <param name="trans"></param>
+        /// <returns></returns>
         public DataSet GetDataSet(string sql, DbTransaction trans)
         {
             DataSet dataSet = null;
