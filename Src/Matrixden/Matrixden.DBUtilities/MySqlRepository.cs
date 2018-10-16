@@ -54,7 +54,8 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition, string strOrder)
+        public override OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition,
+            string strOrder)
         {
             var sbSql = new StringBuilder();
             try
@@ -295,22 +296,18 @@ namespace Matrixden.DBUtilities
                         GenerateDatatableColumnsFromEntityWithFilter<T>(
                                 SerializationFlags.IgnoreOnUpdate | SerializationFlags.Ignore)
                             .Select(p => string.Format("`{0}`=@{0}", p.Name));
-                    if (strIC == null || strIC.Count() <= 0 || strUC == null || strUC.Count() <= 0)
+                    if (!strIC.Any() || !strUC.Any())
                         return strSql;
 
-                    strSql = string.Format(@"
-INSERT INTO `{0}` (`{1}`) VALUES(@{2})
+                    strSql = $@"
+INSERT INTO `{tbn}` (`{string.Join("`,`", strIC)}`) VALUES(@{string.Join(",@", strIC)})
 ON DUPLICATE KEY
-UPDATE {3}",
-                        tbn,
-                        string.Join("`,`", strIC),
-                        string.Join(",@", strIC),
-                        string.Join(",", strUC));
+UPDATE {string.Join(",", strUC)}";
                     log.Debug(strSql);
                 }
                 catch (Exception ex)
                 {
-                    log.ErrorFormat("Failed to generate insert or update sql script from object. For more: {0}.", ex);
+                    log.ErrorException("Failed to generate insert or update sql script from object.", ex);
                 }
 
                 return strSql;
