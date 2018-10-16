@@ -370,10 +370,7 @@ namespace Matrixden.DBUtilities
         /// <returns>是否执行成功</returns>
         public OperationResult Add<T>(T item) where T : class, new()
         {
-            return Do<T>(tbn =>
-            {
-                return Add<T>(tbn, item);
-            });
+            return Do<T>(tbn => Add<T>(tbn, item));
         }
 
         /// <summary>
@@ -430,10 +427,7 @@ namespace Matrixden.DBUtilities
         /// <returns></returns>
         public OperationResult AddBulk<T>(IEnumerable<T> items) where T : class, new()
         {
-            return Do<T>(tbn =>
-            {
-                return AddBulk<T>(tbn, items);
-            });
+            return Do<T>(tbn => AddBulk<T>(tbn, items));
         }
 
         /// <summary>
@@ -545,16 +539,12 @@ namespace Matrixden.DBUtilities
         /// 更新一条数据记录
         /// </summary>
         /// <typeparam name="T">泛型，要更新的数据对象的类型</typeparam>
-        /// <param name="strTableName">表名</param>
         /// <param name="item">要更新的数据对象</param>
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <returns>是否执行成功</returns>
         public bool Update<T>(T item, string strCondition) where T : class, new()
         {
-            return Do<T>(tbn =>
-            {
-                return Update<T>(tbn, item, strCondition);
-            }).Result;
+            return Do<T>(tbn => Update<T>(tbn, item, strCondition)).Result;
         }
 
         /// <summary>
@@ -584,10 +574,7 @@ namespace Matrixden.DBUtilities
         /// <returns></returns>
         public int Count<T>(string condition)
         {
-            return Do<T, int>(tbn =>
-             {
-                 return Count("*", tbn, condition);
-             });
+            return Do<T, int>(tbn => Count("*", tbn, condition));
         }
 
         /// <summary>
@@ -695,7 +682,7 @@ namespace Matrixden.DBUtilities
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
-        /// <param name="item"></param>
+        /// <param name="t"></param>
         /// <param name="strCondition"></param>
         /// <returns></returns>
         public string GenerateUpdateSQLFromObject<T>(string strTableName, T t, string strCondition) where T : class, new()
@@ -1061,9 +1048,9 @@ namespace Matrixden.DBUtilities
         /// <returns></returns>
         protected OperationResult DecodeTableName<T>(Func<string, OperationResult> succ, Func<Exception, OperationResult> err)
         {
-            var tbn = string.Empty;
+            string tbn;
             var cas = typeof(T).GetCustomAttributes<TableAttribute>(false);
-            if (cas.Count() <= 0)
+            if (!cas.Any())
                 tbn = typeof(T).Name;
             else if (cas.Count() == 1)
             {
