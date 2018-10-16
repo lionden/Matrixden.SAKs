@@ -41,56 +41,52 @@ namespace Matrixden.DBUtilities
             }
         }
 
-        /// <summary>
-        /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
-        /// </summary>
-        /// <typeparam name="T">泛型，返回的指定数据对象类型</typeparam>
-        /// <param name="strTableName">要查询的表名</param>
-        /// <param name="strColumns">所选列(SQL语句)，如“[属性列1],[属性列2],……[属性列n]” (如果给空值或者null 等价于 *)</param>
-        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
-        /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
-        /// <returns>返回的数据记录对象数组</returns>
-        public override OperationResult GetByCondition<T>(string strColumns = null, string strCondition = null, string strOrder = null)
+
+        /// <inheritdoc />
+        public override OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition, string strOrder)
         {
-            return Do<T>(tbn =>
+            var sbSql = new StringBuilder();
+            try
             {
-                var sbSql = new StringBuilder();
-                try
+                if (strTableName.IsNullOrEmptyOrWhiteSpace())
+                    return new OperationResult(false);
+
+                if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
                 {
-                    if (tbn.IsNullOrEmptyOrWhiteSpace())
-                        return new OperationResult(false);
-
-                    if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
+                    StringBuilder sb = new StringBuilder(" ");
+                    foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
                     {
-                        StringBuilder sb = new StringBuilder(" ");
-                        foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
-                        {
-                            sb.AppendFormat("{0},", property.Name);// property.Name + ",";    //添加属性列名称
-                        }
-
-                        strColumns = sb.Remove(sb.Length - 1, 1).ToString();
-                    }
-                    else
-                    {
-                        //TODO: check all the columns exist or not
+                        sb.AppendFormat("{0},", property.Name);// property.Name + ",";    //添加属性列名称
                     }
 
-                    sbSql.AppendFormat("SELECT {0} FROM {1} WHERE (CASE COL_LENGTH('{1}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{2}' ", strColumns, tbn, DBColumn_StatusCode.DB_ROW_STATUS_DELETED);
-                    if (strCondition.IsNotNullNorEmptyNorWhitespace())
-                        sbSql.AppendFormat(" AND {0}", strCondition); //添加查询条件
-
-                    if (strOrder.IsNotNullNorEmptyNorWhitespace())
-                        sbSql.AppendFormat(" ORDER BY {0}", strOrder);
-
-                    return new OperationResult(GetBySqLCommand<T>(sbSql.ToString()));
+                    strColumns = sb.Remove(sb.Length - 1, 1).ToString();
                 }
-                catch (Exception ex)
+                else
                 {
-                    log.ErrorException("SQL Command: {0}.", ex, sbSql);
+                    //TODO: check all the columns exist or not
                 }
 
-                return new OperationResult(false);
-            });
+                sbSql.AppendFormat("SELECT {0} FROM {1} WHERE (CASE COL_LENGTH('{1}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{2}' ", strColumns, strTableName, DBColumn_StatusCode.DB_ROW_STATUS_DELETED);
+                if (strCondition.IsNotNullNorEmptyNorWhitespace())
+                    sbSql.AppendFormat(" AND {0}", strCondition); //添加查询条件
+
+                if (strOrder.IsNotNullNorEmptyNorWhitespace())
+                    sbSql.AppendFormat(" ORDER BY {0}", strOrder);
+
+                return new OperationResult(GetBySqLCommand<T>(sbSql.ToString()));
+            }
+            catch (Exception ex)
+            {
+                log.ErrorException("SQL Command: {0}.", ex, sbSql);
+            }
+
+            return new OperationResult(false);
+        }
+
+        /// <inheritdoc />
+        public override OperationResult GetByCondition<T>(string strColumns, string strCondition, string strOrder)
+        {
+            return Do<T>(tbn => GetByCondition<T>(tbn, strColumns, strCondition, strOrder));
         }
 
         /// <summary>
