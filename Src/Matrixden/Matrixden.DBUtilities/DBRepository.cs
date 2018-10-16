@@ -118,11 +118,24 @@ namespace Matrixden.DBUtilities
         /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
         /// </summary>
         /// <typeparam name="T">泛型，返回的指定数据对象类型</typeparam>
+        /// <param name="strTableName">要查询的表名</param>
         /// <param name="strColumns">所选列(SQL语句)，如“[属性列1],[属性列2],……[属性列n]” (如果给空值或者null 等价于 *)</param>
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
         /// <returns>返回的数据记录对象数组</returns>
-        public abstract OperationResult GetByCondition<T>(string strColumns = null, string strCondition = null, string strOrder = null) where T : class, new();
+        public abstract OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition,
+            string strOrder) where T : class, new();
+
+        /// <summary>
+        /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
+        /// </summary>
+        /// <typeparam name="T">泛型，返回的指定数据对象类型</typeparam>
+        /// <param name="strColumns">所选列(SQL语句)，如“[属性列1],[属性列2],……[属性列n]” (如果给空值或者null 等价于 *)</param>
+        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
+        /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
+        /// <returns>返回的数据记录对象数组</returns>
+        public abstract OperationResult GetByCondition<T>(string strColumns, string strCondition, string strOrder)
+            where T : class, new();
 
         /// <summary>
         /// 根据条件保存实体, 如果存在则更新, 否则插入.
@@ -1043,10 +1056,10 @@ namespace Matrixden.DBUtilities
         /// 根据实体获取表名, 执行后续操作.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="succ">解析成功时的函数</param>
+        /// <param name="suc">解析成功时的函数</param>
         /// <param name="err">解析表名失败时执行函数</param>
         /// <returns></returns>
-        protected OperationResult DecodeTableName<T>(Func<string, OperationResult> succ, Func<Exception, OperationResult> err)
+        protected OperationResult DecodeTableName<T>(Func<string, OperationResult> suc, Func<Exception, OperationResult> err)
         {
             string tbn;
             var cas = typeof(T).GetCustomAttributes<TableAttribute>(false);
@@ -1061,7 +1074,7 @@ namespace Matrixden.DBUtilities
             else
                 return err(new Exception("Multiple table attributes found."));
 
-            return succ(tbn);
+            return suc(tbn);
         }
 
         /// <summary>
