@@ -13,7 +13,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public static class JsonHelper
+    public class JsonHelper
     {
         private static readonly ILog log = LogProvider.GetCurrentClassLogger();
         private static readonly IsoDateTimeConverter datetimeConverter = new IsoDateTimeConverter();
