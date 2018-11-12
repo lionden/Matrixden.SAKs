@@ -21,9 +21,9 @@ namespace Matrixden.Utils.Web
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static HttpResponseMessage ResponseJsonMessage(Object obj)
+        public static HttpResponseMessage ResponseJsonMessage(object obj)
         {
-            string str = JsonHelper.Serialize(obj);
+            var str = JsonHelper.Serialize(obj);
 
             return Response(str, Encoding.GetEncoding("UTF-8"), Constants.MIME_TYPE_JSON);
         }
@@ -36,7 +36,8 @@ namespace Matrixden.Utils.Web
         /// <returns></returns>
         public static HttpResponseMessage ResponseJsonpMessage(string parseResponse, Object obj)
         {
-            string str = string.Format(parseResponse.IsNullOrEmptyOrWhiteSpace() ? "{1}" : "{0}({1})", parseResponse, JsonHelper.Serialize(obj));
+            var str = string.Format(parseResponse.IsNullOrEmptyOrWhiteSpace() ? "{1}" : "{0}({1})", parseResponse,
+                JsonHelper.Serialize(obj));
 
             return Response(str, Encoding.GetEncoding("UTF-8"), Constants.MIME_TYPE_JSON);
         }
@@ -47,21 +48,22 @@ namespace Matrixden.Utils.Web
         /// <param name="obj"></param>
         /// <param name="responsePrefix">JSON串前缀, 默认: "var return_api_data = ".</param>
         /// <returns></returns>
-        public static HttpResponseMessage ResponseJsonMessage_WithPrefix(Object obj, string responsePrefix = "var return_api_data = ")
+        public static HttpResponseMessage ResponseJsonMessage_WithPrefix(Object obj,
+            string responsePrefix = "var return_api_data = ")
         {
-            string str = responsePrefix + JsonHelper.Serialize(obj);
+            var str = responsePrefix + JsonHelper.Serialize(obj);
 
             return Response(str, Encoding.GetEncoding("UTF-8"), Constants.MIME_TYPE_JSON);
         }
 
-        private static HttpResponseMessage Response(string strContent, Encoding encoding, string mime_type)
+        private static HttpResponseMessage Response(string strContent, Encoding encoding, string mimeType)
         {
             if (strContent.IsNullOrEmptyOrWhiteSpace())
                 return new HttpResponseMessage(HttpStatusCode.NoContent);
 
             return new HttpResponseMessage
             {
-                Content = new StringContent(strContent, encoding, mime_type)
+                Content = new StringContent(strContent, encoding, mimeType)
             };
         }
     }

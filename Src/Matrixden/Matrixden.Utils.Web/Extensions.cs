@@ -1,17 +1,22 @@
-﻿using System.IO;
-using System.Web.SessionState;
-using Matrixden.Utils.Extensions;
+﻿using Matrixden.Utils.Extensions;
 using Matrixden.Utils.Serialization;
+using Matrixden.Utils.Web.Logging;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Web;
+using System.Web.SessionState;
 
 namespace Matrixden.Utils.Web
 {
-    using System;
-    using System.Linq;
-    using System.Text;
-    using System.Web;
-
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Extensions
     {
+        private static readonly ILog log = LogProvider.GetCurrentClassLogger();
+
         #region  -- HttpCookie --
 
         /// <summary>
@@ -63,6 +68,46 @@ namespace Matrixden.Utils.Web
             return str.UrlEncode(true);
         }
 
+        #region -- HttpResponseMessage 
+
+        /// <summary>
+        /// 将HttpResponseMessage body内容转字符串输出
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static string Text(this HttpResponseMessage response)
+        {
+            if (HttpStatusCode.NoContent.Equals(response.StatusCode))
+            {
+                log.WarnFormat("There is no response content in request uri:\r\n{0}.",
+                    response.RequestMessage.RequestUri);
+
+                return string.Empty;
+            }
+
+            string result = null;
+            try
+            {
+                result = response.Content.ReadAsByteArrayAsync().Result.ToString2();
+                log.DebugFormat("Request uri=[{0}],\r\nResponse content=[{1}].", response.RequestMessage.RequestUri,
+                    result);
+            }
+            catch (NullReferenceException nrEx)
+            {
+                log.ErrorException("内部错误, 接口返回数据为NULL.", nrEx);
+            }
+            catch (Exception ex)
+            {
+                log.FatalException("Unknown exception.", ex);
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region -- HttpSessionState 
+
         /// <summary>
         /// 将给定key-value值, 存入session中.
         /// </summary>
@@ -88,7 +133,11 @@ namespace Matrixden.Utils.Web
         /// <returns></returns>
         public static T Pop<T>(this HttpSessionState @this, string key) where T : class, new()
         {
-            return key.IsNullOrEmptyOrWhiteSpace() ? default(T) : JsonHelper.Deserialize<T>((byte[])HttpContext.Current.Session[key]);
+            return key.IsNullOrEmptyOrWhiteSpace()
+                ? default(T)
+                : JsonHelper.Deserialize<T>((byte[])HttpContext.Current.Session[key]);
         }
+
+        #endregion
     }
 }
