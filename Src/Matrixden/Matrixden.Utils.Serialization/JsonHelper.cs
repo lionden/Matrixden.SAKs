@@ -127,7 +127,7 @@
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static JObject Deserialize2JObject(string input) => (JObject)Deserialize(input);
+        public static JObject Deserialize2JObject(string input) => (JObject) Deserialize(input);
 
         /// <summary>
         /// Deserialize a string value to an entity, using System.Runtime.Serialization.Json.DataContractJsonSerializer.
@@ -150,7 +150,7 @@
                 obj = serializer.ReadObject(mStream);
             }
 
-            return (T)obj;
+            return (T) obj;
         }
 
         /// <summary>
@@ -169,7 +169,7 @@
                     var d = -1;
                     while ((d = stream.ReadByte()) != -1)
                     {
-                        ms.WriteByte((byte)d);
+                        ms.WriteByte((byte) d);
                     }
 
                     data = encoding.GetString(ms.ToArray());
@@ -182,6 +182,35 @@
 
             return Deserialize<T>(data);
         }
+
+        #endregion
+
+        #region -- Legacy methods --
+
+        /// <summary>
+        /// Serialize object to JSON.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="ignoreNullable"></param>
+        /// <returns></returns>
+        public static string SerializeToJsonString(object obj, bool ignoreNullable = false) =>
+            Serialize(obj, ignoreNullable);
+
+        /// <summary>
+        /// Deserialize a string value to an entity, using Newtonsoft.Json.JsonConvert.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input">The string value to be Deserialized.</param>
+        /// <returns></returns>
+        public static T DeserializeStringToObject<T>(string input) => Deserialize<T>(input);
+
+        /// <summary>
+        /// 将JSON格式字符串转实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static T GetEntityFromString<T>(string input) => Deserialize<T>(input);
 
         #endregion
     }
