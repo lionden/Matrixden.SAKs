@@ -23,7 +23,7 @@ namespace Matrixden.Utils.Web
         /// <returns></returns>
         public static HttpResponseMessage ResponseJsonMessage(Object obj)
         {
-            string str = JsonHelper.SerializeToJsonString(obj);
+            string str = JsonHelper.Serialize(obj);
 
             return Response(str, Encoding.GetEncoding("UTF-8"), Constants.MIME_TYPE_JSON);
         }
@@ -36,7 +36,7 @@ namespace Matrixden.Utils.Web
         /// <returns></returns>
         public static HttpResponseMessage ResponseJsonpMessage(string parseResponse, Object obj)
         {
-            string str = string.Format(parseResponse.IsNullOrEmptyOrWhiteSpace() ? "{1}" : "{0}({1})", parseResponse, JsonHelper.SerializeToJsonString(obj));
+            string str = string.Format(parseResponse.IsNullOrEmptyOrWhiteSpace() ? "{1}" : "{0}({1})", parseResponse, JsonHelper.Serialize(obj));
 
             return Response(str, Encoding.GetEncoding("UTF-8"), Constants.MIME_TYPE_JSON);
         }
@@ -49,7 +49,7 @@ namespace Matrixden.Utils.Web
         /// <returns></returns>
         public static HttpResponseMessage ResponseJsonMessage_WithPrefix(Object obj, string responsePrefix = "var return_api_data = ")
         {
-            string str = responsePrefix + JsonHelper.SerializeToJsonString(obj);
+            string str = responsePrefix + JsonHelper.Serialize(obj);
 
             return Response(str, Encoding.GetEncoding("UTF-8"), Constants.MIME_TYPE_JSON);
         }

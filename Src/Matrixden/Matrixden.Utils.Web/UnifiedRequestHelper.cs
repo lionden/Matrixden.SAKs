@@ -1,14 +1,12 @@
-﻿using Matrixden.Utils.Extensions;
+﻿using Flurl;
+using Matrixden.Utils.Extensions;
 using Matrixden.Utils.Serialization;
 using Matrixden.Utils.Web.Enums;
 using Matrixden.Utils.Web.Logging;
 using Matrixden.Utils.Web.Resources;
-using Flurl;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -31,13 +29,15 @@ namespace Matrixden.Utils.Web
         /// <param name="httpMethodEnum">请求方式, 默认: httpGet</param>
         /// <param name="cookies">请求需要携带的Cookie, 默认为空.</param>
         /// <returns></returns>
-        public static JObject GetJobjectDataThrouthRequest(string requestUri, List<KeyValuePair<string, object>> keyValueList, HttpRequestMethod httpMethodEnum = HttpRequestMethod.Get, CookieContainer cookies = null)
+        public static JObject GetJObjectDataThroughRequest(string requestUri,
+            List<KeyValuePair<string, object>> keyValueList, HttpRequestMethod httpMethodEnum = HttpRequestMethod.Get,
+            CookieContainer cookies = null)
         {
-            return GetJobjectDataThrouthRequest(requestUri,
-                    keyValueList == null || keyValueList.Count <= 0
-                        ? null
-                        : keyValueList.Select(k => new KeyValuePair<string, string>(k.Key, k.Value.ToString())).ToList(),
-                    httpMethodEnum);
+            return GetJObjectDataThroughRequest(requestUri,
+                keyValueList == null || keyValueList.Count <= 0
+                    ? null
+                    : keyValueList.Select(k => new KeyValuePair<string, string>(k.Key, k.Value.ToString())).ToList(),
+                httpMethodEnum);
         }
 
         /// <summary>
@@ -48,22 +48,24 @@ namespace Matrixden.Utils.Web
         /// <param name="httpMethodEnum">请求方式, 默认: httpGet</param>
         /// <param name="cookies">请求需要携带的Cookie, 默认为空.</param>
         /// <returns></returns>
-        public static JObject GetJobjectDataThrouthRequest(string requestUri, List<KeyValuePair<string, string>> keyValueList = null, HttpRequestMethod httpMethodEnum = HttpRequestMethod.Get, CookieContainer cookies = null)
+        public static JObject GetJObjectDataThroughRequest(string requestUri,
+            List<KeyValuePair<string, string>> keyValueList = null,
+            HttpRequestMethod httpMethodEnum = HttpRequestMethod.Get, CookieContainer cookies = null)
         {
             var response = GetResponseMessage(requestUri, keyValueList, httpMethodEnum, cookies);
             if (HttpStatusCode.OK != response.StatusCode)
             {
                 log.FatalFormat("Failed to request [{0}].", requestUri);
-                return JsonHelper.DeserializeStringToJObject(Constants.RESPONSE_MESSAGE_FAIL_DEFAULT_JSON);
+                return JsonHelper.Deserialize2JObject(Constants.RESPONSE_MESSAGE_FAIL_DEFAULT_JSON);
             }
 
             var result = GenerateStringFromResponse(response);
-            var obj = JsonHelper.DeserializeStringToObject(result);
-            if (obj == null)
-            {
-                log.FatalFormat("请求接口不成功.\r\nRequest Uri=[{0}],\r\nResponse Str=[{1}].", requestUri, result);
-                obj = JsonConvert.DeserializeObject(Constants.RESPONSE_MESSAGE_FAIL_DEFAULT_JSON);
-            }
+            var obj = JsonHelper.Deserialize(result);
+            if (obj != null)
+                return obj as JObject;
+
+            log.FatalFormat("请求接口不成功.\r\nRequest Uri=[{0}],\r\nResponse Str=[{1}].", requestUri, result);
+            obj = JsonHelper.Deserialize(Constants.RESPONSE_MESSAGE_FAIL_DEFAULT_JSON);
 
             return obj as JObject;
         }
@@ -74,9 +76,10 @@ namespace Matrixden.Utils.Web
         /// <param name="requestUri">请求地址.</param>
         /// <param name="keyValueList">请求参数列表.</param>
         /// <returns></returns>
-        public static JObject GetJobjectDataThrouthPostRequest(string requestUri, List<KeyValuePair<string, object>> keyValueList = null)
+        public static JObject GetJObjectDataThroughPostRequest(string requestUri,
+            List<KeyValuePair<string, object>> keyValueList = null)
         {
-            return GetJobjectDataThrouthRequest(requestUri, keyValueList, HttpRequestMethod.Post);
+            return GetJObjectDataThroughRequest(requestUri, keyValueList, HttpRequestMethod.Post);
         }
 
         /// <summary>
@@ -85,9 +88,10 @@ namespace Matrixden.Utils.Web
         /// <param name="requestUri">请求地址.</param>
         /// <param name="keyValueList">请求参数列表.</param>
         /// <returns></returns>
-        public static JObject GetJobjectDataThrouthPostRequest(string requestUri, List<KeyValuePair<string, string>> keyValueList = null)
+        public static JObject GetJObjectDataThroughPostRequest(string requestUri,
+            List<KeyValuePair<string, string>> keyValueList = null)
         {
-            return GetJobjectDataThrouthRequest(requestUri, keyValueList, HttpRequestMethod.Post);
+            return GetJObjectDataThroughRequest(requestUri, keyValueList, HttpRequestMethod.Post);
         }
 
         /// <summary>
@@ -99,7 +103,8 @@ namespace Matrixden.Utils.Web
         {
             if (HttpStatusCode.NoContent.Equals(response.StatusCode))
             {
-                log.WarnFormat("There is no response content in request uri:\r\n{0}.", response.RequestMessage.RequestUri);
+                log.WarnFormat("There is no response content in request uri:\r\n{0}.",
+                    response.RequestMessage.RequestUri);
                 return string.Empty;
             }
 
@@ -107,7 +112,8 @@ namespace Matrixden.Utils.Web
             try
             {
                 result = response.Content.ReadAsByteArrayAsync().Result.ToString2();
-                log.DebugFormat("Request uri=[{0}],\r\nResponse content=[{1}].", response.RequestMessage.RequestUri, result);
+                log.DebugFormat("Request uri=[{0}],\r\nResponse content=[{1}].", response.RequestMessage.RequestUri,
+                    result);
             }
             catch (NullReferenceException nrEx)
             {
@@ -115,7 +121,7 @@ namespace Matrixden.Utils.Web
             }
             catch (Exception ex)
             {
-                log.FatalException("Unknow exception.", ex);
+                log.FatalException("Unknown exception.", ex);
             }
 
             return result;
@@ -129,9 +135,12 @@ namespace Matrixden.Utils.Web
         /// <param name="httpMethodEnum">Which http method used.</param>
         /// <param name="cookies"></param>
         /// <returns></returns>
-        public static HttpResponseMessage GetResponseMessage(string requestUri, List<KeyValuePair<string, object>> keyValueList, HttpRequestMethod httpMethodEnum, CookieContainer cookies)
+        public static HttpResponseMessage GetResponseMessage(string requestUri,
+            List<KeyValuePair<string, object>> keyValueList, HttpRequestMethod httpMethodEnum, CookieContainer cookies)
         {
-            return GetResponseMessage(requestUri, keyValueList.Select(k => new KeyValuePair<string, string>(k.Key, k.Value.ToString())).ToList(), httpMethodEnum, cookies);
+            return GetResponseMessage(requestUri,
+                keyValueList.Select(k => new KeyValuePair<string, string>(k.Key, k.Value.ToString())).ToList(),
+                httpMethodEnum, cookies);
         }
 
         /// <summary>
@@ -143,7 +152,9 @@ namespace Matrixden.Utils.Web
         /// <param name="cookies"></param>
         /// <param name="timeout">Request times out, default is 100 seconds.</param>
         /// <returns></returns>
-        public static HttpResponseMessage GetResponseMessage(string requestUri, List<KeyValuePair<string, string>> keyValueList, HttpRequestMethod httpMethodEnum, CookieContainer cookies, TimeSpan timeout = default(TimeSpan))
+        public static HttpResponseMessage GetResponseMessage(string requestUri,
+            List<KeyValuePair<string, string>> keyValueList, HttpRequestMethod httpMethodEnum, CookieContainer cookies,
+            TimeSpan timeout = default(TimeSpan))
         {
             var pms = CommonHelper.ConvertKeyValuePairList2QueryParamString(keyValueList);
             log.DebugFormat("Request Uri=[{0}],\r\nParams=[{1}].", requestUri, pms);
@@ -173,7 +184,12 @@ namespace Matrixden.Utils.Web
                                 Content = new FormUrlEncodedContent(keyValueList)
                             }).Result;
                             break;
+                        case HttpRequestMethod.Trace:
+                            break;
+                        case HttpRequestMethod.Head:
+                            break;
                         case HttpRequestMethod.Options:
+                            break;
                         default:
                             break;
                     }
@@ -185,11 +201,13 @@ namespace Matrixden.Utils.Web
             }
             catch (TaskCanceledException)
             {
-                log.ErrorFormat("请求超时. Timeout in seconds=[{2}].\r\nRequest API=[{0}],\r\nParams=[{1}].", requestUri, pms, timeout == default(TimeSpan) ? 100 : timeout.TotalSeconds);
+                log.ErrorFormat("请求超时. Timeout in seconds=[{2}].\r\nRequest API=[{0}],\r\nParams=[{1}].", requestUri,
+                    pms, timeout == default(TimeSpan) ? 100 : timeout.TotalSeconds);
             }
             catch (Exception ex)
             {
-                log.FatalException("Unhandle exception occurred! \r\nRequest API=[{0}],\r\nParams=[{1}].", ex, requestUri, pms);
+                log.FatalException("Unhandled exception occurred! \r\nRequest API=[{0}],\r\nParams=[{1}].", ex,
+                    requestUri, pms);
             }
 
             return hrMsg;
@@ -201,7 +219,8 @@ namespace Matrixden.Utils.Web
         /// <param name="requestUri">The Uri the request is sent to.</param>
         /// <param name="keyValueList">KeyValuePair List</param>
         /// <returns></returns>
-        public static HttpResponseMessage Response_Post(string requestUri, List<KeyValuePair<string, string>> keyValueList)
+        public static HttpResponseMessage Response_Post(string requestUri,
+            List<KeyValuePair<string, string>> keyValueList)
         {
             return GetResponseMessage(requestUri, keyValueList, HttpRequestMethod.Post, null);
         }
@@ -215,12 +234,15 @@ namespace Matrixden.Utils.Web
         /// <param name="timeout">请求超时时间</param>
         /// <param name="keyValues">参数列表.</param>
         /// <returns></returns>
-        public static T MakeHttpRequest<T>(string requestUri, HttpRequestMethod httpMethod, TimeSpan timeout, params KeyValuePair<string, object>[] keyValues)
+        public static T MakeHttpRequest<T>(string requestUri, HttpRequestMethod httpMethod, TimeSpan timeout,
+            params KeyValuePair<string, object>[] keyValues)
         {
-            var response = GetResponseMessage(requestUri, keyValues.Select(a => new KeyValuePair<string, string>(a.Key, a.Value.ToString())).ToList(), httpMethod, null, timeout);
+            var response = GetResponseMessage(requestUri,
+                keyValues.Select(a => new KeyValuePair<string, string>(a.Key, a.Value.ToString())).ToList(), httpMethod,
+                null, timeout);
             var result = GenerateStringFromResponse(response);
 
-            return JsonHelper.GetEntityFromString<T>(result);
+            return JsonHelper.Deserialize<T>(result);
         }
 
         /// <summary>
@@ -231,7 +253,8 @@ namespace Matrixden.Utils.Web
         /// <param name="httpMethod">请求方法, 默认为HttpGet.</param>
         /// <param name="keyValues">参数列表.</param>
         /// <returns></returns>
-        public static T MakeHttpRequest<T>(string requestUri, HttpRequestMethod httpMethod = HttpRequestMethod.Get, params KeyValuePair<string, object>[] keyValues)
+        public static T MakeHttpRequest<T>(string requestUri, HttpRequestMethod httpMethod = HttpRequestMethod.Get,
+            params KeyValuePair<string, object>[] keyValues)
         {
             return MakeHttpRequest<T>(requestUri, httpMethod, default(TimeSpan), keyValues);
         }
@@ -244,12 +267,13 @@ namespace Matrixden.Utils.Web
         /// <param name="keyValueList">请求参数列表.</param>
         /// <param name="httpMethodEnum">请求方法, 默认为HttpGet.</param>
         /// <returns></returns>
-        public static T MakeHttpRequest<T>(string requestUri, List<KeyValuePair<string, string>> keyValueList = null, HttpRequestMethod httpMethodEnum = HttpRequestMethod.Get)
+        public static T MakeHttpRequest<T>(string requestUri, List<KeyValuePair<string, string>> keyValueList = null,
+            HttpRequestMethod httpMethodEnum = HttpRequestMethod.Get)
         {
             var response = GetResponseMessage(requestUri, keyValueList, httpMethodEnum, null);
             var result = GenerateStringFromResponse(response);
 
-            return JsonHelper.GetEntityFromString<T>(result);
+            return JsonHelper.Deserialize<T>(result);
         }
 
         /// <summary>
@@ -264,19 +288,19 @@ namespace Matrixden.Utils.Web
         public static T MakeHttpPostRequest<T>(string url, byte[] data, string contentType, int timeout = 0)
         {
             log.DebugFormat("Request URL=[{0}].", url);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            var request = (HttpWebRequest)WebRequest.Create(url);
             request.Timeout = timeout <= 0 ? Constants.GlobalTimeoutInMilliseconds : timeout;
             request.Referer = Constants.GlobalHttpHeader_Referer;
             request.Method = "POST";
             request.ContentType = contentType;
             request.ContentLength = data.Length;
 
-            Stream writer = request.GetRequestStream();
+            var writer = request.GetRequestStream();
             writer.Write(data, 0, data.Length);
             writer.Close();
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            var response = (HttpWebResponse)request.GetResponse();
 
-            T result = JsonHelper.GetRequestEntity<T>(response.GetResponseStream());
+            var result = JsonHelper.Deserialize<T>(response.GetResponseStream());
             return result;
         }
     }

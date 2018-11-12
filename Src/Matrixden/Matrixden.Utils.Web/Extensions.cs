@@ -1,4 +1,9 @@
-﻿namespace Matrixden.Utils.Web
+﻿using System.IO;
+using System.Web.SessionState;
+using Matrixden.Utils.Extensions;
+using Matrixden.Utils.Serialization;
+
+namespace Matrixden.Utils.Web
 {
     using System;
     using System.Linq;
@@ -56,6 +61,34 @@
         public static string UrlEncode(this string str)
         {
             return str.UrlEncode(true);
+        }
+
+        /// <summary>
+        /// 将给定key-value值, 存入session中.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="key"></param>
+        /// <param name="obj"></param>
+        public static void Push(this HttpSessionState @this, string key, object obj)
+        {
+            if (key.IsNullOrEmptyOrWhiteSpace())
+            {
+                return;
+            }
+
+            HttpContext.Current.Session[key] = JsonHelper.Serialize2Bytes(obj);
+        }
+
+        /// <summary>
+        /// 根据指定key, 从session中取实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="this"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static T Pop<T>(this HttpSessionState @this, string key) where T : class, new()
+        {
+            return key.IsNullOrEmptyOrWhiteSpace() ? default(T) : JsonHelper.Deserialize<T>((byte[])HttpContext.Current.Session[key]);
         }
     }
 }
