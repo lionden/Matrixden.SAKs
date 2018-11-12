@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Matrixden.Utils.Redis
 {
+    /// <summary>
+    /// Redis help methods.
+    /// </summary>
     public partial class RedisHelper
     {
         #region -- KEY --
@@ -162,10 +165,7 @@ namespace Matrixden.Utils.Redis
         /// <returns></returns>
         public string HashGet(string key, string dataKey)
         {
-            return Do(db =>
-            {
-                return db.HashGet(key, dataKey);
-            });
+            return Do(db => db.HashGet(key, dataKey));
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Matrixden.Utils.Redis
             return Do(db =>
             {
                 RedisValue[] values = db.HashKeys(key);
-                return ConvetList<T>(values);
+                return ConvertList<T>(values);
             });
         }
 
@@ -359,7 +359,7 @@ namespace Matrixden.Utils.Redis
         public async Task<List<T>> HashKeysAsync<T>(string key)
         {
             RedisValue[] values = await Do(db => db.HashKeysAsync(key));
-            return ConvetList<T>(values);
+            return ConvertList<T>(values);
         }
 
         #endregion 异步方法
@@ -549,7 +549,7 @@ namespace Matrixden.Utils.Redis
             return Do(redis =>
             {
                 var values = redis.SortedSetRangeByRank(key);
-                return ConvetList<T>(values);
+                return ConvertList<T>(values);
             });
         }
 
@@ -596,7 +596,7 @@ namespace Matrixden.Utils.Redis
         public async Task<List<T>> SortedSetRangeByRankAsync<T>(string key)
         {
             var values = await Do(redis => redis.SortedSetRangeByRankAsync(key));
-            return ConvetList<T>(values);
+            return ConvertList<T>(values);
         }
 
         /// <summary>
@@ -617,7 +617,7 @@ namespace Matrixden.Utils.Redis
             return func(DataBase);
         }
 
-        private List<T> ConvetList<T>(RedisValue[] values)
+        private List<T> ConvertList<T>(RedisValue[] values)
         {
             var lt = new System.Collections.Concurrent.ConcurrentBag<T>();
             Parallel.ForEach(values, val =>
