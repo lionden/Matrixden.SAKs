@@ -1,14 +1,9 @@
 ﻿using Matrixden.Utils.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace Matrixden.Utils.Extensions
 {
@@ -216,7 +211,7 @@ namespace Matrixden.Utils.Extensions
         public static string[] Split(this string source, string separator,
             StringSplitOptions options = StringSplitOptions.None)
         {
-            return source.IsNullOrEmptyOrWhiteSpace() ? new string[0] : source.Split(new string[] {separator}, options);
+            return source.IsNullOrEmptyOrWhiteSpace() ? new string[0] : source.Split(new string[] { separator }, options);
         }
 
         /// <summary>
@@ -326,12 +321,11 @@ namespace Matrixden.Utils.Extensions
         /// Decodes the string from base64
         /// </summary>
         /// <param name="encodedData">The encoded data.</param>
-        /// <param name="encod">Characters' encoding.</param>
+        /// <param name="encoding">Characters' encoding.</param>
         /// <returns>Decoded string</returns>
-        public static string DecodeFromBase64(this string encodedData, Encoding encod)
+        public static string DecodeFromBase64(this string encodedData, Encoding encoding)
         {
-            string oriVal;
-            TryDecodeFromBase64(encodedData, out oriVal, encod);
+            TryDecodeFromBase64(encodedData, out var oriVal, encoding);
 
             return oriVal;
         }
@@ -583,7 +577,7 @@ namespace Matrixden.Utils.Extensions
             if (source == null)
                 return false;
 
-            return pattern == null || pattern.All(p => Regex.IsMatch(source, (string) p));
+            return pattern == null || pattern.All(p => Regex.IsMatch(source, (string)p));
         }
 
         /// <summary>
