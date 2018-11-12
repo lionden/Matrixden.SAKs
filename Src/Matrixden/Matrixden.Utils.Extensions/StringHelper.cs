@@ -22,15 +22,15 @@ namespace Matrixden.Utils.Extensions
         /// <summary>
         /// 匹配汉字
         /// </summary>
-        const string REGULAR_EXPRESSION_CHINESE_CHARS = @"[\u4e00-\u9fa5]";
+        const string RegularExpressionChineseChars = @"[\u4e00-\u9fa5]";
 
         /// <summary>
         /// 检查字符串中是否包含非法字符。
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="InvaildString"></param>
+        /// <param name="invalidString"></param>
         /// <returns></returns>
-        public static bool CheckInvaildCharacter(string input, string[] InvaildString)
+        public static bool CheckInvalidCharacter(string input, string[] invalidString)
         {
             throw new NotImplementedException();
             //TODO:
@@ -42,44 +42,25 @@ namespace Matrixden.Utils.Extensions
         /// <param name="strText">输入的字符串</param>
         /// <param name="strExpression">正则表达式字符串</param>
         /// <returns><c>true</c>If pass. Else<c>false.</c></returns>
-        public static bool CheckVaildInput(string strText, string strExpression)
+        public static bool CheckValidInput(string strText, string strExpression)
         {
-            if (string.IsNullOrWhiteSpace(strText))
+            if (strText.IsNullOrEmptyOrWhiteSpace() || strExpression.IsNullOrEmptyOrWhiteSpace())
             {
                 return false;
             }
-            else
+
+            var regex = new Regex(strExpression, RegexOptions.IgnoreCase);
+            var matchSet = regex.Matches(strText);
+            if (matchSet.Count <= 0)
+                return false;
+
+            foreach (Match match in matchSet)
             {
-                if (!string.IsNullOrWhiteSpace(strExpression))
-                {
-                    Regex regex = new Regex(strExpression, RegexOptions.IgnoreCase);
-                    MatchCollection matchSet = regex.Matches(strText);
-                    if (!(matchSet == null || matchSet.Count <= 0))
-                    {
-                        foreach (Match match in matchSet)
-                        {
-                            if (match.Value != strText)
-                            {
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
+                if (match.Value != strText)
+                    return false;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -89,31 +70,28 @@ namespace Matrixden.Utils.Extensions
         /// <returns></returns>
         public static bool IsNullOrEmptyOrWhiteSpace(params string[] args)
         {
-            if (args == null)
-            {
-                return false;
-            }
-
-            bool flag = false;
-            foreach (string arg in args)
-            {
-                if (IsNullOrEmptyOrWhiteSpace(arg))
-                {
-                    flag = true;
-
-                    break;
-                }
-            }
-
-            return flag;
+            return args != null && args.Any(IsNullOrEmptyOrWhiteSpace);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="encodedData"></param>
+        /// <param name="oriVal"></param>
+        /// <returns></returns>
         public static bool TryDecodeFromBase64(string encodedData, out string oriVal)
         {
             return TryDecodeFromBase64(encodedData, out oriVal, Encoding.ASCII);
         }
 
-        public static bool TryDecodeFromBase64(string encodedData, out string oriVal, Encoding encod)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="encodedData"></param>
+        /// <param name="oriVal"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static bool TryDecodeFromBase64(string encodedData, out string oriVal, Encoding encoding)
         {
             oriVal = string.Empty;
             if (encodedData.IsNullOrEmptyOrWhiteSpace())
@@ -123,7 +101,7 @@ namespace Matrixden.Utils.Extensions
 
             try
             {
-                oriVal = encod.GetString(Convert.FromBase64String(encodedData));
+                oriVal = encoding.GetString(Convert.FromBase64String(encodedData));
                 return true;
             }
             catch (Exception ex)
@@ -142,11 +120,12 @@ namespace Matrixden.Utils.Extensions
         {
             if (values == null)
             {
-                return null;
+                return String.Empty;
             }
+
             Array.Sort(values);
 
-            return string.Join("", values);
+            return string.Join(string.Empty, values);
         }
 
         /// <summary>
@@ -157,12 +136,12 @@ namespace Matrixden.Utils.Extensions
         /// <returns>固定长度的数字串</returns>
         public static string RepairNumericStringLength(string value, int stringLength = 2)
         {
-            if (StringHelper.IsNullOrEmptyOrWhiteSpace(value))
+            if (value.IsNullOrEmptyOrWhiteSpace())
             {
                 return value;
             }
 
-            string result = value.PadLeft(stringLength, '0');
+            var result = value.PadLeft(stringLength, '0');
 
             return result;
         }
@@ -192,24 +171,29 @@ namespace Matrixden.Utils.Extensions
         /// <summary>
         /// 检测一个字符串是否是Null或空或White Space.
         /// </summary>
-        /// <param name="value">待检测字符串</param>
+        /// <param name="source">待检测字符串</param>
         /// <returns>如果是Null或空或White Space, 则返回<c>true</c>, 否则返回<c>fals</c>.</returns>
         public static bool IsNullOrEmptyOrWhiteSpace(this string source)
         {
             return string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source);
         }
 
+        /// <summary>
+        /// 检测一个字符串是否是Null或空或White Space.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static bool IsNotNullNorEmptyNorWhitespace(this string source)
         {
             return !source.IsNullOrEmptyOrWhiteSpace();
         }
 
         /// <summary>
-        /// Splite a string use upper case character.
+        /// Split a string use upper case character.
         /// </summary>
         /// <param name="source">Source string.</param>
-        /// <returns>Splited string array.</returns>
-        public static string[] SpliteWithUpperCase(this string source)
+        /// <returns>Split string array.</returns>
+        public static string[] SplitWithUpperCase(this string source)
         {
             if (source == null)
             {
@@ -217,19 +201,38 @@ namespace Matrixden.Utils.Extensions
             }
 
             var t = Guid.NewGuid().ToString();
-            string t2 = Regex.Replace(source, "(?!^)([A-Z])", t + "$1");
+            var t2 = Regex.Replace(source, "(?!^)([A-Z])", t + "$1");
 
             return t2.Split(t);
         }
 
-        public static string[] Split(this string source, string separator, StringSplitOptions options = StringSplitOptions.None)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="separator"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static string[] Split(this string source, string separator,
+            StringSplitOptions options = StringSplitOptions.None)
         {
-            if (source == null)
+            return source.IsNullOrEmptyOrWhiteSpace() ? new string[0] : source.Split(new string[] {separator}, options);
+        }
+
+        /// <summary>
+        /// Get a string's byte array.
+        /// </summary>
+        /// <param name="sourceStr"></param>
+        /// <param name="encoding">编码方式</param>
+        /// <returns></returns>
+        public static byte[] Bytes(this string sourceStr, Encoding encoding)
+        {
+            if (sourceStr.IsNullOrEmptyOrWhiteSpace() || Equals(encoding, Encoding.Default))
             {
                 return null;
             }
 
-            return source.Split(new string[] { separator }, options);
+            return encoding.GetBytes(sourceStr);
         }
 
         /// <summary>
@@ -237,15 +240,7 @@ namespace Matrixden.Utils.Extensions
         /// </summary>
         /// <param name="sourceStr"></param>
         /// <returns></returns>
-        public static byte[] Bytes(this string sourceStr)
-        {
-            if (sourceStr.IsNullOrEmptyOrWhiteSpace())
-            {
-                return null;
-            }
-
-            return Encoding.UTF8.GetBytes(sourceStr);
-        }
+        public static byte[] Bytes(this string sourceStr) => Bytes(sourceStr, Encoding.UTF8);
 
         #region -- Encode / Decode --
 
@@ -263,18 +258,18 @@ namespace Matrixden.Utils.Extensions
         /// Encodes string to base64.
         /// </summary>
         /// <param name="toEncode">String to encode.</param>
-        /// <param name="encod">Characters' encoding.</param>
+        /// <param name="encoding">Characters' encoding.</param>
         /// <returns>Encoded string</returns>
-        public static string Base64Value(this string toEncode, Encoding encod)
+        public static string Base64Value(this string toEncode, Encoding encoding)
         {
-            if (toEncode == null)
-            {
-                return toEncode;
-            }
-
-            return Convert.ToBase64String(encod.GetBytes(toEncode));
+            return toEncode == null ? toEncode : Convert.ToBase64String(encoding.GetBytes(toEncode));
         }
 
+        /// <summary>
+        /// 获取给定字符串的MD5值.
+        /// </summary>
+        /// <param name="toBeEncode"></param>
+        /// <returns></returns>
         public static string MD5Value(this string toBeEncode)
         {
             if (toBeEncode == null)
@@ -282,18 +277,18 @@ namespace Matrixden.Utils.Extensions
                 return toBeEncode;
             }
 
-            StringBuilder dest = new StringBuilder();
-            MD5 md5 = MD5.Create();
-            byte[] s = md5.ComputeHash(Encoding.UTF8.GetBytes(toBeEncode));
-            for (int i = 0; i < s.Length; i++)
+            var dest = new StringBuilder();
+            var md5 = MD5.Create();
+            var s = md5.ComputeHash(Encoding.UTF8.GetBytes(toBeEncode));
+            foreach (var t in s)
             {
-                if (s[i] < 16)
+                if (t < 16)
                 {
-                    dest.AppendFormat("0{0}", s[i].ToString("X"));
+                    dest.AppendFormat("0{0:X}", t);
                 }
                 else
                 {
-                    dest.Append(s[i].ToString("X"));
+                    dest.Append(t.ToString("X"));
                 }
             }
 
@@ -312,7 +307,7 @@ namespace Matrixden.Utils.Extensions
                 return plainText;
             }
 
-            SHA1 hash = SHA1.Create();
+            var hash = SHA1.Create();
             hash.ComputeHash(new ASCIIEncoding().GetBytes(plainText));
             return BitConverter.ToString(hash.Hash).Replace("-", string.Empty).ToUpper();
         }
@@ -398,10 +393,10 @@ namespace Matrixden.Utils.Extensions
         /// <returns></returns>
         public static string CleanUpInvalidChars(this string source, params char[] chars)
         {
-            if (source.IsNullOrEmptyOrWhiteSpace() || chars == null || chars.Count() <= 0)
+            if (source.IsNullOrEmptyOrWhiteSpace() || chars == null || !chars.Any())
                 return source;
 
-            return String.Join(string.Empty, source.Split(chars));
+            return string.Join(string.Empty, source.Split(chars));
         }
 
         /// <summary>
@@ -412,10 +407,10 @@ namespace Matrixden.Utils.Extensions
         /// <returns></returns>
         public static string CleanUpInvalidSubstring(this string source, params string[] substr)
         {
-            if (source.IsNullOrEmptyOrWhiteSpace() || substr == null || substr.Count() <= 0)
+            if (source.IsNullOrEmptyOrWhiteSpace() || substr == null || !substr.Any())
                 return source;
 
-            return String.Join(string.Empty, source.Split(substr, StringSplitOptions.None));
+            return string.Join(string.Empty, source.Split(substr, StringSplitOptions.None));
         }
 
         /// <summary>
@@ -453,7 +448,7 @@ namespace Matrixden.Utils.Extensions
         /// <summary>
         /// 移除字符串中的汉字
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="source"></param>
         /// <returns></returns>
         public static string CleanChineseCharacter(this string source)
         {
@@ -462,11 +457,16 @@ namespace Matrixden.Utils.Extensions
                 return source;
             }
 
-            Regex regex = new Regex(REGULAR_EXPRESSION_CHINESE_CHARS);
+            var regex = new Regex(RegularExpressionChineseChars);
 
             return regex.Replace(source, string.Empty);
         }
 
+        /// <summary>
+        /// 正则提取给定字符串中的汉字
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static string GetChineseCharacter(this string source)
         {
             if (source == null)
@@ -475,16 +475,16 @@ namespace Matrixden.Utils.Extensions
             }
 
             // @"[\u4e00-\u9fa5]";
-            Regex regex = new Regex(string.Format("{0}+", REGULAR_EXPRESSION_CHINESE_CHARS));
+            var regex = new Regex($"{RegularExpressionChineseChars}+");
 
-            if (regex.IsMatch(source))
-            {
-                return regex.Match(source).Value;
-            }
-
-            return "";
+            return regex.IsMatch(source) ? regex.Match(source).Value : string.Empty;
         }
 
+        /// <summary>
+        /// 检测给定字符串是否含有汉字
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static bool ValidateWhetherContainsChineseChar(this string source)
         {
             if (source == null)
@@ -492,11 +492,16 @@ namespace Matrixden.Utils.Extensions
                 return false;
             }
 
-            Regex regex = new Regex(REGULAR_EXPRESSION_CHINESE_CHARS);
+            var regex = new Regex(RegularExpressionChineseChars);
 
             return regex.IsMatch(source);
         }
 
+        /// <summary>
+        /// 检测给定字符串是否是以字母开头
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static bool IsStartWithLetter(this string source)
         {
             if (source == null)
@@ -504,11 +509,16 @@ namespace Matrixden.Utils.Extensions
                 return false;
             }
 
-            Regex rg = new Regex("^[a-zA-Z]");
+            var rg = new Regex("^[a-zA-Z]");
 
             return rg.IsMatch(source);
         }
 
+        /// <summary>
+        /// 检测给定字符串是否包含字母
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static bool IsContainLetter(this string source)
         {
             if (source == null)
@@ -516,7 +526,7 @@ namespace Matrixden.Utils.Extensions
                 return false;
             }
 
-            Regex rg = new Regex("[a-zA-Z]");
+            var rg = new Regex("[a-zA-Z]");
 
             return rg.IsMatch(source);
         }
@@ -526,16 +536,9 @@ namespace Matrixden.Utils.Extensions
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static bool IsGUID(this string source)
+        public static bool IsGuid(this string source)
         {
-            if (source == null)
-            {
-                return false;
-            }
-
-            Guid result = new Guid();
-
-            return Guid.TryParse(source, out result);
+            return source != null && Guid.TryParse(source, out _);
         }
 
         /// <summary>
@@ -556,25 +559,39 @@ namespace Matrixden.Utils.Extensions
             return false;
         }
 
+        /// <summary>
+        /// 将字符串转为GUID.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static Guid ToGuid(this string source)
         {
-            Guid result;
-            if (!Guid.TryParse(source, out result))
+            if (!Guid.TryParse(source, out var result))
                 result = default(Guid);
+
             return result;
         }
 
+        /// <summary>
+        /// 正则校验给定字符串是否完全符合给定模式.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
         public static bool MatchAll(this string source, params string[] pattern)
         {
             if (source == null)
                 return false;
 
-            if (pattern == null)
-                return true;
-
-            return !pattern.Any(p => !Regex.IsMatch(source, p));
+            return pattern == null || pattern.All(p => Regex.IsMatch(source, (string) p));
         }
 
+        /// <summary>
+        /// 正则校验给定字符串是否符合给定模式中的一个.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
         public static bool MatchAny(this string source, params string[] pattern)
         {
             if (source == null)
@@ -598,7 +615,8 @@ namespace Matrixden.Utils.Extensions
             if (ori.IsNullOrEmptyOrWhiteSpace() || keyVal.Length <= 0)
                 return defaultVal;
 
-            return (keyVal.FirstOrDefault(f => f.Item1.Equals(ori)) ?? new Tuple<string, string>("", defaultVal)).Item2;
+            return (keyVal.FirstOrDefault(f => f.Item1.Equals(ori)) ??
+                    new Tuple<string, string>(string.Empty, defaultVal)).Item2;
         }
 
         /// <summary>
@@ -618,8 +636,8 @@ namespace Matrixden.Utils.Extensions
 
             return (len > 0
                     ? @this.PadRight(len, paddingChar)
-                        : @this.PadLeft(-len, paddingChar))
-                    .Substring(0, Math.Abs(len));
+                    : @this.PadLeft(-len, paddingChar))
+                .Substring(0, Math.Abs(len));
         }
 
         /// <summary>
@@ -652,8 +670,8 @@ namespace Matrixden.Utils.Extensions
                 return string.Empty.PadLeft(len, paddingChar);
 
             var s = len > 0
-                    ? @this.PadRight(len, paddingChar)
-                        : @this.PadLeft(-len, paddingChar);
+                ? @this.PadRight(len, paddingChar)
+                : @this.PadLeft(-len, paddingChar);
 
             return s.Substring(s.Length - Math.Abs(len));
         }
