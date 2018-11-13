@@ -114,14 +114,14 @@ namespace Matrixden.Utils.Web
         /// <param name="this"></param>
         /// <param name="key"></param>
         /// <param name="obj"></param>
-        public static void Push(this HttpSessionState @this, string key, object obj)
+        public static void Push(this HttpSessionStateBase @this, string key, object obj)
         {
-            if (key.IsNullOrEmptyOrWhiteSpace())
+            if (@this == default(HttpSessionStateBase) || key.IsNullOrEmptyOrWhiteSpace())
             {
                 return;
             }
 
-            HttpContext.Current.Session[key] = JsonHelper.Serialize2Bytes(obj);
+            @this[key] = JsonHelper.Serialize2Bytes(obj);
         }
 
         /// <summary>
@@ -131,11 +131,11 @@ namespace Matrixden.Utils.Web
         /// <param name="this"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static T Pop<T>(this HttpSessionState @this, string key) where T : class, new()
+        public static T Pop<T>(this HttpSessionStateBase @this, string key) where T : class, new()
         {
-            return key.IsNullOrEmptyOrWhiteSpace()
+            return @this == default(HttpSessionStateBase) || key.IsNullOrEmptyOrWhiteSpace()
                 ? default(T)
-                : JsonHelper.Deserialize<T>((byte[])HttpContext.Current.Session[key]);
+                : JsonHelper.Deserialize<T>((byte[]) @this[key]);
         }
 
         #endregion
