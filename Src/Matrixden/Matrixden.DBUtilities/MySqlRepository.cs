@@ -13,43 +13,52 @@ namespace Matrixden.DBUtilities
     using Matrixden.Utils.Models;
     using System;
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class MySqlRepository : DBRepository
     {
         private MySqlRepository() : base()
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connStr"></param>
         public MySqlRepository(string connStr) : base(
             new ConnectionStringSettings(DataAccessHelper.APP_CONFIG_DB_CONNCTION, connStr,
                 DataAccessHelper.PROVIDER_NAME_MYSQL))
         {
         }
 
-        private static object locker = new object();
-        private static MySqlRepository instance;
+        private static readonly object Locker = new object();
+        private static MySqlRepository _instance;
 
-        public static new MySqlRepository Instance
+        /// <summary>
+        /// 
+        /// </summary>
+        public new static MySqlRepository Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    lock (locker)
+                    lock (Locker)
                     {
-                        if (instance == null)
+                        if (_instance == null)
                         {
-                            instance = new MySqlRepository();
+                            _instance = new MySqlRepository();
                         }
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
@@ -65,13 +74,13 @@ namespace Matrixden.DBUtilities
 
                 if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
                 {
-                    var pis = GenerateDatatableColumnsFromEntityWithFilter<T>(
+                    var pis = GenerateDataTableColumnsFromEntityWithFilter(new T(),
                         SerializationFlags.Ignore | SerializationFlags.IgnoewOnQuery);
-                    if (pis == null || pis.Count() <= 0)
+                    if (pis == null || !pis.Any())
                         return new OperationResult(false);
 
                     var cls = pis.Select(p => p.Name);
-                    if (cls == null || cls.Count() <= 0)
+                    if (!cls.Any())
                         return new OperationResult(false);
 
                     strColumns = $"`{string.Join("`,`", cls)}`";
@@ -96,44 +105,27 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override OperationResult GetByCondition<T>(string strColumns, string strCondition, string strOrder)
+        public override bool Save(object item)
         {
-            return Do<T>(tbn => GetByCondition<T>(tbn, strColumns, strCondition, strOrder));
-        }
-
-        /// <summary>
-        /// 根据条件保存实体, 如果存在则更新, 否则插入.
-        /// 仅适用于有主键索引的表，且PK参数为主键字段。
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public override bool Save<T>(T item)
-        {
-            if (item == default(T))
+            if (item == default(object))
             {
-                log.WarnFormat("Instance[{0}] is null.", typeof(T));
+                log.Warn("Instance is null.");
                 return false;
             }
 
-            if (CommonClass.GetFieldValue(item, DBUtil.GetPrimaryKeyName<T>()) == null)
+            var pk = DBUtil.GetPrimaryKeyName(item);
+            if (CommonClass.GetFieldValue(item, pk) == null)
             {
-                log.WarnFormat("PK' value is null.");
+                log.WarnFormat("PK[{0}]'s value is null.", pk);
                 return false;
             }
 
-            var iu = GenerateInsertOrUpdateSQLWithParameters<T>();
+            var iu = GenerateInsertOrUpdateSqlWithParameters(item.GetType());
 
             return DataAccess.ExecuteNonQuery(iu, item) >= 1;
         }
 
-        /// <summary>
-        /// 更新数据记录
-        /// </summary>
-        /// <param name="strTableName">表名</param>
-        /// <param name="strSets">要更新的属性值(SQL语句)，如“[属性列1]=[值1], [属性列2]=[值2], ……[属性列n]=[值n]”. 无需包含[UpdateTime]字段.</param>
-        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
-        /// <returns>是否执行成功</returns>
+        /// <inheritdoc />
         public override bool Update(string strTableName, string strSets, string strCondition)
         {
             if (strTableName.IsNullOrEmptyOrWhiteSpace() || strSets.IsNullOrEmptyOrWhiteSpace() ||
@@ -152,12 +144,6 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override OperationResult Update<T>(string strSets, string strCondition)
-        {
-            return Do<T>(tbn => new OperationResult(Update(tbn, strSets, strCondition)));
-        }
-
-        /// <inheritdoc />
         public override bool IsDataRowExist(string strDataTable, string strCondition)
         {
             if (StringHelper.IsNullOrEmptyOrWhiteSpace(strDataTable, strCondition))
@@ -167,15 +153,6 @@ namespace Matrixden.DBUtilities
             var r = DataAccess.GetSingleRowValue(strSql);
 
             return r != null && r.Length == 1 && "1".Equals(r[0]);
-        }
-
-        /// <inheritdoc />
-        public override bool IsDataRowExist<T>(string strCondition)
-        {
-            if (strCondition.IsNullOrEmptyOrWhiteSpace())
-                return false;
-
-            return Do<T>(tbn => { return IsDataRowExist(tbn, strCondition); });
         }
 
         /// <inheritdoc />
@@ -197,7 +174,7 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override string GenerateInsertSQLWithParameters<T>(string table)
+        public override string GenerateInsertSqlWithParameters(string table, object item)
         {
             string strSql = string.Empty;
             if (table.IsNullOrEmptyOrWhiteSpace())
@@ -206,7 +183,7 @@ namespace Matrixden.DBUtilities
             try
             {
                 var strColumns =
-                    GenerateDatatableColumnsFromEntityWithFilter<T>(
+                    GenerateDataTableColumnsFromEntityWithFilter(item,
                         SerializationFlags.IgnoreOnInsert | SerializationFlags.Ignore).Select(p => p.Name);
                 var ca = strColumns.ToArray();
                 if (!ca.Any())
@@ -227,7 +204,7 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override string GenerateUpdateSQLWithParameters<T>(string table, string condition, T t)
+        public override string GenerateUpdateSqlWithParameters<T>(string table, string condition, T t)
         {
             string strSql = string.Empty;
             if (table.IsNullOrEmptyOrWhiteSpace() || condition.IsNullOrEmptyOrWhiteSpace() || t == null)
@@ -235,9 +212,9 @@ namespace Matrixden.DBUtilities
 
             try
             {
-                var prps = GenerateDatatableColumnsFromEntityWithFilter<T>(
+                var prps = GenerateDataTableColumnsFromEntityWithFilter(t,
                     SerializationFlags.IgnoreOnUpdate | SerializationFlags.Ignore);
-                if (prps == null || prps.Count() <= 0)
+                if (prps == null || !prps.Any())
                     return strSql;
 
                 ConcurrentBag<string> strColumns = new ConcurrentBag<string>();
@@ -266,7 +243,7 @@ namespace Matrixden.DBUtilities
                     }
                 });
 
-                if (strColumns == null || strColumns.Count() <= 0)
+                if (!strColumns.Any())
                     return strSql;
 
                 strSql = $";UPDATE `{table}` SET {string.Join(",", strColumns.ToArray())} WHERE {condition};";
@@ -283,19 +260,18 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override string GenerateInsertOrUpdateSQLWithParameters<T>()
+        public override string GenerateInsertOrUpdateSqlWithParameters(Type type)
         {
-            return Do<T>(tbn =>
+            return Do(type, tbn =>
             {
-                string strSql = string.Empty;
+                var strSql = string.Empty;
                 try
                 {
-                    var strIC = GenerateDatatableColumnsFromEntityWithFilter<T>(
+                    var strIC = GenerateDataTableColumnsFromEntityWithFilter(type,
                         SerializationFlags.IgnoreOnInsert | SerializationFlags.Ignore).Select(p => p.Name);
-                    var strUC =
-                        GenerateDatatableColumnsFromEntityWithFilter<T>(
-                                SerializationFlags.IgnoreOnUpdate | SerializationFlags.Ignore)
-                            .Select(p => string.Format("`{0}`=@{0}", p.Name));
+                    var strUC = GenerateDataTableColumnsFromEntityWithFilter(type,
+                            SerializationFlags.IgnoreOnUpdate | SerializationFlags.Ignore)
+                        .Select(p => $"`{p.Name}`=@{p.Name}");
                     if (!strIC.Any() || !strUC.Any())
                         return strSql;
 

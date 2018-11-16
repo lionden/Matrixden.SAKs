@@ -11,18 +11,28 @@ namespace Matrixden.DBUtilities
     using Matrixden.Utils.Extensions;
     using Matrixden.Utils.Models;
     using System;
-    using System.Collections.Generic;
     using System.Configuration;
     using System.Text;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class MSSqlRepository : DBRepository
     {
-        private MSSqlRepository() : base() { }
-        public MSSqlRepository(string connStr) : base(new ConnectionStringSettings(DataAccessHelper.APP_CONFIG_DB_CONNCTION, connStr, DataAccessHelper.PROVIDER_NAME_MSSQL)) { }
+        private MSSqlRepository() : base()
+        {
+        }
+
+        public MSSqlRepository(string connStr) : base(
+            new ConnectionStringSettings(DataAccessHelper.APP_CONFIG_DB_CONNCTION, connStr,
+                DataAccessHelper.PROVIDER_NAME_MSSQL))
+        {
+        }
 
         private static object locker = new object();
         private static MSSqlRepository instance;
-        public static new MSSqlRepository Instance
+
+        public new static MSSqlRepository Instance
         {
             get
             {
@@ -41,9 +51,9 @@ namespace Matrixden.DBUtilities
             }
         }
 
-
         /// <inheritdoc />
-        public override OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition, string strOrder)
+        public override OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition,
+            string strOrder)
         {
             var sbSql = new StringBuilder();
             try
@@ -54,9 +64,9 @@ namespace Matrixden.DBUtilities
                 if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
                 {
                     StringBuilder sb = new StringBuilder(" ");
-                    foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
+                    foreach (System.Reflection.PropertyInfo property in GenerateDataTableColumnsFromEntity<T>())
                     {
-                        sb.AppendFormat("{0},", property.Name);// property.Name + ",";    //添加属性列名称
+                        sb.AppendFormat("{0},", property.Name); // property.Name + ",";    //添加属性列名称
                     }
 
                     strColumns = sb.Remove(sb.Length - 1, 1).ToString();
@@ -66,7 +76,9 @@ namespace Matrixden.DBUtilities
                     //TODO: check all the columns exist or not
                 }
 
-                sbSql.AppendFormat("SELECT {0} FROM {1} WHERE (CASE COL_LENGTH('{1}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{2}' ", strColumns, strTableName, DBColumn_StatusCode.DB_ROW_STATUS_DELETED);
+                sbSql.AppendFormat(
+                    "SELECT {0} FROM {1} WHERE (CASE COL_LENGTH('{1}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{2}' ",
+                    strColumns, strTableName, DBColumn_StatusCode.DB_ROW_STATUS_DELETED);
                 if (strCondition.IsNotNullNorEmptyNorWhitespace())
                     sbSql.AppendFormat(" AND {0}", strCondition); //添加查询条件
 
@@ -84,46 +96,29 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override OperationResult GetByCondition<T>(string strColumns, string strCondition, string strOrder)
+        public override bool Save(object item)
         {
-            return Do<T>(tbn => GetByCondition<T>(tbn, strColumns, strCondition, strOrder));
-        }
-
-        /// <summary>
-        /// 根据条件保存实体, 如果存在则更新, 否则插入.
-        /// 仅适用于有主键索引的表，且PK参数为主键字段。
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="pk">主键字段</param>
-        /// <returns></returns>
-        public override bool Save<T>(T item)
-        {
-            if (item == default(T))
+            if (item == default(object))
             {
-                log.WarnFormat("Instance[{0}] is null.", typeof(T));
+                log.Warn("Instance is null.");
                 return false;
             }
 
-            var pk = DBUtil.GetPrimaryKeyName<T>();
+            var pk = DBUtil.GetPrimaryKeyName(item);
             if (CommonClass.GetFieldValue(item, pk) == null)
             {
                 log.WarnFormat("PK' value is null.");
                 return false;
             }
 
-            return Do<T>(tbn =>
+            return Do(item.GetType(), tbn =>
             {
-                var utp = GenerateUpdateSQLWithParametersFromObject(tbn, item);
-                var itp = GenerateInsertSQLWithParametersFromObject(tbn, item);
+                var utp = GenerateUpdateSqlWithParametersFromObject(tbn, item);
+                var itp = GenerateInsertSqlWithParametersFromObject(tbn, item);
 
                 return DataAccess.ExecuteNonQuery(
-                        string.Format("IF EXISTS (SELECT {0} FROM {1} WHERE {0}=@{0}) {2} ELSE {3};",
-                            pk,
-                            tbn,
-                            utp.Item1 + string.Format(" WHERE {0}=@{0}", pk),
-                            itp.Item1),
-                        itp.Item2) == 1;
+                           $"IF EXISTS (SELECT {pk} FROM {tbn} WHERE {pk}=@{pk}) {utp.Item1} WHERE {pk}=@{pk} ELSE {itp.Item1};",
+                           itp.Item2) == 1;
             });
         }
 
@@ -136,7 +131,8 @@ namespace Matrixden.DBUtilities
         /// <returns>是否执行成功</returns>
         public override bool Update(string strTableName, string strSets, string strCondition)
         {
-            if (strTableName.IsNullOrEmptyOrWhiteSpace() || strSets.IsNullOrEmptyOrWhiteSpace() || strCondition.IsNullOrEmptyOrWhiteSpace())
+            if (strTableName.IsNullOrEmptyOrWhiteSpace() || strSets.IsNullOrEmptyOrWhiteSpace() ||
+                strCondition.IsNullOrEmptyOrWhiteSpace())
                 return false;
 
             // ToDo: Need to make sure there is no UpdateTime column in the strSets. If not, replace its value.
@@ -145,22 +141,10 @@ namespace Matrixden.DBUtilities
             }
 
             string strSql =
-                "UPDATE " + strTableName + " SET " + strSets + "," + DBTableCommonColumns.UpdateTime + "=GETDATE() WHERE " + strCondition;  //根据指定查询条件，更新数据记录
+                "UPDATE " + strTableName + " SET " + strSets + "," + DBTableCommonColumns.UpdateTime +
+                "=GETDATE() WHERE " + strCondition; //根据指定查询条件，更新数据记录
             bool bResult = DataAccess.ExecSql(strSql);
             return bResult;
-        }
-
-        /// <summary>
-        /// 更新一条数据记录
-        /// </summary>
-        /// <typeparam name="T">泛型，要更新的数据对象的类型</typeparam>
-        /// <param name="strTableName">表名</param>
-        /// <param name="item">要更新的数据对象</param>
-        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
-        /// <returns>是否执行成功</returns>
-        public override OperationResult Update<T>(string strSets, string strCondition)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -174,20 +158,10 @@ namespace Matrixden.DBUtilities
             if (StringHelper.IsNullOrEmptyOrWhiteSpace(strDataTable, strCondition))
                 return false;
 
-            string strSql = string.Format("SELECT TOP 1 1 FROM {0} WHERE {1};", strDataTable, strCondition);
+            string strSql = $"SELECT TOP 1 1 FROM {strDataTable} WHERE {strCondition};";
             var r = DataAccess.GetSingleRowValue(strSql);
 
             return r != null && r.Length == 1 && "1".Equals(r[0]);
-        }
-
-        /// <summary>
-        /// 根据特定条件查询表中是否含有该条数据.
-        /// </summary>
-        /// <param name="strCondition">数据库查询条件, 不含where关键字</param>
-        /// <returns></returns>
-        public override bool IsDataRowExist<T>(string strCondition)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -201,14 +175,14 @@ namespace Matrixden.DBUtilities
         /// <param name="originalLatestUpdateFlag"></param>
         /// <param name="conditionStr"></param>
         /// <returns></returns>
-        public override bool IsTableDataChanged(string table, int originalCount, object originalLatestUpdateFlag, string conditionStr)
+        public override bool IsTableDataChanged(string table, int originalCount, object originalLatestUpdateFlag,
+            string conditionStr)
         {
             if (originalCount != DataAccess.GetCount(table, conditionStr))
                 return true;
 
-            string sql = string.Format(@"SELECT TOP 1 Flags FROM {0} ORDER BY Flags DESC {1};",
-                            table,
-                            conditionStr.IsNullOrEmptyOrWhiteSpace() ? "" : " WHERE " + conditionStr);
+            string sql =
+                $@"SELECT TOP 1 Flags FROM {table} ORDER BY Flags DESC {(conditionStr.IsNullOrEmptyOrWhiteSpace() ? "" : " WHERE " + conditionStr)};";
             var res = DataAccess.GetArray(sql);
             if (res == null || res.Length != 1)
             {
@@ -218,36 +192,20 @@ namespace Matrixden.DBUtilities
             return originalLatestUpdateFlag == null || !originalLatestUpdateFlag.ToString().Equals(res[0]);
         }
 
-        /// <summary>
-        /// 根据实体生成Insert SQL语句, 使用参数方式赋值.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="table">实体对应的表名</param>
-        /// <returns></returns>
-        public override string GenerateInsertSQLWithParameters<T>(string table)
+        /// <inheritdoc />
+        public override string GenerateInsertSqlWithParameters(string table, object item)
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// 根据实体生成Update SQL语句, 使用参数方式赋值.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="table">实体对应的表名</param>
-        /// <param name="condition"></param>
-        /// <param name="t"></param>
-        /// <returns></returns>
-        public override string GenerateUpdateSQLWithParameters<T>(string table, string condition, T t)
+        /// <inheritdoc />
+        public override string GenerateUpdateSqlWithParameters<T>(string table, string condition, T t)
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// 根据实体生成Insert or Update SQL语句, 使用参数方式赋值.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public override string GenerateInsertOrUpdateSQLWithParameters<T>()
+        /// <inheritdoc />
+        public override string GenerateInsertOrUpdateSqlWithParameters(Type type)
         {
             throw new NotImplementedException();
         }

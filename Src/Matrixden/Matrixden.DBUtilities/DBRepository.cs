@@ -4,32 +4,31 @@
        DBRepository repository = new DBRepository();            //实例化类
 
        //创建数据表的模型对象，通过DBUtility.DBRepository.Models
-       userhistoryModel userhistory = new userhistoryModel();   //userhistory表的数据模型
+       UserHistoryModel userHistory = new UserHistoryModel();   //UserHistory表的数据模型
    
        //设置数据表模型参数
-       userhistory.id = 3;
-       userhistory.acc_time = DateTime.Now;
-       userhistory.accesstype = 1;
-       userhistory.user_link = 1;
+       userHistory.id = 3;
+       userHistory.acc_time = DateTime.Now;
+       userHistory.accessType = 1;
+       userHistory.user_link = 1;
        
        //返回全部数据记录
-       userhistoryModel[] items = repository.GetByCondition<userhistoryModel>("userhistory", "");
+       UserHistoryModel[] items = repository.GetByCondition<UserHistoryModel>("userHistory", "");
 
        //添加一条新的数据记录
-       bool bResult = repository.Add<userhistoryModel>("userhistory", userhistory);
+       bool bResult = repository.Add<UserHistoryModel>("userHistory", userHistory);
  
        //根据指定的条件，更新一条数据记录
-       bool bResult = repository.Update<userhistoryModel>("userhistory", userhistory, "id=" + userhistory.id);
- *
+       bool bResult = repository.Update<UserHistoryModel>("userHistory", userHistory, "id=" + userHistory.id);
  * 
  */
 
 namespace Matrixden.DBUtilities
 {
     using Matrixden.DBUtilities.Attributes;
+    using Matrixden.DBUtilities.Interfaces;
     using Matrixden.DBUtilities.Logging;
     using Matrixden.DBUtilities.Resources;
-    using Matrixden.DBUtilities.Interfaces;
     using Matrixden.UnifiedDBAdapter;
     using Matrixden.Utils;
     using Matrixden.Utils.Extensions;
@@ -46,12 +45,19 @@ namespace Matrixden.DBUtilities
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class DBRepository : IDBRepository
     {
         internal static readonly ILog log = LogProvider.GetCurrentClassLogger();
         public static DataAccessHelper DataAccess = new DataAccessHelper();
 
-        protected DBRepository() : this(ConfigurationManager.ConnectionStrings[DataAccessHelper.APP_CONFIG_DB_CONNCTION]) { }
+        protected DBRepository() : this(
+            ConfigurationManager.ConnectionStrings[DataAccessHelper.APP_CONFIG_DB_CONNCTION])
+        {
+        }
+
         protected DBRepository(ConnectionStringSettings config)
         {
             if (config == default(ConnectionStringSettings))
@@ -73,6 +79,10 @@ namespace Matrixden.DBUtilities
 
         private static object locker = new object();
         private static DBRepository instance;
+
+        /// <summary>
+        /// 单例
+        /// </summary>
         public static DBRepository Instance
         {
             get
@@ -86,7 +96,8 @@ namespace Matrixden.DBUtilities
                             // 从config文件中读取数据库类型
                             try
                             {
-                                var cnf = System.Configuration.ConfigurationManager.ConnectionStrings[DataAccessHelper.APP_CONFIG_DB_CONNCTION];
+                                var cnf = System.Configuration.ConfigurationManager.ConnectionStrings[
+                                    DataAccessHelper.APP_CONFIG_DB_CONNCTION];
                                 switch (cnf.ProviderName)
                                 {
                                     case DataAccessHelper.PROVIDER_NAME_MSSQL:
@@ -134,16 +145,15 @@ namespace Matrixden.DBUtilities
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
         /// <returns>返回的数据记录对象数组</returns>
-        public abstract OperationResult GetByCondition<T>(string strColumns, string strCondition, string strOrder)
-            where T : class, new();
+        public OperationResult GetByCondition<T>(string strColumns, string strCondition, string strOrder)
+            where T : class, new() => Do<T>(tbn => GetByCondition<T>(tbn, strColumns, strCondition, strOrder));
 
         /// <summary>
         /// 根据条件保存实体, 如果存在则更新, 否则插入.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        public abstract bool Save<T>(T item) where T : class, new();
+        public abstract bool Save(object item);
 
         /// <summary>
         /// 更新数据记录
@@ -160,7 +170,8 @@ namespace Matrixden.DBUtilities
         /// <param name="strSets">要更新的属性值(SQL语句)，如“[属性列1]=[值1], [属性列2]=[值2], ……[属性列n]=[值n]”. 无需包含[UpdateTime]字段.</param>
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <returns></returns>
-        public abstract OperationResult Update<T>(string strSets, string strCondition);
+        public OperationResult Update<T>(string strSets, string strCondition) where T : class, new() =>
+            Do<T>(tbn => new OperationResult(Update(tbn, strSets, strCondition)));
 
         /// <summary>
         /// 根据特定条件查询表中是否含有该条数据.
@@ -173,46 +184,68 @@ namespace Matrixden.DBUtilities
         /// <summary>
         /// 根据特定条件查询表中是否含有该条数据.
         /// </summary>
+        /// <param name="type"></param>
         /// <param name="strCondition">数据库查询条件, 不含where关键字</param>
         /// <returns></returns>
-        public abstract bool IsDataRowExist<T>(string strCondition);
+        public bool IsDataRowExist(Type type, string strCondition) =>
+            !strCondition.IsNullOrEmptyOrWhiteSpace() && Do(type, tbn => IsDataRowExist(tbn, strCondition));
+
+        /// <summary>
+        /// 根据特定条件查询表中是否含有该条数据.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="strCondition"></param>
+        /// <returns></returns>
+        public bool IsDataRowExist<T>(string strCondition) => IsDataRowExist(typeof(T), strCondition);
 
         /// <summary>
         /// 此方法仅用于逻辑删除的数据库表, 即仅有增, 改, 查操作权限的表.
         /// 对带有物理删除的数据库表, 不适用.
         /// 如果在校验过程中, 发生UnExpected结果, 直接返回True.
         /// Microsoft SQL Server中, 使用"[Flags] [timestamp] NOT NULL"字段跟踪数据行的变化;
-        /// MySQL中, 则使用"`UpdateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP"字段跟踪数据行的变化.
+        /// MySQL中, 则使用"`Flags` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP"字段跟踪数据行的变化.
         /// </summary>
         /// <param name="table">表名</param>
         /// <param name="originalCount">已缓存的数据条</param>
         /// <param name="originalLatestUpdateFlag">缓存结束数据标记.</param>
         /// <param name="conditionStr"></param>
         /// <returns></returns>
-        public abstract bool IsTableDataChanged(string table, int originalCount, object originalLatestUpdateFlag, string conditionStr);
+        public abstract bool IsTableDataChanged(string table, int originalCount, object originalLatestUpdateFlag,
+            string conditionStr);
 
         /// <summary>
         /// 根据实体生成Insert SQL语句, 使用参数方式赋值.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="table">实体对应的表名</param>
-        /// <returns></returns>
-        public abstract string GenerateInsertSQLWithParameters<T>(string table) where T : class, new();
+        /// <param name="item">实体</param>
+        public abstract string GenerateInsertSqlWithParameters(string table, object item);
 
         /// <summary>
         /// 根据实体生成Update SQL语句, 使用参数方式赋值.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="table">实体对应的表名</param>
+        /// <param name="condition"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
-        public abstract string GenerateUpdateSQLWithParameters<T>(string table, string condition, T t) where T : class, new();
+        public abstract string GenerateUpdateSqlWithParameters<T>(string table, string condition, T t)
+            where T : class, new();
+
+        /// <summary>
+        /// 根据实体生成Insert or Update SQL语句, 使用参数方式赋值.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public abstract string GenerateInsertOrUpdateSqlWithParameters(Type type);
 
         /// <summary>
         /// 根据实体生成Insert or Update SQL语句, 使用参数方式赋值.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public abstract string GenerateInsertOrUpdateSQLWithParameters<T>() where T : class, new();
+        [Obsolete("Use the overload method instead.")]
+        public string GenerateInsertOrUpdateSqlWithParameters<T>() where T : class, new() =>
+            GenerateInsertOrUpdateSqlWithParameters(typeof(T));
 
         /// <summary>
         /// 执行SQL语句, 返回数据集
@@ -230,7 +263,7 @@ namespace Matrixden.DBUtilities
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("SQL Command: {0}; Exception Msg: {1}.", sqlCommand, ex);
+                log.ErrorException("SQL Command: {0}.", ex, sqlCommand);
             }
 
             return default(IEnumerable<T>);
@@ -250,7 +283,7 @@ namespace Matrixden.DBUtilities
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("SQL Command: {0}; Exception Msg: {1}.", sqlCommand, ex);
+                log.ErrorException("SQL Command: {0}.", ex, sqlCommand);
             }
 
             return default(string[]);
@@ -265,7 +298,7 @@ namespace Matrixden.DBUtilities
         {
             try
             {
-                System.Data.DataSet dataSet = DataAccess.GetDataSet(sqlCommand);
+                var dataSet = DataAccess.GetDataSet(sqlCommand);
                 if (dataSet != null)
                 {
                     if (dataSet.Tables.Count > 0)
@@ -276,10 +309,10 @@ namespace Matrixden.DBUtilities
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("SQL Command: {0}; Exception Msg: {1}.", sqlCommand, ex);
+                log.ErrorException("SQL Command: {0}.", ex, sqlCommand);
             }
 
-            return default(string);
+            return string.Empty;
         }
 
         /// <summary>
@@ -289,7 +322,8 @@ namespace Matrixden.DBUtilities
         /// <param name="procName">存储过程名称.</param>
         /// <param name="paras">存储过程参数列表.</param>
         /// <returns></returns>
-        public IEnumerable<T> GetByStoredProcedure<T>(string procName, params DbParameter[] paras) where T : class, new()
+        public IEnumerable<T> GetByStoredProcedure<T>(string procName, params DbParameter[] paras)
+            where T : class, new()
         {
             try
             {
@@ -299,7 +333,7 @@ namespace Matrixden.DBUtilities
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("Procedure Name: {0}; Exception Msg: {1}.", procName, ex);
+                log.ErrorException("Procedure Name: {0}.", ex, procName);
             }
 
             return default(IEnumerable<T>);
@@ -314,33 +348,29 @@ namespace Matrixden.DBUtilities
         /// <returns>是否执行成功</returns>
         public bool Add(string strTableName, string strColumns, string strValues)
         {
-            if (strTableName.IsNullOrEmptyOrWhiteSpace() || strColumns.IsNullOrEmptyOrWhiteSpace() || strValues.IsNullOrEmptyOrWhiteSpace())
-            {
+            if (strTableName.IsNullOrEmptyOrWhiteSpace() || strColumns.IsNullOrEmptyOrWhiteSpace() ||
+                strValues.IsNullOrEmptyOrWhiteSpace())
                 return false;
-            }
 
-            string strSql =
-                "INSERT INTO " + strTableName + " (" + strColumns + ") " +
-                "VALUES(" + strValues + ")";  //添加数据记录
-
-            return DataAccess.ExecSql(strSql);              //执行sql语句，返回是否执行成功
+            //添加数据记录
+            //执行sql语句，返回是否执行成功
+            return DataAccess.ExecSql($"INSERT INTO {strTableName} ({strColumns}) VALUES({strValues})");
         }
 
         /// <summary>
         /// 添加一条数据记录
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public OperationResult Add<T>(string strTableName, T item) where T : class, new()
+        public OperationResult Add(string strTableName, object item)
         {
             var result = new OperationResult(DBOperationMessage.Fail);
-            if (strTableName.IsNullOrEmptyOrWhiteSpace() || item == default(T))
+            if (strTableName.IsNullOrEmptyOrWhiteSpace())
                 return result;
 
             var cnt = 0;
-            var sql = instance.GenerateInsertSQLWithParameters<T>(strTableName);
+            var sql = instance.GenerateInsertSqlWithParameters(strTableName, item);
             if (sql.IsNullOrEmptyOrWhiteSpace())
                 return result;
 
@@ -352,7 +382,7 @@ namespace Matrixden.DBUtilities
             }
             catch (SqlException sEx)
             {
-                log.ErrorException("Error occured during SQL excute, Table: {0},\r\nSQL {1}.", sEx, strTableName, sql);
+                log.ErrorException("Error occured during SQL execute, Table: {0},\r\nSQL {1}.", sEx, strTableName, sql);
                 cnt = -1;
                 if (sEx.Message.Contains("违反了 PRIMARY KEY 约束") || sEx.Message.Contains("违反了 UNIQUE KEY 约束"))
                 {
@@ -381,10 +411,7 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T">泛型，要插入的数据对象的类型</typeparam>
         /// <param name="item">要插入的数据对象</param>
         /// <returns>是否执行成功</returns>
-        public OperationResult Add<T>(T item) where T : class, new()
-        {
-            return Do<T>(tbn => Add<T>(tbn, item));
-        }
+        public OperationResult Add<T>(T item) where T : class, new() => Do(typeof(T), tbn => Add(tbn, item));
 
         /// <summary>
         /// 同时向数据库中添加多条数据.
@@ -396,11 +423,11 @@ namespace Matrixden.DBUtilities
         public OperationResult AddBulk<T>(string tableName, IEnumerable<T> items) where T : class, new()
         {
             var result = new OperationResult(DBOperationMessage.Fail);
-            if (tableName.IsNullOrEmptyOrWhiteSpace() || items == null || items.Count() <= 0)
+            if (tableName.IsNullOrEmptyOrWhiteSpace() || items == null || !items.Any())
                 return result;
 
             var cnt = 0;
-            var sql = instance.GenerateInsertSQLWithParameters<T>(tableName);
+            var sql = instance.GenerateInsertSqlWithParameters(tableName, items);
             if (sql.IsNullOrEmptyOrWhiteSpace())
                 return result;
 
@@ -438,10 +465,8 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T">泛型</typeparam>
         /// <param name="items">实体值</param>
         /// <returns></returns>
-        public OperationResult AddBulk<T>(IEnumerable<T> items) where T : class, new()
-        {
-            return Do<T>(tbn => AddBulk<T>(tbn, items));
-        }
+        public OperationResult AddBulk<T>(IEnumerable<T> items) where T : class, new() =>
+            Do<T>(tbn => AddBulk<T>(tbn, items));
 
         /// <summary>
         /// 添加一条数据记录, 返回受影响的行数.
@@ -452,7 +477,7 @@ namespace Matrixden.DBUtilities
         /// <returns>返回添加的行数.</returns>
         public int AddThenGetAffectedRows<T>(string strTableName, T item) where T : class, new()
         {
-            var tp = GenerateInsertSQLWithParametersFromObject(strTableName, item);
+            var tp = GenerateInsertSqlWithParametersFromObject(strTableName, item);
             if (tp == null)
                 return -1;
 
@@ -462,7 +487,7 @@ namespace Matrixden.DBUtilities
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("表{0}主键重复, SQL: {1}.", ex, strTableName, tp.Item1);
+                log.ErrorException("表{0}主键重复, SQL: {1}.", ex, strTableName, tp.Item1);
             }
 
             return -1;
@@ -479,9 +504,8 @@ namespace Matrixden.DBUtilities
             if (strTableName.IsNullOrEmptyOrWhiteSpace() || strCondition.IsNullOrEmptyOrWhiteSpace())
                 return false;
 
-            string strSql = "DELETE FROM " + strTableName + " WHERE " + strCondition;             //根据指定查询条件，删除数据记录
-
-            return DataAccess.ExecSql(strSql);
+            //根据指定查询条件，删除数据记录
+            return DataAccess.ExecSql($"DELETE FROM {strTableName} WHERE {strCondition}");
         }
 
         /// <summary>
@@ -490,10 +514,9 @@ namespace Matrixden.DBUtilities
         /// <param name="strTableName"></param>
         /// <param name="strCondition"></param>
         /// <returns></returns>
-        public bool Remove_Logic(string strTableName, string strCondition)
-        {
-            return Update(strTableName, string.Format("{0}='{1}'", DBTableCommonColumns.Status, DBColumn_StatusCode.DB_ROW_STATUS_DELETED), strCondition);
-        }
+        public bool Remove_Logic(string strTableName, string strCondition) => Update(strTableName,
+            $"{DBTableCommonColumns.Status}='{DBColumn_StatusCode.DB_ROW_STATUS_DELETED}'",
+            strCondition);
 
         /// <summary>
         /// 更新一条数据记录
@@ -506,11 +529,12 @@ namespace Matrixden.DBUtilities
         public OperationResult Update<T>(string strTableName, T item, string strCondition) where T : class, new()
         {
             var result = new OperationResult(DBOperationMessage.Fail);
-            if (strTableName.IsNullOrEmptyOrWhiteSpace() || item == default(T) || strCondition.IsNullOrEmptyOrWhiteSpace())
+            if (strTableName.IsNullOrEmptyOrWhiteSpace() || item == default(T) ||
+                strCondition.IsNullOrEmptyOrWhiteSpace())
                 return result;
 
             var cnt = 0;
-            var sql = instance.GenerateUpdateSQLWithParameters<T>(strTableName, strCondition, item);
+            var sql = instance.GenerateUpdateSqlWithParameters<T>(strTableName, strCondition, item);
             if (sql.IsNullOrEmptyOrWhiteSpace())
                 return result;
 
@@ -543,10 +567,7 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T">泛型，要更新的数据对象的类型</typeparam>
         /// <param name="item">要更新的数据对象</param>
         /// <returns>是否执行成功</returns>
-        public bool Update<T>(T item) where T : class, new()
-        {
-            return Update<T>(item, "ID=@ID");
-        }
+        public bool Update<T>(T item) where T : class, new() => Update(item, "ID=@ID");
 
         /// <summary>
         /// 更新一条数据记录
@@ -555,10 +576,8 @@ namespace Matrixden.DBUtilities
         /// <param name="item">要更新的数据对象</param>
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <returns>是否执行成功</returns>
-        public bool Update<T>(T item, string strCondition) where T : class, new()
-        {
-            return Do<T>(tbn => Update<T>(tbn, item, strCondition)).Result;
-        }
+        public bool Update<T>(T item, string strCondition) where T : class, new() =>
+            Do<T>(tbn => Update<T>(tbn, item, strCondition)).Result;
 
         /// <summary>
         /// 依据给定条件, 按格式拼接语句, 获取数据集行数. SQL拼接格式: SELECT COUNT(<c>countColumn</c>) FROM <c>table</c> WHERE <c>condition</c>;
@@ -571,7 +590,8 @@ namespace Matrixden.DBUtilities
         {
             if (StringHelper.IsNullOrEmptyOrWhiteSpace(countColumn, table, condition))
             {
-                log.DebugFormat("给定值存在空.\r\ncountColumn:{0};\r\ntable:{1};\r\ncondition:{2}.", countColumn, table, condition);
+                log.DebugFormat("给定值存在空.\r\ncountColumn:{0};\r\ntable:{1};\r\ncondition:{2}.", countColumn, table,
+                    condition);
 
                 return 0;
             }
@@ -585,27 +605,21 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T"></typeparam>
         /// <param name="condition"></param>
         /// <returns></returns>
-        public int Count<T>(string condition)
-        {
-            return Do<T, int>(tbn => Count("*", tbn, condition));
-        }
+        public int Count<T>(string condition) => Do<T, int>(tbn => Count("*", tbn, condition));
 
         /// <summary>
         /// 检测数据库连接是否正常
         /// </summary>
-        public void TryTestDBConnection()
-        {
-            DataAccess.GetDataSet("SHOW TABLES");
-        }
+        public void TryTestDBConnection() => DataAccess.GetDataSet("SHOW TABLES");
 
         /// <summary>
-        /// GenerateInsertSQLFromObject
+        /// GenerateInsertSqlFromObject
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
         /// <param name="t"></param>
         /// <returns></returns>
-        public string GenerateInsertSQLFromObject<T>(string strTableName, T t) where T : class, new()
+        public string GenerateInsertSqlFromObject<T>(string strTableName, T t) where T : class, new()
         {
             try
             {
@@ -620,9 +634,8 @@ namespace Matrixden.DBUtilities
                 CommonClass.SetPropertyValue(item, DBTableCommonColumns.DeleteMan, null);
 
                 string strColumns = ""; //属性列
-                string strValues = "";  //属性值
-                string strProp = "";
-                foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
+                string strValues = ""; //属性值
+                foreach (var property in GenerateDataTableColumnsFromEntity<T>())
                 {
                     object value = CommonClass.GetFieldValue(item, property.Name);
                     if (value == null)
@@ -630,55 +643,58 @@ namespace Matrixden.DBUtilities
                         continue;
                     }
 
-                    strProp = property.PropertyType.ToString();
+                    var strProp = property.PropertyType.ToString();
                     switch (strProp)
                     {
                         case "System.String":
-                            strColumns += property.Name + ",";    //添加属性列名称
+                            strColumns += property.Name + ","; //添加属性列名称
                             strValues += "'" + value + "',";
                             break;
                         case "System.Int32":
-                            strColumns += property.Name + ",";    //添加属性列名称
+                            strColumns += property.Name + ","; //添加属性列名称
                             strValues += value + ",";
                             break;
                         case "System.Double":
-                            strColumns += property.Name + ",";    //添加属性列名称
+                            strColumns += property.Name + ","; //添加属性列名称
                             strValues += value + ",";
                             break;
                         case "System.DateTime":
-                            if (property.Name.Equals(DBTableCommonColumns.CreateTime, StringComparison.CurrentCultureIgnoreCase))
+                            if (property.Name.Equals(DBTableCommonColumns.CreateTime,
+                                StringComparison.CurrentCultureIgnoreCase))
                             {
                                 strValues += "GETDATE(),";
                             }
                             else
                             {
-                                if ((DateTime)value == default(DateTime))
+                                if ((DateTime) value == default(DateTime))
                                     break;
 
-                                strValues += "'" + ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss") + "',";
+                                strValues += "'" + ((DateTime) value).ToString("yyyy-MM-dd HH:mm:ss") + "',";
                             }
-                            strColumns += property.Name + ",";    //添加属性列名称
+
+                            strColumns += property.Name + ","; //添加属性列名称
                             break;
                         case "System.Nullable`1[System.DateTime]":
-                            strColumns += property.Name + ",";    //添加属性列名称
+                            strColumns += property.Name + ","; //添加属性列名称
                             strValues += "'" + value + "',";
                             break;
                         case "System.Boolean":
-                            value = (bool)value ? 1 : 0;
-                            strColumns += property.Name + ",";    //添加属性列名称
+                            value = (bool) value ? 1 : 0;
+                            strColumns += property.Name + ","; //添加属性列名称
                             strValues += "'" + value + "',";
                             break;
                         case "System.Decimal":
-                            strColumns += property.Name + ",";    //添加属性列名称
+                            strColumns += property.Name + ","; //添加属性列名称
                             strValues += value + ",";
                             break;
-                    }//end switch
-                }//end foreach
+                    } //end switch
+                } //end foreach
+
                 strColumns = strColumns.Remove(strColumns.Length - 1);
                 strValues = strValues.Remove(strValues.Length - 1);
                 string strSql =
                     "INSERT INTO " + strTableName + " (" + strColumns + ") " +
-                    "VALUES(" + strValues + ");";  //添加数据记录
+                    "VALUES(" + strValues + ");"; //添加数据记录
 
                 return strSql;
             }
@@ -691,14 +707,15 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// GenerateUpdateSQLFromObject
+        /// GenerateUpdateSqlFromObject
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
         /// <param name="t"></param>
         /// <param name="strCondition"></param>
         /// <returns></returns>
-        public string GenerateUpdateSQLFromObject<T>(string strTableName, T t, string strCondition) where T : class, new()
+        public string GenerateUpdateSqlFromObject<T>(string strTableName, T t, string strCondition)
+            where T : class, new()
         {
             try
             {
@@ -713,7 +730,7 @@ namespace Matrixden.DBUtilities
                 CommonClass.SetPropertyValue(item, DBTableCommonColumns.DeleteMan, null);
 
                 StringBuilder strSets = new StringBuilder(); //属性设置
-                foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
+                foreach (System.Reflection.PropertyInfo property in GenerateDataTableColumnsFromEntity<T>())
                 {
                     object value = CommonClass.GetFieldValue(item, property.Name);
                     if (value == null)
@@ -736,21 +753,27 @@ namespace Matrixden.DBUtilities
                             strSets.AppendFormat("{0}={1},", property.Name, value);
                             break;
                         case "System.DateTime":
-                            if (property.Name.Equals(DBTableCommonColumns.CreateTime, StringComparison.CurrentCultureIgnoreCase)
-                                                || property.Name.Equals(DBTableCommonColumns.DeleteTime, StringComparison.CurrentCultureIgnoreCase))
+                            if (property.Name.Equals(DBTableCommonColumns.CreateTime,
+                                    StringComparison.CurrentCultureIgnoreCase)
+                                || property.Name.Equals(DBTableCommonColumns.DeleteTime,
+                                    StringComparison.CurrentCultureIgnoreCase))
                                 break;
 
                             strSets.AppendFormat("{0}={1},",
-                                                property.Name, property.Name.Equals(DBTableCommonColumns.UpdateTime, StringComparison.CurrentCultureIgnoreCase)
-                                                    ? "GETDATE()" : "'" + value + "'");
+                                property.Name, property.Name.Equals(DBTableCommonColumns.UpdateTime,
+                                    StringComparison.CurrentCultureIgnoreCase)
+                                    ? "GETDATE()"
+                                    : "'" + value + "'");
                             break;
                         case "System.Boolean":
-                            strSets.AppendFormat("{0} = {1},", property.Name, (bool)value ? 1 : 2);     // 2 for false, 1 for true
+                            strSets.AppendFormat("{0} = {1},", property.Name,
+                                (bool) value ? 1 : 2); // 2 for false, 1 for true
                             break;
-                    }//end switch
-                }//end foreach
+                    } //end switch
+                } //end foreach
+
                 strSets.Remove(strSets.Length - 1, 1);
-                string strSql = string.Format("UPDATE {0} SET {1} WHERE {2};", strTableName, strSets.ToString(), strCondition);//根据指定查询条件，更新数据记录
+                var strSql = $"UPDATE {strTableName} SET {strSets.ToString()} WHERE {strCondition};"; //根据指定查询条件，更新数据记录
 
                 return strSql;
             }
@@ -763,13 +786,14 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// GenerateInsertSQLWithParametersFromObject
+        /// GenerateInsertSqlWithParametersFromObject
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
-        /// <param name="item"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
-        public Tuple<string, List<DbParameter>> GenerateInsertSQLWithParametersFromObject<T>(string strTableName, T t) where T : class, new()
+        public Tuple<string, List<DbParameter>> GenerateInsertSqlWithParametersFromObject<T>(string strTableName, T t)
+            where T : class, new()
         {
             try
             {
@@ -778,13 +802,10 @@ namespace Matrixden.DBUtilities
                     return default(Tuple<string, List<DbParameter>>);
                 }
 
-                //var item = new T();
-                //CommonHelper.SyncModelToModel<T, T>(t, item);
-                List<string> columns = new List<string>();
-                List<DbParameter> parameters = new List<DbParameter>();
+                var columns = new List<string>();
+                var parameters = new List<DbParameter>();
 
-                string strProp = "";
-                foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
+                foreach (System.Reflection.PropertyInfo property in GenerateDataTableColumnsFromEntity<T>())
                 {
                     object value = CommonClass.GetFieldValue(t, property.Name);
                     if (value == null)
@@ -792,12 +813,13 @@ namespace Matrixden.DBUtilities
                         continue;
                     }
 
-                    strProp = property.PropertyType.ToString();
+                    var strProp = property.PropertyType.ToString();
                     columns.Add(property.Name);
                     switch (strProp)
                     {
                         case "System.DateTime":
-                            if (property.Name.Equals(DBTableCommonColumns.CreateTime, StringComparison.CurrentCultureIgnoreCase))
+                            if (property.Name.Equals(DBTableCommonColumns.CreateTime,
+                                StringComparison.CurrentCultureIgnoreCase))
                             {
                                 if (value.Equals(default(DateTime)))
                                 {
@@ -805,47 +827,59 @@ namespace Matrixden.DBUtilities
                                     break;
                                 }
                                 else
-                                    parameters.Add(new SqlParameter { ParameterName = property.Name, SqlDbType = SqlDbType.DateTime, Value = DateTime.Now });
+                                    parameters.Add(new SqlParameter
+                                    {
+                                        ParameterName = property.Name,
+                                        SqlDbType = SqlDbType.DateTime,
+                                        Value = DateTime.Now
+                                    });
                             }
-                            else if (property.Name.Equals(DBTableCommonColumns.UpdateTime, StringComparison.CurrentCultureIgnoreCase)
-                                        || property.Name.Equals(DBTableCommonColumns.DeleteTime, StringComparison.CurrentCultureIgnoreCase))
+                            else if (property.Name.Equals(DBTableCommonColumns.UpdateTime,
+                                         StringComparison.CurrentCultureIgnoreCase)
+                                     || property.Name.Equals(DBTableCommonColumns.DeleteTime,
+                                         StringComparison.CurrentCultureIgnoreCase))
                             {
                                 columns.Remove(property.Name);
                                 break;
                             }
                             else
                             {
-                                if ((DateTime)value == default(DateTime))
+                                if ((DateTime) value == default(DateTime))
                                 {
                                     columns.Remove(property.Name);
                                     break;
                                 }
 
-                                parameters.Add(new SqlParameter { ParameterName = property.Name, SqlDbType = SqlDbType.DateTime, Value = value });
+                                parameters.Add(new SqlParameter
+                                    {ParameterName = property.Name, SqlDbType = SqlDbType.DateTime, Value = value});
                             }
+
                             break;
                         case "System.Guid":
-                            if ((Guid)value == default(Guid))
+                            if ((Guid) value == default(Guid))
                             {
                                 columns.Remove(property.Name);
                                 break;
                             }
                             else
-                                parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
+                                parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
+
                             break;
                         case "System.Boolean":
-                            value = (bool)value ? 1 : 0;
-                            parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
+                            value = (bool) value ? 1 : 0;
+                            parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
                             break;
                         default:
-                            parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
+                            parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
                             break;
-                    }//end switch
-                }//end foreach
+                    } //end switch
+                } //end foreach
 
                 var strColumns = string.Join(",", columns.ToArray());
                 var values = string.Join(",@", columns.ToArray());
-                return new Tuple<string, List<DbParameter>>(string.Format("INSERT INTO {0}({1}) VALUES(@{2});", strTableName, strColumns, values), parameters);  //添加数据记录  strColumns;
+                return new Tuple<string, List<DbParameter>>(
+                    $"INSERT INTO {strTableName}({strColumns}) VALUES(@{values});",
+                    parameters); //添加数据记录  strColumns;
             }
             catch (Exception ex)
             {
@@ -856,13 +890,14 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// GenerateUpdateSQLWithParametersFromObject, 需要在外部添加条件.
+        /// GenerateUpdateSqlWithParametersFromObject, 需要在外部添加条件.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="strTableName"></param>
         /// <param name="t"></param>
         /// <returns></returns>
-        public Tuple<string, List<DbParameter>> GenerateUpdateSQLWithParametersFromObject<T>(string strTableName, T t) where T : class, new()
+        public Tuple<string, List<DbParameter>> GenerateUpdateSqlWithParametersFromObject<T>(string strTableName, T t)
+            where T : class, new()
         {
             try
             {
@@ -871,11 +906,9 @@ namespace Matrixden.DBUtilities
                     return default(Tuple<string, List<DbParameter>>);
                 }
 
-                //var item = new T();
-                //CommonHelper.SyncModelToModel<T, T>(t, item);
-                List<DbParameter> parameters = new List<DbParameter>();
-                StringBuilder strSets = new StringBuilder(); //属性设置
-                foreach (System.Reflection.PropertyInfo property in GenerateDatatableColumnsFromEntity<T>())
+                var parameters = new List<DbParameter>();
+                var strSets = new StringBuilder(); //属性设置
+                foreach (var property in GenerateDataTableColumnsFromEntity<T>())
                 {
                     object value = CommonClass.GetFieldValue(t, property.Name);
                     if (value == null || property.Name.Equals(DBUtil.GetPrimaryKeyName<T>()))
@@ -885,35 +918,44 @@ namespace Matrixden.DBUtilities
                     switch (strProp)
                     {
                         case "System.DateTime":
-                            if (property.Name.Equals(DBTableCommonColumns.CreateTime, StringComparison.CurrentCultureIgnoreCase)
-                                                || property.Name.Equals(DBTableCommonColumns.DeleteTime, StringComparison.CurrentCultureIgnoreCase))
+                            if (property.Name.Equals(DBTableCommonColumns.CreateTime,
+                                    StringComparison.CurrentCultureIgnoreCase)
+                                || property.Name.Equals(DBTableCommonColumns.DeleteTime,
+                                    StringComparison.CurrentCultureIgnoreCase))
                                 break;
 
                             strSets.AppendFormat("{0}={1},",
-                                                property.Name, property.Name.Equals(DBTableCommonColumns.UpdateTime, StringComparison.CurrentCultureIgnoreCase)
-                                                    ? "GETDATE()" : "'" + value + "'");
+                                property.Name, property.Name.Equals(DBTableCommonColumns.UpdateTime,
+                                    StringComparison.CurrentCultureIgnoreCase)
+                                    ? "GETDATE()"
+                                    : "'" + value + "'");
                             break;
                         case "System.Guid":
-                            if ((Guid)value == default(Guid))
+                            if ((Guid) value == default(Guid))
                                 break;
                             else
                             {
                                 strSets.AppendFormat("{0}=@{0},", property.Name);
-                                parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
+                                parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
                             }
+
                             break;
                         case "System.Boolean":
-                            strSets.AppendFormat("{0} = {1},", property.Name, (bool)value ? 1 : 2);     // 2 for false, 1 for true
+                            strSets.AppendFormat("{0} = {1},", property.Name,
+                                (bool) value ? 1 : 2); // 2 for false, 1 for true
                             break;
                         default:
                             strSets.AppendFormat("{0}=@{0},", property.Name, value);
-                            parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
+                            parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
                             break;
-                    }//end switch
-                }//end foreach
+                    } //end switch
+                } //end foreach
+
                 strSets.Remove(strSets.Length - 1, 1);
 
-                return new Tuple<string, List<DbParameter>>(string.Format("UPDATE {0} SET {1} ", strTableName, strSets.ToString()), parameters);//根据指定查询条件，更新数据记录
+                return new Tuple<string, List<DbParameter>>(
+                    $"UPDATE {strTableName} SET {strSets} ",
+                    parameters); //根据指定查询条件，更新数据记录
             }
             catch (Exception ex)
             {
@@ -928,10 +970,8 @@ namespace Matrixden.DBUtilities
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected IEnumerable<PropertyInfo> GenerateDatatableColumnsFromEntity<T>()
-        {
-            return GenerateDatatableColumnsFromEntity<T>(BindingFlags.Public | BindingFlags.Instance);
-        }
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity<T>() =>
+            GenerateDataTableColumnsFromEntity<T>(BindingFlags.Public | BindingFlags.Instance);
 
         /// <summary>
         /// 根据实体属性, 获取数据库表字段.
@@ -942,24 +982,41 @@ namespace Matrixden.DBUtilities
         ///     how the search is conducted.-or- Zero, to return null.
         /// </param>
         /// <returns></returns>
-        protected IEnumerable<PropertyInfo> GenerateDatatableColumnsFromEntity<T>(BindingFlags bindingAttr)
-        {
-            var pis = typeof(T).GetProperties(bindingAttr);
-            return pis;
-        }
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity<T>(BindingFlags bindingAttr) =>
+            typeof(T).GetProperties(bindingAttr);
 
         /// <summary>
         /// 根据实体属性的特性标签, 获取数据库表字段.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
         /// <param name="flags">待匹配的标签</param>
         /// <returns></returns>
-        protected IEnumerable<PropertyInfo> GenerateDatatableColumnsFromEntity<T>(SerializationFlags flags)
-        {
-            var pis = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => pi.GetCustomAttributes(typeof(SqlSerializableAttribute), false).Any(a => ((a as SqlSerializableAttribute).Serializable & flags) != SerializationFlags.None));
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity(object obj, SerializationFlags flags) =>
+            obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi =>
+                pi.GetCustomAttributes(typeof(SqlSerializableAttribute), false).Any(a =>
+                    // ReSharper disable once PossibleNullReferenceException
+                    ((a as SqlSerializableAttribute).Serializable & flags) != SerializationFlags.None));
 
-            return pis;
-        }
+        /// <summary>
+        /// 根据实体属性的特性标签, 获取数据库表字段.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="filterFlags">待排除的标签</param>
+        /// <returns></returns>
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntityWithFilter(Type type,
+            SerializationFlags filterFlags) => type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(
+            pi =>
+                !pi.GetCustomAttributes(typeof(SqlSerializableAttribute), false).Any(a =>
+                    ((a as SqlSerializableAttribute).Serializable & filterFlags) != SerializationFlags.None));
+
+        /// <summary>
+        /// 根据实体属性的特性标签, 获取数据库表字段.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="filterFlags">待排除的标签</param>
+        /// <returns></returns>
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntityWithFilter(object obj,
+            SerializationFlags filterFlags) => GenerateDataTableColumnsFromEntityWithFilter(obj.GetType(), filterFlags);
 
         /// <summary>
         /// 根据实体属性的特性标签, 获取数据库表字段.
@@ -967,12 +1024,9 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T"></typeparam>
         /// <param name="filterFlags">待排除的标签</param>
         /// <returns></returns>
-        protected IEnumerable<PropertyInfo> GenerateDatatableColumnsFromEntityWithFilter<T>(SerializationFlags filterFlags)
-        {
-            var pis = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi => !pi.GetCustomAttributes(typeof(SqlSerializableAttribute), false).Any(a => ((a as SqlSerializableAttribute).Serializable & filterFlags) != SerializationFlags.None));
-
-            return pis;
-        }
+        protected IEnumerable<PropertyInfo>
+            GenerateDataTableColumnsFromEntityWithFilter<T>(SerializationFlags filterFlags) =>
+            GenerateDataTableColumnsFromEntityWithFilter(typeof(T), filterFlags);
 
         /// <summary>
         /// 将数据库返回的DataSet转化为数据模型对象数组
@@ -980,73 +1034,75 @@ namespace Matrixden.DBUtilities
         /// <typeparam name="T">泛型，指定的数据模型</typeparam>
         /// <param name="dataSet">数据库返回的DataSet</param>
         /// <returns>转化后的数据模型对象数组</returns>
-        protected IEnumerable<T> GetModels<T>(System.Data.DataSet dataSet) where T : class, new()
+        protected IEnumerable<T> GetModels<T>(DataSet dataSet) where T : class, new()
         {
             try
             {
-                IEnumerable<T> models = Enumerable.Empty<T>();
-                if (dataSet != null)
+                var models = Enumerable.Empty<T>();
+                if (dataSet == null)
+                    return models;
+
+                if (dataSet.Tables.Count <= 0)
+                    return models;
+
+                var iUsersCount = 0;
+                var iColumnCount = 0;
+                if (dataSet.Tables[0].Rows.Count > 0)
                 {
-                    if (dataSet.Tables.Count > 0)
+                    iUsersCount = dataSet.Tables[0].Rows.Count;
+                }
+
+                if (dataSet.Tables[0].Columns.Count > 0)
+                {
+                    iColumnCount = dataSet.Tables[0].Columns.Count;
+                }
+
+                if (iUsersCount <= 0 || iColumnCount <= 0)
+                    return models;
+
+                // Use parallel only when the entity count more than 50.
+                if (iUsersCount > 50)
+                {
+                    var ts = new ConcurrentBag<T>();
+                    Parallel.For(0, iUsersCount, i =>
                     {
-                        int iusersCount = 0;
-                        int iColumCount = 0;
-                        if (dataSet.Tables[0].Rows.Count > 0)
+                        var t = new T();
+                        Parallel.For(0, iColumnCount, j =>
                         {
-                            iusersCount = dataSet.Tables[0].Rows.Count;
-                        }
-                        if (dataSet.Tables[0].Columns.Count > 0)
+                            CommonClass.SetPropertyValue(
+                                t,
+                                dataSet.Tables[0].Columns[j].ColumnName,
+                                dataSet.Tables[0].Rows[i][j]);
+                        });
+
+                        ts.Add(t);
+                    });
+
+                    models = ts.OrderBy(t => CommonClass.GetFieldValue(t, DBTableCommonColumns.UpdateTime));
+                }
+                else
+                {
+                    var users = new T[iUsersCount];
+                    for (var i = 0; i < iUsersCount; i++)
+                    {
+                        users[i] = new T();
+                        for (var j = 0; j < iColumnCount; j++)
                         {
-                            iColumCount = dataSet.Tables[0].Columns.Count;
-                        }
-                        if (iusersCount > 0 && iColumCount > 0)
-                        {
-                            // Use parallel only when the entity count more than 50.
-                            if (iusersCount > 50)
-                            {
-                                var ts = new ConcurrentBag<T>();
-                                Parallel.For(0, iusersCount, i =>
-                                {
-                                    var t = new T();
-                                    Parallel.For(0, iColumCount, j =>
-                                    {
-                                        CommonClass.SetPropertyValue(
-                                            t,
-                                            dataSet.Tables[0].Columns[j].ColumnName,
-                                            dataSet.Tables[0].Rows[i][j]);
-                                    });
+                            CommonClass.SetPropertyValue(
+                                users[i],
+                                dataSet.Tables[0].Columns[j].ColumnName,
+                                dataSet.Tables[0].Rows[i][j]);
+                        } //end for j
+                    } //end for i
 
-                                    ts.Add(t);
-                                });
-
-                                models = ts.OrderBy(t => CommonClass.GetFieldValue(t, "UpdateTime"));
-                            }
-                            else
-                            {
-                                var users = new T[iusersCount];
-                                for (int i = 0; i < iusersCount; i++)
-                                {
-                                    users[i] = new T();
-                                    for (int j = 0; j < iColumCount; j++)
-                                    {
-                                        CommonClass.SetPropertyValue(
-                                            users[i],
-                                            dataSet.Tables[0].Columns[j].ColumnName,
-                                            dataSet.Tables[0].Rows[i][j]);
-                                    }//end for j
-                                }//end for i
-
-                                models = users;
-                            }
-                        }//end if iusersCount
-                    }//end if Tables
-                }//end if strArray
+                    models = users;
+                }
 
                 return models;
             }
             catch (Exception ex)
             {
-                log.Error(ex.Message);
+                log.ErrorException(string.Empty, ex);
             }
 
             return default(IEnumerable<T>);
@@ -1055,21 +1111,22 @@ namespace Matrixden.DBUtilities
         /// <summary>
         /// 根据实体获取表名, 执行后续操作.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
         /// <param name="suc">解析成功时的函数</param>
         /// <param name="err">解析表名失败时执行函数</param>
         /// <returns></returns>
-        protected OperationResult DecodeTableName<T>(Func<string, OperationResult> suc, Func<Exception, OperationResult> err)
+        protected OperationResult DecodeTableName(Type type, Func<string, OperationResult> suc,
+            Func<Exception, OperationResult> err)
         {
             string tbn;
-            var cas = typeof(T).GetCustomAttributes<TableAttribute>(false);
+            var cas = type.GetCustomAttributes<TableAttribute>(false);
             if (!cas.Any())
-                tbn = typeof(T).Name;
+                tbn = type.Name;
             else if (cas.Count() == 1)
             {
                 tbn = cas.Select(s => s.Name).FirstOrDefault();
                 if (tbn.IsNullOrEmptyOrWhiteSpace())
-                    tbn = typeof(T).Name;
+                    tbn = type.Name;
             }
             else
                 return err(new Exception("Multiple table attributes found."));
@@ -1080,12 +1137,12 @@ namespace Matrixden.DBUtilities
         /// <summary>
         /// 根据实体获取表名, 执行后续操作.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
         /// <param name="func">解析成功时的函数</param>
         /// <returns></returns>
-        protected OperationResult Do<T>(Func<string, OperationResult> func)
+        protected OperationResult Do(Type type, Func<string, OperationResult> func)
         {
-            return DecodeTableName<T>(func, ex =>
+            return DecodeTableName(type, func, ex =>
             {
                 log.ErrorException("Error during get table name.", ex);
                 return new OperationResult(false);
@@ -1093,46 +1150,40 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// 根据实体获取表名, 执行后续操作. 返回<c>bool</c>类型结果.
+        /// 根据实体获取表名, 执行后续操作.
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="func">解析成功时的函数</param>
+        /// <returns></returns>
+        protected OperationResult Do<T>(Func<string, OperationResult> func) => Do(typeof(T), func);
+
+        /// <summary>
+        /// 根据实体获取表名, 执行后续操作. 返回<c>bool</c>类型结果.
+        /// </summary>
+        /// <param name="type"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected bool Do<T>(Func<string, bool> func)
-        {
-            return Do<T>(tbn =>
-            {
-                return new OperationResult(func(tbn));
-            }).Result;
-        }
+        protected bool Do(Type type, Func<string, bool> func) => Do(type, tbn => new OperationResult(func(tbn))).Result;
 
         /// <summary>
         /// 根据实体获取表名, 执行后续操作. 返回<c>string</c>类型操作信息.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
         /// <param name="func"></param>
         /// <returns></returns>
-        protected string Do<T>(Func<string, string> func)
-        {
-            return Do<T>(tbn =>
-            {
-                return new OperationResult(func(tbn));
-            }).Message;
-        }
+        protected string Do(Type type, Func<string, string> func) =>
+            Do(type, tbn => new OperationResult(func(tbn))).Message;
 
         /// <summary>
         /// 根据实体获取表名, 执行后续操作.
         /// </summary>
-        /// <typeparam name="U"></typeparam>
-        /// <typeparam name="K"></typeparam>
+        /// <typeparam name="TU"></typeparam>
+        /// <typeparam name="TK"></typeparam>
         /// <param name="func">解析成功时的函数</param>
         /// <returns></returns>
-        protected K Do<U, K>(Func<string, K> func)
+        protected TK Do<TU, TK>(Func<string, TK> func)
         {
-            return (K)Do<U>(tbn =>
-            {
-                return new OperationResult(func(tbn));
-            }).Data;
+            return (TK) Do(typeof(TU), tbn => new OperationResult(func(tbn))).Data;
         }
     }
 }
