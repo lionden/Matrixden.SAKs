@@ -7,6 +7,9 @@ namespace Matrixden.Utils.Models
     using Matrixden.Utils.Serialization;
     using System;
 
+    /// <summary>
+    /// 操作结果实体
+    /// </summary>
     public class OperationResult
     {
         private bool _operationResult;
@@ -15,10 +18,7 @@ namespace Matrixden.Utils.Models
         /// </summary>
         public bool Result
         {
-            get
-            {
-                return _operationResult;
-            }
+            get => _operationResult;
             set
             {
                 _operationResult = value;
@@ -39,18 +39,33 @@ namespace Matrixden.Utils.Models
         /// </summary>
         public object Data { get; set; }
 
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
         public OperationResult() { }
 
+        /// <summary>
+        /// 带错误消息的构造函数
+        /// </summary>
+        /// <param name="errorMsg"></param>
         public OperationResult(string errorMsg)
         {
             this.Message = errorMsg;
         }
 
+        /// <summary>
+        /// 仅待失败结果的构造函数
+        /// </summary>
+        /// <param name="result"></param>
         public OperationResult(bool result)
         {
             this._operationResult = result;
         }
 
+        /// <summary>
+        /// 待数据返还的构造函数
+        /// </summary>
+        /// <param name="data"></param>
         public OperationResult(object data)
         {
             if (data != default(object))
@@ -60,6 +75,11 @@ namespace Matrixden.Utils.Models
                 this.Data = data;
             }
         }
+
+        /// <summary>
+        /// 失败结果
+        /// </summary>
+        public static OperationResult False => new OperationResult(false);
 
         /// <summary>
         /// Logical AND operator.
