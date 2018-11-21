@@ -128,14 +128,36 @@ namespace Matrixden.DBUtilities
         /// <summary>
         /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
         /// </summary>
+        /// <param name="type">返回的指定数据对象类型</param>
+        /// <param name="strTableName">要查询的表名</param>
+        /// <param name="strColumns">所选列(SQL语句)，如“[属性列1],[属性列2],……[属性列n]” (如果给空值或者null 等价于 *)</param>
+        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
+        /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
+        /// <returns>返回的数据记录对象数组</returns>
+        public abstract OperationResult GetByCondition(Type type, string strTableName, string strColumns, string strCondition,
+            string strOrder);
+
+        /// <summary>
+        /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
+        /// </summary>
+        /// <param name="type">返回的指定数据对象类型</param>
+        /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
+        /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
+        /// <returns></returns>
+        public OperationResult GetByCondition(Type type, string strCondition, string strOrder) => Do(type,
+            tbn => GetByCondition(type, tbn, string.Empty, strCondition, strOrder));
+
+        /// <summary>
+        /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
+        /// </summary>
         /// <typeparam name="T">泛型，返回的指定数据对象类型</typeparam>
         /// <param name="strTableName">要查询的表名</param>
         /// <param name="strColumns">所选列(SQL语句)，如“[属性列1],[属性列2],……[属性列n]” (如果给空值或者null 等价于 *)</param>
         /// <param name="strCondition">自定义WHERE查询条件(不加WHERE)，如“[属性列1] = [值1] AND [属性列2] = [值2] ……”</param>
         /// <param name="strOrder">对查询返回的数据集进行排序，DESC为降序；ASC为升序；空为不添加排序条件。如“ID DESC”，即根据ID属性按降序排列</param>
         /// <returns>返回的数据记录对象数组</returns>
-        public abstract OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition,
-            string strOrder) where T : class, new();
+        public OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition,
+            string strOrder) where T : class, new() => GetByCondition(typeof(T), strTableName, strColumns, strCondition, strOrder);
 
         /// <summary>
         /// 根据指定表名和查询条件(也可无查询条件)，返回指定属性列的数据对象数组
@@ -666,10 +688,10 @@ namespace Matrixden.DBUtilities
                             }
                             else
                             {
-                                if ((DateTime) value == default(DateTime))
+                                if ((DateTime)value == default(DateTime))
                                     break;
 
-                                strValues += "'" + ((DateTime) value).ToString("yyyy-MM-dd HH:mm:ss") + "',";
+                                strValues += "'" + ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss") + "',";
                             }
 
                             strColumns += property.Name + ","; //添加属性列名称
@@ -679,7 +701,7 @@ namespace Matrixden.DBUtilities
                             strValues += "'" + value + "',";
                             break;
                         case "System.Boolean":
-                            value = (bool) value ? 1 : 0;
+                            value = (bool)value ? 1 : 0;
                             strColumns += property.Name + ","; //添加属性列名称
                             strValues += "'" + value + "',";
                             break;
@@ -767,7 +789,7 @@ namespace Matrixden.DBUtilities
                             break;
                         case "System.Boolean":
                             strSets.AppendFormat("{0} = {1},", property.Name,
-                                (bool) value ? 1 : 2); // 2 for false, 1 for true
+                                (bool)value ? 1 : 2); // 2 for false, 1 for true
                             break;
                     } //end switch
                 } //end foreach
@@ -844,33 +866,33 @@ namespace Matrixden.DBUtilities
                             }
                             else
                             {
-                                if ((DateTime) value == default(DateTime))
+                                if ((DateTime)value == default(DateTime))
                                 {
                                     columns.Remove(property.Name);
                                     break;
                                 }
 
                                 parameters.Add(new SqlParameter
-                                    {ParameterName = property.Name, SqlDbType = SqlDbType.DateTime, Value = value});
+                                { ParameterName = property.Name, SqlDbType = SqlDbType.DateTime, Value = value });
                             }
 
                             break;
                         case "System.Guid":
-                            if ((Guid) value == default(Guid))
+                            if ((Guid)value == default(Guid))
                             {
                                 columns.Remove(property.Name);
                                 break;
                             }
                             else
-                                parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
+                                parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
 
                             break;
                         case "System.Boolean":
-                            value = (bool) value ? 1 : 0;
-                            parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
+                            value = (bool)value ? 1 : 0;
+                            parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
                             break;
                         default:
-                            parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
+                            parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
                             break;
                     } //end switch
                 } //end foreach
@@ -931,22 +953,22 @@ namespace Matrixden.DBUtilities
                                     : "'" + value + "'");
                             break;
                         case "System.Guid":
-                            if ((Guid) value == default(Guid))
+                            if ((Guid)value == default(Guid))
                                 break;
                             else
                             {
                                 strSets.AppendFormat("{0}=@{0},", property.Name);
-                                parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
+                                parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
                             }
 
                             break;
                         case "System.Boolean":
                             strSets.AppendFormat("{0} = {1},", property.Name,
-                                (bool) value ? 1 : 2); // 2 for false, 1 for true
+                                (bool)value ? 1 : 2); // 2 for false, 1 for true
                             break;
                         default:
                             strSets.AppendFormat("{0}=@{0},", property.Name, value);
-                            parameters.Add(new SqlParameter {ParameterName = property.Name, Value = value});
+                            parameters.Add(new SqlParameter { ParameterName = property.Name, Value = value });
                             break;
                     } //end switch
                 } //end foreach
@@ -966,12 +988,24 @@ namespace Matrixden.DBUtilities
         }
 
         /// <summary>
-        /// 根据实体属性, 获取数据库表字段.
+        /// 给定实体类型, 和待匹配标签, 由属性的特性标签, 获取数据库表字段.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="flags"></param>
         /// <returns></returns>
-        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity<T>() =>
-            GenerateDataTableColumnsFromEntity<T>(BindingFlags.Public | BindingFlags.Instance);
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity(Type type, SerializationFlags flags) =>
+            type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi =>
+                pi.GetCustomAttributes(typeof(SqlSerializableAttribute), false).Any(a =>
+                    // ReSharper disable once PossibleNullReferenceException
+                    ((a as SqlSerializableAttribute).Serializable & flags) != SerializationFlags.None));
+
+        /// <summary>
+        /// 给定实体, 和待匹配标签, 由属性的特性标签, 获取数据库表字段.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="flags">待匹配的标签</param>
+        /// <returns></returns>
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity(object obj, SerializationFlags flags) => GenerateDataTableColumnsFromEntity(obj.GetType(), flags);
 
         /// <summary>
         /// 根据实体属性, 获取数据库表字段.
@@ -986,19 +1020,15 @@ namespace Matrixden.DBUtilities
             typeof(T).GetProperties(bindingAttr);
 
         /// <summary>
-        /// 根据实体属性的特性标签, 获取数据库表字段.
+        /// 根据实体属性, 获取数据库表字段.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="flags">待匹配的标签</param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity(object obj, SerializationFlags flags) =>
-            obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi =>
-                pi.GetCustomAttributes(typeof(SqlSerializableAttribute), false).Any(a =>
-                    // ReSharper disable once PossibleNullReferenceException
-                    ((a as SqlSerializableAttribute).Serializable & flags) != SerializationFlags.None));
+        protected IEnumerable<PropertyInfo> GenerateDataTableColumnsFromEntity<T>() =>
+            GenerateDataTableColumnsFromEntity<T>(BindingFlags.Public | BindingFlags.Instance);
 
         /// <summary>
-        /// 根据实体属性的特性标签, 获取数据库表字段.
+        /// 给定实体类型, 和待排除标签, 由属性的特性标签, 获取数据库表字段.
         /// </summary>
         /// <param name="type"></param>
         /// <param name="filterFlags">待排除的标签</param>
@@ -1010,7 +1040,7 @@ namespace Matrixden.DBUtilities
                     ((a as SqlSerializableAttribute).Serializable & filterFlags) != SerializationFlags.None));
 
         /// <summary>
-        /// 根据实体属性的特性标签, 获取数据库表字段.
+        /// 给定实体, 和待排除标签, 由属性的特性标签, 获取数据库表字段.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="filterFlags">待排除的标签</param>
@@ -1019,7 +1049,7 @@ namespace Matrixden.DBUtilities
             SerializationFlags filterFlags) => GenerateDataTableColumnsFromEntityWithFilter(obj.GetType(), filterFlags);
 
         /// <summary>
-        /// 根据实体属性的特性标签, 获取数据库表字段.
+        /// 给定泛型, 和待排除标签, 由属性的特性标签, 获取数据库表字段.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="filterFlags">待排除的标签</param>
@@ -1183,7 +1213,7 @@ namespace Matrixden.DBUtilities
         /// <returns></returns>
         protected TK Do<TU, TK>(Func<string, TK> func)
         {
-            return (TK) Do(typeof(TU), tbn => new OperationResult(func(tbn))).Data;
+            return (TK)Do(typeof(TU), tbn => new OperationResult(func(tbn))).Data;
         }
     }
 }

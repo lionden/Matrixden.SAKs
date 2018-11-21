@@ -4,6 +4,7 @@
 
 namespace Matrixden.DBUtilities
 {
+    using Matrixden.DBUtilities.Attributes;
     using Matrixden.DBUtilities.Logging;
     using Matrixden.DBUtilities.Resources;
     using Matrixden.UnifiedDBAdapter;
@@ -52,47 +53,35 @@ namespace Matrixden.DBUtilities
         }
 
         /// <inheritdoc />
-        public override OperationResult GetByCondition<T>(string strTableName, string strColumns, string strCondition,
-            string strOrder)
+        public override OperationResult GetByCondition(Type type, string strTableName, string strColumns,
+            string strCondition, string strOrder)
         {
-            var sbSql = new StringBuilder();
-            try
+            if (strTableName.IsNullOrEmptyOrWhiteSpace())
+                return OperationResult.False;
+
+            var sb = new StringBuilder(" ");
+            if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
             {
-                if (strTableName.IsNullOrEmptyOrWhiteSpace())
-                    return new OperationResult(false);
-
-                if (strColumns.IsNullOrEmptyOrWhiteSpace() || "*".Equals(strColumns.CleanUp())) //属性列
+                foreach (var property in GenerateDataTableColumnsFromEntity(type, SerializationFlags.All))
                 {
-                    StringBuilder sb = new StringBuilder(" ");
-                    foreach (System.Reflection.PropertyInfo property in GenerateDataTableColumnsFromEntity<T>())
-                    {
-                        sb.AppendFormat("{0},", property.Name); // property.Name + ",";    //添加属性列名称
-                    }
-
-                    strColumns = sb.Remove(sb.Length - 1, 1).ToString();
-                }
-                else
-                {
-                    //TODO: check all the columns exist or not
+                    sb.AppendFormat("{0},", property.Name); // property.Name + ",";    //添加属性列名称
                 }
 
-                sbSql.AppendFormat(
-                    "SELECT {0} FROM {1} WHERE (CASE COL_LENGTH('{1}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{2}' ",
-                    strColumns, strTableName, DBColumn_StatusCode.DB_ROW_STATUS_DELETED);
-                if (strCondition.IsNotNullNorEmptyNorWhitespace())
-                    sbSql.AppendFormat(" AND {0}", strCondition); //添加查询条件
-
-                if (strOrder.IsNotNullNorEmptyNorWhitespace())
-                    sbSql.AppendFormat(" ORDER BY {0}", strOrder);
-
-                return new OperationResult(GetBySqLCommand<T>(sbSql.ToString()));
+                strColumns = sb.Remove(sb.Length - 1, 1).ToString();
             }
-            catch (Exception ex)
+            else
             {
-                log.ErrorException("SQL Command: {0}.", ex, sbSql);
+                //TODO: check all the columns exist or not
             }
 
-            return new OperationResult(false);
+            var sbSql = new StringBuilder($"SELECT {strColumns} FROM {strTableName} WHERE (CASE COL_LENGTH('{strTableName}', 'Status') WHEN 1 THEN Status ELSE '1' END)!='{DBColumn_StatusCode.DB_ROW_STATUS_DELETED}' ");
+            if (strCondition.IsNotNullNorEmptyNorWhitespace())
+                sbSql.AppendFormat(" AND {0}", strCondition); //添加查询条件
+
+            if (strOrder.IsNotNullNorEmptyNorWhitespace())
+                sbSql.AppendFormat(" ORDER BY {0}", strOrder);
+
+            return new OperationResult(DataAccess.Query(sbSql.ToString()));
         }
 
         /// <inheritdoc />
