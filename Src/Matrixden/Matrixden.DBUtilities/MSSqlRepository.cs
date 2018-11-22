@@ -94,7 +94,7 @@ namespace Matrixden.DBUtilities
             }
 
             var pk = DBUtil.GetPrimaryKeyName(item);
-            if (CommonClass.GetFieldValue(item, pk) == null)
+            if (CommonClass.GetPropertyValue(item, pk) == null)
             {
                 log.WarnFormat("PK' value is null.");
                 return false;

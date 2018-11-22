@@ -88,7 +88,7 @@ namespace Matrixden.DBUtilities
             if (strOrder.IsNotNullNorEmptyNorWhitespace())
                 sbSql.AppendFormat(" ORDER BY {0}", strOrder);
 
-            return new OperationResult(DataAccess.Query(sbSql.ToString()));
+            return new OperationResult(DataAccess.Query(type, sbSql.ToString()));
         }
 
         /// <inheritdoc />
@@ -101,7 +101,7 @@ namespace Matrixden.DBUtilities
             }
 
             var pk = DBUtil.GetPrimaryKeyName(item);
-            if (CommonClass.GetFieldValue(item, pk) == null)
+            if (CommonClass.GetPropertyValue(item, pk) == null)
             {
                 log.WarnFormat("PK[{0}]'s value is null.", pk);
                 return false;
@@ -207,7 +207,7 @@ namespace Matrixden.DBUtilities
                 ConcurrentBag<string> strColumns = new ConcurrentBag<string>();
                 Parallel.ForEach(prps, p =>
                 {
-                    var val = CommonClass.GetFieldValue(t, p.Name);
+                    var val = CommonClass.GetPropertyValue(t, p.Name);
                     if (val == null)
                         return;
 

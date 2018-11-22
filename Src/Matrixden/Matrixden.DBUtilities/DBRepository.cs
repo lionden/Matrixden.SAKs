@@ -398,7 +398,7 @@ namespace Matrixden.DBUtilities
 
             try
             {
-                if (CommonClass.GetFieldValue(item, DBTableCommonColumns.ID) == null)
+                if (CommonClass.GetPropertyValue(item, DBTableCommonColumns.ID) == null)
                     CommonClass.SetPropertyValue(item, DBTableCommonColumns.ID, Guid.NewGuid());
                 cnt = DataAccess.ExecuteNonQuery(sql, item);
             }
@@ -659,7 +659,7 @@ namespace Matrixden.DBUtilities
                 string strValues = ""; //属性值
                 foreach (var property in GenerateDataTableColumnsFromEntity<T>())
                 {
-                    object value = CommonClass.GetFieldValue(item, property.Name);
+                    object value = CommonClass.GetPropertyValue(item, property.Name);
                     if (value == null)
                     {
                         continue;
@@ -754,7 +754,7 @@ namespace Matrixden.DBUtilities
                 StringBuilder strSets = new StringBuilder(); //属性设置
                 foreach (System.Reflection.PropertyInfo property in GenerateDataTableColumnsFromEntity<T>())
                 {
-                    object value = CommonClass.GetFieldValue(item, property.Name);
+                    object value = CommonClass.GetPropertyValue(item, property.Name);
                     if (value == null)
                         continue;
 
@@ -829,7 +829,7 @@ namespace Matrixden.DBUtilities
 
                 foreach (System.Reflection.PropertyInfo property in GenerateDataTableColumnsFromEntity<T>())
                 {
-                    object value = CommonClass.GetFieldValue(t, property.Name);
+                    object value = CommonClass.GetPropertyValue(t, property.Name);
                     if (value == null)
                     {
                         continue;
@@ -932,7 +932,7 @@ namespace Matrixden.DBUtilities
                 var strSets = new StringBuilder(); //属性设置
                 foreach (var property in GenerateDataTableColumnsFromEntity<T>())
                 {
-                    object value = CommonClass.GetFieldValue(t, property.Name);
+                    object value = CommonClass.GetPropertyValue(t, property.Name);
                     if (value == null || property.Name.Equals(DBUtil.GetPrimaryKeyName<T>()))
                         continue;
 
@@ -1108,7 +1108,7 @@ namespace Matrixden.DBUtilities
                         ts.Add(t);
                     });
 
-                    models = ts.OrderBy(t => CommonClass.GetFieldValue(t, DBTableCommonColumns.UpdateTime));
+                    models = ts.OrderBy(t => CommonClass.GetPropertyValue(t, DBTableCommonColumns.UpdateTime));
                 }
                 else
                 {
