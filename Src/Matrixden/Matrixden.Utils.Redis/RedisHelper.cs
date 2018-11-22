@@ -240,7 +240,7 @@ namespace Matrixden.Utils.Redis
             {
                 Parallel.ForEach(t, v =>
                 {
-                    hes.Add(new HashEntry(string.Format("{0}:{1}", fieldPrefix, CommonClass.GetFieldValue(v, fieldKey)), JsonHelper.SerializeToJsonString(v)));
+                    hes.Add(new HashEntry($"{fieldPrefix}:{CommonClass.GetPropertyValue(v, fieldKey)}", JsonHelper.SerializeToJsonString(v)));
                 });
             }
             else
@@ -248,9 +248,9 @@ namespace Matrixden.Utils.Redis
                 var hesR = new ConcurrentBag<HashEntry>();
                 Parallel.ForEach(t, v =>
                 {
-                    var fk = string.Format("{0}:{1}", fieldPrefix, CommonClass.GetFieldValue(v, fieldKey));
+                    var fk = $"{fieldPrefix}:{CommonClass.GetPropertyValue(v, fieldKey)}";
                     hes.Add(new HashEntry(fk, JsonHelper.SerializeToJsonString(v)));
-                    hesR.Add(new HashEntry(fk, CommonClass.GetFieldValue(v, valueKey).ToString()));
+                    hesR.Add(new HashEntry(fk, CommonClass.GetPropertyValue(v, valueKey).ToString()));
                 });
 
                 DataBase.HashSet(string.Format("{0}_{1}_{2}", key, fieldKey, valueKey), hesR.ToArray());
@@ -261,7 +261,7 @@ namespace Matrixden.Utils.Redis
 
         public async Task ModelSetAsync<T>(string key, IEnumerable<T> t, string fieldKey, string fieldPrefix)
         {
-            var hes = t.Select(v => new HashEntry(string.Format("{0}:{1}", fieldPrefix, CommonClass.GetFieldValue(v, fieldKey)), JsonHelper.SerializeToJsonString(v)));
+            var hes = t.Select(v => new HashEntry($"{fieldPrefix}:{CommonClass.GetPropertyValue(v, fieldKey)}", JsonHelper.SerializeToJsonString(v)));
 
             await DataBase.HashSetAsync(key, hes.ToArray());
         }
