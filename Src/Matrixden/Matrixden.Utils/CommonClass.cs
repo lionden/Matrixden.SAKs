@@ -1,13 +1,14 @@
-﻿namespace Matrixden.Utils
-{
-    using Matrixden.Utils.Extensions;
-    using Matrixden.Utils.Logging;
-    using Newtonsoft.Json.Linq;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
+﻿using Matrixden.Utils.Extensions;
+using Matrixden.Utils.Logging;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
+namespace Matrixden.Utils
+{
     /// <summary>
     /// 
     /// </summary>
@@ -26,50 +27,48 @@
             try
             {
                 Type type = instance.GetType();
-                System.Reflection.PropertyInfo property = type.GetProperty(strProperty);
-                if (property != null && property.CanWrite)
-                {
-                    if (value == DBNull.Value)
-                    {
-                        value = null;
-                    }
-                    else if (value != null && value.GetType() != property.PropertyType)
-                    {
-                        switch (property.PropertyType.ToString())
-                        {
-                            case "System.String":
-                                value = value.ToString2();
-                                break;
-                            case "System.Int16":
-                                value = value.ToInt16();
-                                break;
-                            case "System.Int32":
-                                value = value.ToInt32();
-                                break;
-                            case "System.Int64":
-                                value = value.ToInt64();
-                                break;
-                            case "System.Decimal":
-                                value = value.ToDecimal();
-                                break;
-                            case "System.Boolean":
-                                if (value.GetType() == Type.GetType("System.Int32"))
-                                    value = value.ToInt32() == 1;
-                                break;
-                            case "System.Guid":
-                                value = value.ToString2().ToGuid();
-                                break;
-                            case "System.DateTime":
-                                value = value.ToDateTime();
-                                break;
-                        }
-                    }
+                var property = type.GetProperty(strProperty);
+                if (property == null || !property.CanWrite)
+                    return false;
 
-                    property.SetValue(instance, value, null);
-                    return true;
+                if (value == DBNull.Value)
+                {
+                    value = null;
+                }
+                else if (value != null && value.GetType() != property.PropertyType)
+                {
+                    switch (property.PropertyType.ToString())
+                    {
+                        case "System.String":
+                            value = value.ToString2();
+                            break;
+                        case "System.Int16":
+                            value = value.ToInt16();
+                            break;
+                        case "System.Int32":
+                            value = value.ToInt32();
+                            break;
+                        case "System.Int64":
+                            value = value.ToInt64();
+                            break;
+                        case "System.Decimal":
+                            value = value.ToDecimal();
+                            break;
+                        case "System.Boolean":
+                            if (value.GetType() == Type.GetType("System.Int32"))
+                                value = value.ToInt32() == 1;
+                            break;
+                        case "System.Guid":
+                            value = value.ToString2().ToGuid();
+                            break;
+                        case "System.DateTime":
+                            value = value.ToDateTime();
+                            break;
+                    }
                 }
 
-                return false;
+                property.SetValue(instance, value, null);
+                return true;
             }
             catch (Exception ex)
             {
@@ -103,30 +102,72 @@
         }
 
         /// <summary>
+        /// 获取属性值
+        /// </summary>
+        /// <typeparam name="TIn"></typeparam>
+        /// <typeparam name="TOut"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public static TOut GetPropertyValue<TIn, TOut>(TIn instance, string property)
+        {
+            var type = instance.GetType();
+            var pi = type.GetProperty(property);
+            if (pi == null)
+                return default(TOut);
+
+            try
+            {
+                var func = (Func<TIn, TOut>)Delegate.CreateDelegate(typeof(Func<TIn, TOut>), pi.GetGetMethod());
+
+                return func(instance);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorException("Failed to get property({0})'s value.", ex, property);
+                return default(TOut);
+            }
+        }
+
+        /// <summary>
+        /// 获取属性值
+        /// </summary>
+        /// <param name="instance">要查询的对象</param>
+        /// <param name="propertyName">属性名</param>
+        /// <returns></returns>
+        public static object GetPropertyValue(object instance, string propertyName)
+        {
+            var type = instance.GetType();
+            var pi = type.GetProperty(propertyName);
+            if (pi == null)
+                return null;
+
+            try
+            {
+                var target = Expression.Parameter(typeof(object));
+                var getter = Expression.Lambda(typeof(Func<object, object>),
+                    Expression.Convert(Expression.Property(Expression.Convert(target, type), pi), typeof(object)),
+                    target);
+                var getValueDelegate = (Func<object, object>)getter.Compile();
+
+                return getValueDelegate(instance);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorException("Failed to get property({0})'s value.", ex, propertyName);
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 使用反射动态返回object对象中指定的属性。若存在则返回指定属性值；否则返回null。
         /// </summary>
         /// <param name="instance">要查询的对象</param>
         /// <param name="strProperty">属性名</param>
         /// <returns>属性值</returns>
-        public static object GetFieldValue(object instance, string strProperty)
-        {
-            try
-            {
-                Type type = instance.GetType();
-                System.Reflection.PropertyInfo property = type.GetProperty(strProperty);
-                if (property != null)
-                {
-                    return property.GetValue(instance, null);
-                }
-
-                return null;
-            }
-            catch (Exception ex)
-            {
-                log.ErrorException("Failed to get property({0})'s value.", ex, strProperty);
-                return null;
-            }
-        }
+        [Obsolete("Use GetPropertyValue instead.", true)]
+        public static object GetFieldValue(object instance, string strProperty) =>
+            GetPropertyValue(instance, strProperty);
 
         /// <summary>
         /// 
@@ -136,10 +177,7 @@
         /// <returns></returns>
         public static object GetFieldsValue(object instance, params string[] strProperties)
         {
-            if (strProperties == null)
-                return null;
-
-            return strProperties.Where(s => s.IsNotNullNorEmptyNorWhitespace()).Select(p => GetFieldValue(instance, p));
+            return strProperties?.Where(s => s.IsNotNullNorEmptyNorWhitespace()).Select(p => GetPropertyValue(instance, p));
         }
 
         /// <summary>
@@ -155,7 +193,7 @@
             PropertyInfo[] properties = CommonClass.GetProperties(typeof(T));
             foreach (PropertyInfo property in properties)
             {
-                object value = CommonClass.GetFieldValue(tModel, property.Name);
+                object value = CommonClass.GetPropertyValue(tModel, property.Name);
                 string propertyType = property.PropertyType.ToString();
                 switch (propertyType)
                 {
