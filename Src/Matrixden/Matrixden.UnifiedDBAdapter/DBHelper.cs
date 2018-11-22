@@ -1,11 +1,12 @@
+using System;
+using System.Data.Common;
+using System.Data;
+using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
+using System.Collections.Generic;
+
 namespace Matrixden.UnifiedDBAdapter
 {
-    using System.Data.Common;
-    using System.Data;
-    using System.Data.SqlClient;
-    using MySql.Data.MySqlClient;
-    using System.Collections.Generic;
-
     /// <summary>
     /// 数据库操作
     /// </summary>
@@ -348,12 +349,13 @@ namespace Matrixden.UnifiedDBAdapter
         /// <summary>
         /// 根据SQL语句, 查询数据库
         /// </summary>
+        /// <param name="type"></param>
         /// <param name="sql"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        public IEnumerable<dynamic> Query(string sql, object param = null)
+        public IEnumerable<object> Query(Type type, string sql, object param = null)
         {
-            return _DBHelper.Query(connectionString, sql, param);
+            return _DBHelper.Query(type, connectionString, sql, param);
         }
     }
 }

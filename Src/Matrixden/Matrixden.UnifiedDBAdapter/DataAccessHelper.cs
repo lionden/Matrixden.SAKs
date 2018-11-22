@@ -535,13 +535,22 @@
         /// <summary>
         /// 根据SQL语句, 查询数据库
         /// </summary>
+        /// <param name="type"></param>
         /// <param name="sql"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        public IEnumerable<dynamic> Query(string sql, object param = null)
+        public IEnumerable<object> Query(Type type, string sql, object param = null)
         {
-            return DataBaseHelper.Query(sql, param);
+            return DataBaseHelper.Query(type, sql, param);
         }
+
+        /// <summary>
+        /// 根据SQL语句, 查询数据库
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public IEnumerable<object> Query(string sql, object param = null) => Query(typeof(object), sql, param);
 
         /// <summary>
         /// 预处理用户提供的命令,数据库连接/事务/命令类型/参数

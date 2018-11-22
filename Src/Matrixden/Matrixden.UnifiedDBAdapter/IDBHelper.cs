@@ -5,16 +5,17 @@
     using System.Data;
     using System.Collections.Generic;
 
-    interface IDBHelper
+    internal interface IDBHelper
     {
         /// <summary>
         /// 根据SQL语句, 查询数据库
         /// </summary>
+        /// <param name="type"></param>
         /// <param name="connectionString"></param>
         /// <param name="sql"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        IEnumerable<dynamic> Query(string connectionString, string sql, object param = null);
+        IEnumerable<object> Query(Type type, string connectionString, string sql, object param = null);
 
         /// <summary>
         /// 执行 Transact-SQL 语句(带参数), 并返回受影响的行数。

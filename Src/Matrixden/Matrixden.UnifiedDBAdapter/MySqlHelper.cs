@@ -11,18 +11,19 @@
     using System.Linq;
     using System.Text;
 
+    /// <inheritdoc />
     /// <summary>
     /// 数据库操作基类(for MySql)
     /// </summary>
     internal class MySqlHelper : IDBHelper
     {
-        private string ConnectionString;
+        private readonly string ConnectionString;
         private static readonly ILog _logger = LogProvider.GetCurrentClassLogger();
 
-        public MySqlHelper(string ConnectionString)
+        public MySqlHelper(string connectionString)
         {
             // TODO: Complete member initialization
-            this.ConnectionString = ConnectionString;
+            this.ConnectionString = connectionString;
         }
 
         /// <summary>
@@ -49,6 +50,7 @@
             {
                 strSql.AppendFormat(" order by {0}{1}", fldSort, strSort);
             }
+
             strSql.AppendFormat(" limit {0},{1}", pageSize * (pageIndex - 1), pageSize);
 
             return strSql.ToString();
@@ -230,12 +232,13 @@
         /// <param name="cmdTexts">SQL list</param>
         /// <param name="cmdParms">SQL parms</param>
         /// <returns></returns>
-        public int ExecuteNonQuery(string connectionString, CommandType cmdType, IEnumerable<string> cmdTexts, params DbParameter[] cmdParms)
+        public int ExecuteNonQuery(string connectionString, CommandType cmdType, IEnumerable<string> cmdTexts,
+            params DbParameter[] cmdParms)
         {
             int cnt = -1;
             if (string.IsNullOrEmpty(connectionString))
                 return cnt;
-            if (cmdTexts == null || cmdTexts.Count() <= 0)
+            if (cmdTexts == null || !cmdTexts.Any())
                 return 0;
 
             using (var conn = new MySqlConnection(connectionString))
@@ -243,7 +246,10 @@
                 conn.Open();
                 using (var trans = conn.BeginTransaction())
                 {
-                    cnt = ExecuteNonQuery(trans, cmdType, string.Join(";", cmdTexts.Where(w => w.IsNotNullNorEmptyNorWhitespace()).Select(s => s.Trim(';', ' '))), cmdParms);
+                    cnt = ExecuteNonQuery(trans, cmdType,
+                        string.Join(";",
+                            cmdTexts.Where(w => w.IsNotNullNorEmptyNorWhitespace()).Select(s => s.Trim(';', ' '))),
+                        cmdParms);
 
                     if (cnt > 0)
                         trans.Commit();
@@ -263,12 +269,13 @@
         /// <param name="cmdTexts"></param>
         /// <param name="cmdParms"></param>
         /// <returns></returns>
-        public int ExecuteNonQueryNew(string connectionString, CommandType cmdType, IEnumerable<string> cmdTexts, params DbParameter[] cmdParms)
+        public int ExecuteNonQueryNew(string connectionString, CommandType cmdType, IEnumerable<string> cmdTexts,
+            params DbParameter[] cmdParms)
         {
             int cnt = -1;
             if (string.IsNullOrEmpty(connectionString))
                 return cnt;
-            if (cmdTexts == null || cmdTexts.Count() <= 0)
+            if (cmdTexts == null || !cmdTexts.Any())
                 return 0;
 
             using (var conn = new MySqlConnection(connectionString))
@@ -278,13 +285,15 @@
                 {
                     MySqlCommand cmd = new MySqlCommand();
                     try
-                    { //循环
+                    {
+                        //循环
                         foreach (string cmdText in cmdTexts)
                         {
                             PrepareCommand(cmd, trans.Connection, trans, cmdType, cmdText, cmdParms);
                             int val = cmd.ExecuteNonQuery();
                             cmd.Parameters.Clear();
                         }
+
                         trans.Commit();
                         cnt = 1;
                     }
@@ -424,7 +433,8 @@
             }
         }
 
-        public int ExecuteNonQuery(string connectionString, int iTimeOut, CommandType cmdType, string cmdText, params DbParameter[] cmdParms)
+        public int ExecuteNonQuery(string connectionString, int iTimeOut, CommandType cmdType, string cmdText,
+            params DbParameter[] cmdParms)
         {
             throw new NotImplementedException();
         }
@@ -441,41 +451,43 @@
             if (parameters == null || parameters.Count <= 0)
                 return -1;
 
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            return OpenConnection(connectionString, conn =>
             {
-                if (conn.State != ConnectionState.Open)
-                    conn.Open();
-
-                using (MySqlCommand cmd = new MySqlCommand(sql, conn))
+                using (var cmd = new MySqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddRange(parameters.ToArray());
                     return cmd.ExecuteNonQuery();
                 }
-            }
+            });
+        }
+
+        public IEnumerable<object> Query(Type type, string connectionString, string sql, object param = null)
+        {
+            if (sql.IsNullOrEmptyOrWhiteSpace())
+                return null;
+
+            return OpenConnection(connectionString, conn => conn.Query(type, sql, param));
         }
 
         /// <summary>
-        /// 根据SQL语句, 查询数据库
+        /// 打开数据库连接
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="connectionString"></param>
-        /// <param name="sql"></param>
-        /// <param name="param"></param>
+        /// <param name="func"></param>
         /// <returns></returns>
-        public IEnumerable<dynamic> Query(string connectionString, string sql, object param = null)
+        private T OpenConnection<T>(string connectionString, Func<MySqlConnection, T> func)
         {
-            IEnumerable<dynamic> rslt;
-            if (connectionString.IsNullOrEmptyOrWhiteSpace() || sql.IsNullOrEmptyOrWhiteSpace())
-                return null;
+            if (connectionString.IsNullOrEmptyOrWhiteSpace())
+                connectionString = this.ConnectionString;
 
             using (var conn = new MySqlConnection(connectionString))
             {
                 if (conn.State != ConnectionState.Open)
                     conn.Open();
 
-                rslt = conn.Query(sql, param);
+                return func(conn);
             }
-
-            return rslt;
         }
     }
 }

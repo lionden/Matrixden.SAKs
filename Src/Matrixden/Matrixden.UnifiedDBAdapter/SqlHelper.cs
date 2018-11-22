@@ -347,14 +347,7 @@ namespace Matrixden.UnifiedDBAdapter
             return val;
         }
 
-        /// <summary>
-        /// 根据SQL语句, 查询数据库
-        /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="sql"></param>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        public IEnumerable<dynamic> Query(string connectionString, string sql, object param = null)
+        public IEnumerable<object> Query(Type type, string connectionString, string sql, object param = null)
         {
             IEnumerable<dynamic> rslt;
             if (connectionString.IsNullOrEmptyOrWhiteSpace() || sql.IsNullOrEmptyOrWhiteSpace())
