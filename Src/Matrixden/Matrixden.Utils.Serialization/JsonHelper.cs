@@ -7,7 +7,11 @@
     using Newtonsoft.Json.Linq;
     using System;
     using System.IO;
+
+#if !NET40
     using System.Runtime.Serialization.Json;
+#endif
+
     using System.Text;
 
     /// <summary>
@@ -127,8 +131,9 @@
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static JObject Deserialize2JObject(string input) => (JObject) Deserialize(input);
+        public static JObject Deserialize2JObject(string input) => (JObject)Deserialize(input);
 
+#if !NET40
         /// <summary>
         /// Deserialize a string value to an entity, using System.Runtime.Serialization.Json.DataContractJsonSerializer.
         /// </summary>
@@ -150,8 +155,9 @@
                 obj = serializer.ReadObject(mStream);
             }
 
-            return (T) obj;
+            return (T)obj;
         }
+#endif
 
         /// <summary>
         /// Deserialize stream to T.
@@ -169,7 +175,7 @@
                     var d = -1;
                     while ((d = stream.ReadByte()) != -1)
                     {
-                        ms.WriteByte((byte) d);
+                        ms.WriteByte((byte)d);
                     }
 
                     data = encoding.GetString(ms.ToArray());

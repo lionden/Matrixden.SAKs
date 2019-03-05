@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.DBUtilities.Resou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Test", "Matrixden.Test\Matrixden.Test.csproj", "{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Extensions.Net40", "Matrixden.Utils.Extensions.Net40\Matrixden.Utils.Extensions.Net40.csproj", "{F752EBAD-D32E-4452-A742-2761490CD6D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Serialization.Net40", "Matrixden.Utils.Serialization.Net40\Matrixden.Utils.Serialization.Net40.csproj", "{CDC2B854-D980-4B3E-BA64-64772D72261D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +96,14 @@ Global
 		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
