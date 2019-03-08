@@ -398,8 +398,8 @@ namespace Matrixden.DBUtilities
 
             try
             {
-                if (CommonClass.GetPropertyValue(item, DBTableCommonColumns.ID) == null)
-                    CommonClass.SetPropertyValue(item, DBTableCommonColumns.ID, Guid.NewGuid());
+                if (CommonClass.GetPropertyValue(item, DBTableCommonColumns.Id) == null)
+                    CommonClass.SetPropertyValue(item, DBTableCommonColumns.Id, Guid.NewGuid());
                 cnt = DataAccess.ExecuteNonQuery(sql, item);
             }
             catch (SqlException sEx)

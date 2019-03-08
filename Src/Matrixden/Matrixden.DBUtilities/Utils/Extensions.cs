@@ -26,7 +26,7 @@ namespace Matrixden.DBUtilities.Utils
             var pks = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(pi =>
                 pi.GetCustomAttributes(typeof(ColumnAttribute), false).Any(a => ((a as ColumnAttribute).IsPK)));
             if (!pks.Any())
-                return DBTableCommonColumns.ID;
+                return DBTableCommonColumns.Id;
 
             if (pks.Count() == 1)
             {
