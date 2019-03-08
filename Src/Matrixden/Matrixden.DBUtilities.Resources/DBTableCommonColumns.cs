@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Matrixden.DBUtilities.Resources
+﻿namespace Matrixden.DBUtilities.Resources
 {
     /// <summary>
     /// 数据库表通用字段
     /// </summary>
     public class DBTableCommonColumns
     {
-        public const string ID = "ID";
         public const string Id = "Id";
-        public const string id = "id";
+        public const string No = "No";
         public const string CreateMan = "CreateMan";
         public const string CreateTime = "CreateTime";
         public const string UpdateMan = "UpdateMan";
@@ -22,6 +15,12 @@ namespace Matrixden.DBUtilities.Resources
         public const string DeleteTime = "DeleteTime";
         public const string Status = "Status";
         public const string Remark = "Remark";
+        public const string create_man = "create_man";
+        public const string create_time = "create_time";
+        public const string update_man = "update_man";
+        public const string update_time = "update_time";
+        public const string delete_man = "delete_man";
+        public const string delete_time = "delete_time";
     }
 
     /// <summary>
@@ -29,15 +28,20 @@ namespace Matrixden.DBUtilities.Resources
     /// </summary>
     public enum DBTableCommonColumnsEnum
     {
-        ID,
         Id,
-        id,
+        No,
         CreateMan,
         CreateTime,
         UpdateMan,
         UpdateTime,
         DeleteMan,
         DeleteTime,
+        create_man,
+        create_time,
+        update_man,
+        update_time,
+        delete_man,
+        delete_time,
         Status,
         Remark
     }
