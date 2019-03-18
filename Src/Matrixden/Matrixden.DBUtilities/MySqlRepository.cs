@@ -81,9 +81,9 @@ namespace Matrixden.DBUtilities
             }
 
             var sbSql = new StringBuilder(
-                $"SELECT {strColumns} FROM {strTableName} WHERE Status !={DBColumn_StatusCode.DB_ROW_STATUS_DELETED} ");
+                $"SELECT {strColumns} FROM {strTableName} ");
             if (strCondition.IsNotNullNorEmptyNorWhitespace())
-                sbSql.AppendFormat(" AND {0}", strCondition); //添加查询条件
+                sbSql.AppendFormat(" WHERE {0}", strCondition); //添加查询条件
 
             if (strOrder.IsNotNullNorEmptyNorWhitespace())
                 sbSql.AppendFormat(" ORDER BY {0}", strOrder);
