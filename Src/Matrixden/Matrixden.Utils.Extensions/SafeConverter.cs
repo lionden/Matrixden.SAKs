@@ -138,6 +138,19 @@ namespace Matrixden.Utils.Extensions
             return r;
         }
 
+        /// <summary>
+        /// Safe convert a string value to boolean. True if any in "true", "t", "1", otherwise is false, ignore case.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static bool ToBoolean(this string @this)
+        {
+            if (@this.IsNullOrEmptyOrWhiteSpace())
+                return false;
+
+            return @this.ToUpper().IsEqualWithSpecificValue("TRUE", "T", "1");
+        }
+
         #endregion
 
         #region -- Object --
