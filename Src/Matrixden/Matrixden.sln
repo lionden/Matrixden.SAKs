@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Extensions.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Serialization.Net40", "Matrixden.Utils.Serialization.Net40\Matrixden.Utils.Serialization.Net40.csproj", "{CDC2B854-D980-4B3E-BA64-64772D72261D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Image", "Matrixden.Utils.Image\Matrixden.Utils.Image.csproj", "{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
