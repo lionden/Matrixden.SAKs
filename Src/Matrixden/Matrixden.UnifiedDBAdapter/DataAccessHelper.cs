@@ -189,6 +189,7 @@
         /// <returns></returns>
         public string[] GetArray(string pSql)
         {
+            log.Trace(pSql);
             string[] result = null;
             DataSet ds = GetDataSet(pSql);
             result = this.GetRowValues(ds);
@@ -204,6 +205,7 @@
         /// <returns></returns>
         public string[] GetSingleRowValue(string pSql)
         {
+            log.Trace(pSql);
             string[,] res1 = GetBigArray(pSql, 1);
             if (res1 == null || res1.GetLength(0) < 1) return null;
             string[] res = new string[res1.GetLength(1)];
@@ -231,22 +233,23 @@
         /// <summary>
         /// 执行Sql语句，操作数据库。
         /// </summary>
-        /// <param name="cmdText">SQL语句</param>
+        /// <param name="sql">SQL语句</param>
         /// <param name="cmdParms"></param>
         /// <returns>返回受影响的行数. 如果异常发生, 返回-1.</returns>
-        public int ExecSql(string cmdText, params DbParameter[] cmdParms)
+        public int ExecSql(string sql, params DbParameter[] cmdParms)
         {
+            log.Trace(sql);
             int nResult = 0;
             if (DataBaseHelper.ConnectionString != null)
             {
                 try
                 {
-                    nResult = DataBaseHelper.ExecuteNonQuery(CommandType.Text, cmdText, cmdParms);
+                    nResult = DataBaseHelper.ExecuteNonQuery(CommandType.Text, sql, cmdParms);
                 }
                 catch (Exception ex)
                 {
                     nResult = -1;
-                    log.ErrorException("Failed to execute non-query sql:\r\n[{0}].", ex, cmdText);
+                    log.ErrorException("Failed to execute non-query sql:\r\n[{0}].", ex, sql);
                 }
             }
 

@@ -143,6 +143,7 @@
             if (connectionString.IsNullOrEmptyOrWhiteSpace() || sql.IsNullOrEmptyOrWhiteSpace())
                 return -1;
 
+            _logger.Trace(sql);
             using (var conn = new MySqlConnection(connectionString))
             {
                 if (conn.State != ConnectionState.Open)
@@ -466,6 +467,7 @@
             if (sql.IsNullOrEmptyOrWhiteSpace())
                 return null;
 
+            _logger.Trace(sql);
             return OpenConnection(connectionString, conn => conn.Query(type, sql, param));
         }
 

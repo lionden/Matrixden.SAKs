@@ -149,8 +149,7 @@ namespace Matrixden.DBUtilities
             if (originalCount != DataAccess.GetCount(table, conditionStr))
                 return true;
 
-            var sql =
-                $@"SELECT UpdateTime FROM {table} ORDER BY UpdateTime DESC {(conditionStr.IsNullOrEmptyOrWhiteSpace() ? string.Empty : $" WHERE {conditionStr}")} LIMIT 1;";
+            var sql = $@"SELECT UpdateTime FROM {table} ORDER BY UpdateTime DESC {(conditionStr.IsNullOrEmptyOrWhiteSpace() ? string.Empty : $" WHERE {conditionStr}")} LIMIT 1;";
             var res = DataAccess.GetArray(sql);
             if (res == null || res.Length != 1)
             {
@@ -176,11 +175,8 @@ namespace Matrixden.DBUtilities
                 if (!ca.Any())
                     return strSql;
 
-                strSql =
-                    $";INSERT INTO `{table}` (`{string.Join("`,`", ca)}`) VALUES(@{string.Join(",@", ca)});";
-#if DEBUG
-                log.Debug(strSql);
-#endif
+                strSql = $";INSERT INTO `{table}` (`{string.Join("`,`", ca)}`) VALUES(@{string.Join(",@", ca)});";
+                log.Trace(strSql);
             }
             catch (Exception ex)
             {
@@ -234,9 +230,7 @@ namespace Matrixden.DBUtilities
                     return strSql;
 
                 strSql = $";UPDATE `{table}` SET {string.Join(",", strColumns.ToArray())} WHERE {condition};";
-#if DEBUG
-                log.Debug(strSql);
-#endif
+                log.Trace(strSql);
             }
             catch (Exception ex)
             {
@@ -266,7 +260,7 @@ namespace Matrixden.DBUtilities
 INSERT INTO `{tbn}` (`{string.Join("`,`", strIC)}`) VALUES(@{string.Join(",@", strIC)})
 ON DUPLICATE KEY
 UPDATE {string.Join(",", strUC)}";
-                    log.Debug(strSql);
+                    log.Trace(strSql);
                 }
                 catch (Exception ex)
                 {
