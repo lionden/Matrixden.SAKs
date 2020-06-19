@@ -79,29 +79,31 @@ namespace Matrixden.Utils.Web
         {
             if (HttpStatusCode.NoContent.Equals(response.StatusCode))
             {
-                log.WarnFormat("There is no response content in request uri:\r\n{0}.",
-                    response.RequestMessage.RequestUri);
+                log.WarnFormat("There is no response content in request uri:\r\n{0}.", response.RequestMessage.RequestUri);
 
                 return string.Empty;
             }
 
-            string result = null;
+            string txt = null;
             try
             {
-                result = response.Content.ReadAsByteArrayAsync().Result.ToString2();
-                log.DebugFormat("Request uri=[{0}],\r\nResponse content=[{1}].", response.RequestMessage.RequestUri,
-                    result);
+                var result = response.Content.ReadAsByteArrayAsync().Result;
+                if (result == null || result.Length <= 0)
+                    return null;
+
+                txt = result.ToString2();
+                log.DebugFormat("Request uri=[{0}],\r\nResponse content=[{1}].", response.RequestMessage.RequestUri, txt);
             }
-            catch (NullReferenceException nrEx)
+            catch (OutOfMemoryException ex)
             {
-                log.ErrorException("内部错误, 接口返回数据为NULL.", nrEx);
+                log.ErrorException("内部错误, 接口返回内容过大.", ex);
             }
             catch (Exception ex)
             {
                 log.FatalException("Unknown exception.", ex);
             }
 
-            return result;
+            return txt;
         }
 
         #endregion
@@ -135,7 +137,7 @@ namespace Matrixden.Utils.Web
         {
             return @this == default(HttpSessionStateBase) || key.IsNullOrEmptyOrWhiteSpace()
                 ? default(T)
-                : JsonHelper.Deserialize<T>((byte[]) @this[key]);
+                : JsonHelper.Deserialize<T>((byte[])@this[key]);
         }
 
         #endregion
