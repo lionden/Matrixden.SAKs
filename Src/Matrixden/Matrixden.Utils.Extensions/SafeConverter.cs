@@ -130,12 +130,21 @@ namespace Matrixden.Utils.Extensions
         /// </summary>
         /// <param name="val"></param>
         /// <returns></returns>
-        public static DateTime ToDateTime(this string val)
+        public static DateTime ToDateTime(this string val) => val.ToDateTime(default(DateTime));
+
+        /// <summary>
+        /// Safe convert a string value to datetime.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static DateTime ToDateTime(this string val, DateTime defaultVal)
         {
             DateTime r = new DateTime();
-            DateTime.TryParse(val, out r);
-
-            return r;
+            if (DateTime.TryParse(val, out r))
+                return r;
+            else
+                return defaultVal;
         }
 
         /// <summary>
@@ -230,13 +239,15 @@ namespace Matrixden.Utils.Extensions
         /// </summary>
         /// <param name="val">The object to be converted.</param>
         /// <returns></returns>
-        public static DateTime ToDateTime(this object val)
-        {
-            if (val == null)
-                return default(DateTime);
+        public static DateTime ToDateTime(this object val) => val.ToDateTime(default(DateTime));
 
-            return val.ToString().ToDateTime();
-        }
+        /// <summary>
+        /// Safe convert a string value to datetime.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <param name="defaultVal"></param>
+        /// <returns></returns>
+        public static DateTime ToDateTime(this object val, DateTime defaultVal) => val.ToString2().ToDateTime(defaultVal);
 
         /// <summary>
         /// Safe Convert a object value to a String value.
