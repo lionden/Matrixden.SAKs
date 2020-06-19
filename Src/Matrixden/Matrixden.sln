@@ -32,13 +32,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.DBUtilities.Resources", "Matrixden.DBUtilities.Resources\Matrixden.DBUtilities.Resources.csproj", "{FB1FF297-9BE4-4EB7-885E-D58BCC1731F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Test", "Matrixden.Test\Matrixden.Test.csproj", "{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Extensions.Net40", "Matrixden.Utils.Extensions.Net40\Matrixden.Utils.Extensions.Net40.csproj", "{F752EBAD-D32E-4452-A742-2761490CD6D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Serialization.Net40", "Matrixden.Utils.Serialization.Net40\Matrixden.Utils.Serialization.Net40.csproj", "{CDC2B854-D980-4B3E-BA64-64772D72261D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Image", "Matrixden.Utils.Image\Matrixden.Utils.Image.csproj", "{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Net45", "Matrixden.Utils.Net45\Matrixden.Utils.Net45.csproj", "{00F1948E-0C4A-44E5-9C95-81E467E39A32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,10 +94,6 @@ Global
 		{FB1FF297-9BE4-4EB7-885E-D58BCC1731F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB1FF297-9BE4-4EB7-885E-D58BCC1731F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB1FF297-9BE4-4EB7-885E-D58BCC1731F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -110,6 +106,10 @@ Global
 		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F1948E-0C4A-44E5-9C95-81E467E39A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F1948E-0C4A-44E5-9C95-81E467E39A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F1948E-0C4A-44E5-9C95-81E467E39A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F1948E-0C4A-44E5-9C95-81E467E39A32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
