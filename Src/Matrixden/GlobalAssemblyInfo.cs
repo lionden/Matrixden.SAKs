@@ -5,7 +5,7 @@
 // associated with an assembly.
 [assembly: AssemblyCompany("matrixden.org")]
 [assembly: AssemblyProduct("Matrixden")]
-[assembly: AssemblyCopyright("Copyright © Lionden 2019")]
+[assembly: AssemblyCopyright("Copyright © Lionden 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,6 +19,6 @@
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")
-[assembly: AssemblyVersion("1.1")]
-[assembly: AssemblyFileVersion("1.1.2019.10213")]
-[assembly: AssemblyInformationalVersion("1.1 Beta")]
+//↓↓↓ Product version
+[assembly: AssemblyInformationalVersion("1.1.2020.0724")]
+[assembly: AssemblyVersion("1.2020.0724.1")]
