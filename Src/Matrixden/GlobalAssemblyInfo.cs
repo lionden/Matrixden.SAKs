@@ -21,4 +21,4 @@
 // [assembly: AssemblyVersion("1.0.*")
 //↓↓↓ Product version
 [assembly: AssemblyInformationalVersion("1.1.2020.0724")]
-[assembly: AssemblyVersion("1.2020.0724.1")]
+[assembly: AssemblyVersion("1.2020.0724.2")]

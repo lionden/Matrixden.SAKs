@@ -59,6 +59,26 @@ namespace Matrixden.Utils.Models
         }
 
         /// <summary>
+        /// 带错误消息及错误代码的构造函数
+        /// </summary>
+        /// <param name="errorMsg"></param>
+        /// <param name="errCode"></param>
+        public OperationResult(string errorMsg, int errCode)
+        {
+            this.Message = errorMsg;
+            this.Code = errCode;
+        }
+
+        /// <summary>
+        /// 带错误代码的构造函数
+        /// </summary>
+        /// <param name="errCode"></param>
+        public OperationResult(int errCode)
+        {
+            this.Code = errCode;
+        }
+
+        /// <summary>
         /// 仅待失败结果的构造函数
         /// </summary>
         /// <param name="result"></param>
