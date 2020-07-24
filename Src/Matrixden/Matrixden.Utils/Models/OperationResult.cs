@@ -12,22 +12,27 @@ namespace Matrixden.Utils.Models
     /// </summary>
     public class OperationResult
     {
-        private bool _operationResult;
+        private bool _result;
         /// <summary>
         /// 操作结果
         /// </summary>
         public bool Result
         {
-            get => _operationResult;
+            get => _result;
             set
             {
-                _operationResult = value;
-                if (_operationResult)
+                _result = value;
+                if (_result)
                 {
                     Message = null;
                 }
             }
         }
+
+        /// <summary>
+        /// 错误代码
+        /// </summary>
+        public int Code { get; set; }
 
         /// <summary>
         /// 操作消息
@@ -59,7 +64,7 @@ namespace Matrixden.Utils.Models
         /// <param name="result"></param>
         public OperationResult(bool result)
         {
-            this._operationResult = result;
+            this._result = result;
         }
 
         /// <summary>
@@ -70,7 +75,7 @@ namespace Matrixden.Utils.Models
         {
             if (data != default(object))
             {
-                this._operationResult = true;
+                this._result = true;
                 this.Message = string.Empty;
                 this.Data = data;
             }
@@ -80,6 +85,11 @@ namespace Matrixden.Utils.Models
         /// 失败结果
         /// </summary>
         public static OperationResult False => new OperationResult(false);
+
+        /// <summary>
+        /// 成功结果
+        /// </summary>
+        public static OperationResult True => new OperationResult(true);
 
         /// <summary>
         /// Logical AND operator.
