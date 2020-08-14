@@ -42,6 +42,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,6 +55,15 @@
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.Utils\Audio\AudioUtil.cs">
+      <Link>Audio\AudioUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.Utils\Audio\TextSpeaker.cs">
+      <Link>Audio\TextSpeaker.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.Utils\Audio\WavPlayer.cs">
+      <Link>Audio\WavPlayer.cs</Link>
     </Compile>
     <Compile Include="..\Matrixden.Utils\CommonClass.cs">
       <Link>CommonClass.cs</Link>
@@ -84,6 +95,9 @@
     <Compile Include="..\Matrixden.Utils\RegistryUtil.cs">
       <Link>RegistryUtil.cs</Link>
     </Compile>
+    <Compile Include="..\Matrixden.Utils\Serialization\JsonHelper.cs">
+      <Link>Serialization\JsonHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Matrixden.Utils\SystemInfoUtil.cs">
       <Link>SystemInfoUtil.cs</Link>
     </Compile>
@@ -108,10 +122,6 @@
     <ProjectReference Include="..\Matrixden.Utils.Extensions.Net40\Matrixden.Utils.Extensions.Net40.csproj">
       <Project>{f752ebad-d32e-4452-a742-2761490cd6d1}</Project>
       <Name>Matrixden.Utils.Extensions.Net40</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Matrixden.Utils.Serialization.Net40\Matrixden.Utils.Serialization.Net40.csproj">
-      <Project>{cdc2b854-d980-4b3e-ba64-64772d72261d}</Project>
-      <Name>Matrixden.Utils.Serialization.Net40</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
