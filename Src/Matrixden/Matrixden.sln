@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils", "Matrixde
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Extensions", "Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj", "{A9209C7E-FCC0-4840-8270-66EA3F116055}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Serialization", "Matrixden.Utils.Serialization\Matrixden.Utils.Serialization.csproj", "{16899AD5-222B-4E7B-8CF6-38EBC4E3F7D2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Redis", "Matrixden.Utils.Redis\Matrixden.Utils.Redis.csproj", "{06DF54BB-2BDB-4C25-9C47-DBB5CA93B85B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.PinYin", "Matrixden.Utils.PinYin\Matrixden.Utils.PinYin.csproj", "{4B1E3DFE-F624-425C-9323-D3AA31CA8DD3}"
@@ -34,15 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.DBUtilities.Resou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Extensions.Net40", "Matrixden.Utils.Extensions.Net40\Matrixden.Utils.Extensions.Net40.csproj", "{F752EBAD-D32E-4452-A742-2761490CD6D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Serialization.Net40", "Matrixden.Utils.Serialization.Net40\Matrixden.Utils.Serialization.Net40.csproj", "{CDC2B854-D980-4B3E-BA64-64772D72261D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Image", "Matrixden.Utils.Image\Matrixden.Utils.Image.csproj", "{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Net45", "Matrixden.Utils.Net45\Matrixden.Utils.Net45.csproj", "{00F1948E-0C4A-44E5-9C95-81E467E39A32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.WebAPI.Tracking", "Matrixden.WebAPI.Tracking\Matrixden.WebAPI.Tracking.csproj", "{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Audio", "Matrixden.Utils.Audio\Matrixden.Utils.Audio.csproj", "{14AC041E-343D-41B3-9E6E-A65575029787}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.Server", "NuGet.Server\NuGet.Server.csproj", "{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}"
 EndProject
@@ -60,10 +54,6 @@ Global
 		{A9209C7E-FCC0-4840-8270-66EA3F116055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9209C7E-FCC0-4840-8270-66EA3F116055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9209C7E-FCC0-4840-8270-66EA3F116055}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16899AD5-222B-4E7B-8CF6-38EBC4E3F7D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16899AD5-222B-4E7B-8CF6-38EBC4E3F7D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16899AD5-222B-4E7B-8CF6-38EBC4E3F7D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16899AD5-222B-4E7B-8CF6-38EBC4E3F7D2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06DF54BB-2BDB-4C25-9C47-DBB5CA93B85B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06DF54BB-2BDB-4C25-9C47-DBB5CA93B85B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06DF54BB-2BDB-4C25-9C47-DBB5CA93B85B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -104,10 +94,6 @@ Global
 		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F752EBAD-D32E-4452-A742-2761490CD6D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDC2B854-D980-4B3E-BA64-64772D72261D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6E4F2DA-416C-4450-AA35-DDAC5C9B6514}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -120,10 +106,6 @@ Global
 		{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14AC041E-343D-41B3-9E6E-A65575029787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14AC041E-343D-41B3-9E6E-A65575029787}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14AC041E-343D-41B3-9E6E-A65575029787}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14AC041E-343D-41B3-9E6E-A65575029787}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}.Release|Any CPU.ActiveCfg = Release|Any CPU

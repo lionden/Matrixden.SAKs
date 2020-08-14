@@ -42,6 +42,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,6 +57,9 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
+    <Compile Include="Audio\AudioUtil.cs" />
+    <Compile Include="Audio\TextSpeaker.cs" />
+    <Compile Include="Audio\WavPlayer.cs" />
     <Compile Include="CommonClass.cs" />
     <Compile Include="CommonHelper.cs" />
     <Compile Include="Constants.cs" />
@@ -64,6 +69,7 @@
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomValueGenerator.cs" />
+    <Compile Include="Serialization\JsonHelper.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Util_SystemInfo.cs" />
   </ItemGroup>
@@ -76,10 +82,6 @@
     <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj">
       <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
       <Name>Matrixden.Utils.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Matrixden.Utils.Serialization\Matrixden.Utils.Serialization.csproj">
-      <Project>{16899ad5-222b-4e7b-8cf6-38ebc4e3f7d2}</Project>
-      <Name>Matrixden.Utils.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
