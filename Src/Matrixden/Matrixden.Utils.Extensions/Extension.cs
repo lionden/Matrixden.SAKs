@@ -1,12 +1,18 @@
 ﻿namespace Matrixden.Utils.Extensions
 {
+    using Matrixden.Utils.Extensions.Logging;
     using System;
     using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Web;
 
+    /// <summary>
+    /// Extend methods.
+    /// </summary>
     public static class Extension
     {
+        private static readonly ILog _LOG = LogProvider.GetCurrentClassLogger();
         /// <summary>
         /// Generate a string from a byte array.
         /// </summary>
@@ -50,6 +56,24 @@
 
         #endregion
 
+        #region -- Int32 --
+
+        /// <summary>
+        /// 判断特定值是否在给定集合里
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static bool IN(this Int32 @this, params Int32[] values)
+        {
+            if (values == null || values.Length <= 0)
+                return false;
+
+            return values.Any(a => @this.Equals(a));
+        }
+
+        #endregion
+
         #region -- Int64 --
 
         /// <summary>
@@ -73,6 +97,20 @@
         public static bool Contains(this Int64 intA, Int64 intB)
         {
             return intA.ToString().Contains(intB.ToString());
+        }
+
+        /// <summary>
+        /// 判断特定值是否在给定集合里
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static bool IN(this Int64 @this, params Int64[] values)
+        {
+            if (values == null || values.Length <= 0)
+                return false;
+
+            return values.Any(a => @this.Equals(a));
         }
 
         #endregion
