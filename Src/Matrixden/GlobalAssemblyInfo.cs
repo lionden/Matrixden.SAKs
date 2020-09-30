@@ -20,5 +20,5 @@
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")
 //↓↓↓ Product version
-[assembly: AssemblyInformationalVersion("1.1.2020.0915")]
-[assembly: AssemblyVersion("1.2020.0915.0")]
+[assembly: AssemblyInformationalVersion("1.1.2020.0930")]
+[assembly: AssemblyVersion("1.2020.0930.0")]
