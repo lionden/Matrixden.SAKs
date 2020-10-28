@@ -343,7 +343,7 @@ namespace Matrixden.Utils.Extensions
             if (val.IsNullOrEmptyOrWhiteSpace() || len <= 0 || val.Length <= len)
                 return val;
 
-            return val.Substring(1);
+            return val.Substring(len);
         }
 
         /// <summary>
