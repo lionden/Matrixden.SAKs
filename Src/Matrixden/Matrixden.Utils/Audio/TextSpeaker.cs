@@ -1,4 +1,5 @@
-﻿using Matrixden.Utils.Logging;
+﻿using Matrixden.Utils.Extensions;
+using Matrixden.Utils.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,6 +24,9 @@ namespace Matrixden.Utils.Audio
         /// <param name="txt">Text to speak.</param>
         public void SpeakAsync(string txt)
         {
+            if (txt.IsNullOrEmptyOrWhiteSpace())
+                return;
+
             if (!_prompt.IsCompleted)
             {
                 if (txt.Equals(_pre_text))
@@ -42,6 +46,10 @@ namespace Matrixden.Utils.Audio
 
         private static object __locker = new object();
         private static TextSpeaker __instance;
+
+        /// <summary>
+        /// Singleton Instance
+        /// </summary>
         public static TextSpeaker Instance
         {
             get
