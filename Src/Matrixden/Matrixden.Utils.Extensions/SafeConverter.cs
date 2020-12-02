@@ -235,7 +235,7 @@ namespace Matrixden.Utils.Extensions
         }
 
         /// <summary>
-        /// Safe Convert an object value to a DateTime value.
+        /// Safe convert an object value to a DateTime value.
         /// </summary>
         /// <param name="val">The object to be converted.</param>
         /// <returns></returns>
@@ -250,7 +250,7 @@ namespace Matrixden.Utils.Extensions
         public static DateTime ToDateTime(this object val, DateTime defaultVal) => val.ToString2().ToDateTime(defaultVal);
 
         /// <summary>
-        /// Safe Convert a object value to a String value.
+        /// Safe convert an object value to a String value.
         /// </summary>
         /// <param name="val">The object to be converted.</param>
         /// <param name="defaultVal">The default value should be reutrned if error occured.</param>
@@ -262,6 +262,13 @@ namespace Matrixden.Utils.Extensions
 
             return val.ToString();
         }
+
+        /// <summary>
+        /// Safe convert an object value to a bool value.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static bool ToBoolean(this object @this) => @this.ToString2().ToBoolean();
 
         #endregion
     }
