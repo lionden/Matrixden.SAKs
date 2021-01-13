@@ -1,4 +1,5 @@
-﻿using Matrixden.Utils.Extensions;
+﻿using AudioSwitcher.AudioApi.CoreAudio;
+using Matrixden.Utils.Extensions;
 using Matrixden.Utils.Logging;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Speech.Synthesis;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Matrixden.Utils.Audio
@@ -19,7 +21,7 @@ namespace Matrixden.Utils.Audio
         string _pre_text = string.Empty;
         Prompt _prompt = new Prompt(string.Empty);
         /// <summary>
-        /// 
+        /// 播放指定文字
         /// </summary>
         /// <param name="txt">Text to speak.</param>
         public void SpeakAsync(string txt)
@@ -39,13 +41,45 @@ namespace Matrixden.Utils.Audio
             _prompt = Synth.SpeakAsync(txt);
         }
 
-        internal void SpeakAsyncCancelAll() => Synth.SpeakAsyncCancelAll();
+        /// <summary>
+        /// 大声播放指定文字，使用系统80%音量。
+        /// </summary>
+        /// <param name="txt"></param>
+        public void SpeakLoudly(string txt)
+        {
+            var _preVol = DefaultPlaybackDevice.Volume;
+
+            DefaultPlaybackDevice.Volume = 80;
+            SpeakAsync(txt);
+
+            new Thread(() => Instance.WaitToRestoreSystemVolume(_preVol)).Start();
+        }
+
+        private void WaitToRestoreSystemVolume(double _preVol)
+        {
+            while (!_prompt.IsCompleted) { }
+            DefaultPlaybackDevice.Volume = _preVol;
+        }
+
+        /// <summary>
+        /// 结束所有在播放内容
+        /// </summary>
+        public void SpeakAsyncCancelAll() => Synth.SpeakAsyncCancelAll();
 
         // Initialize a new instance of the SpeechSynthesizer.  
         SpeechSynthesizer Synth { get; } = new SpeechSynthesizer();
 
         private static object __locker = new object();
         private static TextSpeaker __instance;
+
+        private static CoreAudioDevice _defaultPlaybackDevice;
+        private static CoreAudioDevice DefaultPlaybackDevice
+        {
+            get
+            {
+                return _defaultPlaybackDevice;
+            }
+        }
 
         /// <summary>
         /// Singleton Instance
@@ -74,6 +108,7 @@ namespace Matrixden.Utils.Audio
             // Configure the audio output.   
             Synth.SetOutputToDefaultAudioDevice();
             Synth.SelectVoiceByHints(VoiceGender.Female, VoiceAge.NotSet, 0, CultureInfo.GetCultureInfo("zh-CN"));
+            _defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
 
             if (Synth.Voice.Culture.Name != "zh-CN")
             {
