@@ -69,7 +69,7 @@ namespace Matrixden.Utils.Audio
         // Initialize a new instance of the SpeechSynthesizer.  
         SpeechSynthesizer Synth { get; } = new SpeechSynthesizer();
 
-        private static object __locker = new object();
+        private static readonly object __locker = new object();
         private static TextSpeaker __instance;
 
         private static CoreAudioDevice _defaultPlaybackDevice;
