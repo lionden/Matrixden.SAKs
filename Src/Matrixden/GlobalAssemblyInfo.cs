@@ -3,9 +3,9 @@
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyCompany("matrixden.org")]
+[assembly: AssemblyCompany("matrixden.top")]
 [assembly: AssemblyProduct("Matrixden")]
-[assembly: AssemblyCopyright("Copyright © Lionden 2020")]
+[assembly: AssemblyCopyright("Copyright © Lionden 2018 - 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
