@@ -7,8 +7,8 @@
     <ProjectGuid>{3FBE0A85-B0B8-49D1-B077-5340A2FC02D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Matrixden.Utils</RootNamespace>
-    <AssemblyName>Matrixden.Utils</AssemblyName>
+    <RootNamespace>Matrixden.SwissArmyKnives</RootNamespace>
+    <AssemblyName>Matrixden.SwissArmyKnives</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -29,7 +29,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Matrixden.Utils.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Matrixden.SwissArmyKnives.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\SwissArmyKnife.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AudioSwitcher.AudioApi, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
@@ -85,10 +88,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj">
+    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.SAK.Extensions.csproj">
       <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
-      <Name>Matrixden.Utils.Extensions</Name>
+      <Name>Matrixden.SAK.Extensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\SwissArmyKnife.ico">
+      <Link>SwissArmyKnife.ico</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -50,9 +50,9 @@
     <Compile Include="TableAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj">
+    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.SAK.Extensions.csproj">
       <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
-      <Name>Matrixden.Utils.Extensions</Name>
+      <Name>Matrixden.SAK.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

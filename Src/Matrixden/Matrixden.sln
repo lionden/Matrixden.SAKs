@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils", "Matrixden.Utils\Matrixden.Utils.csproj", "{3FBE0A85-B0B8-49D1-B077-5340A2FC02D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.SwissArmyKnives", "Matrixden.Utils\Matrixden.SwissArmyKnives.csproj", "{3FBE0A85-B0B8-49D1-B077-5340A2FC02D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Extensions", "Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj", "{A9209C7E-FCC0-4840-8270-66EA3F116055}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.SAK.Extensions", "Matrixden.Utils.Extensions\Matrixden.SAK.Extensions.csproj", "{A9209C7E-FCC0-4840-8270-66EA3F116055}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Redis", "Matrixden.Utils.Redis\Matrixden.Utils.Redis.csproj", "{06DF54BB-2BDB-4C25-9C47-DBB5CA93B85B}"
 EndProject
@@ -26,6 +26,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3867340E-1ECD-402B-A480-D6E5642E6B95}"
 	ProjectSection(SolutionItems) = preProject
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+		SwissArmyKnife.ico = SwissArmyKnife.ico
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.DBUtilities.Resources", "Matrixden.DBUtilities.Resources\Matrixden.DBUtilities.Resources.csproj", "{FB1FF297-9BE4-4EB7-885E-D58BCC1731F4}"
