@@ -5,22 +5,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Matrixden.Utils.Web.Models
+namespace Matrixden.Utils.Models
 {
     /// <summary>
     /// 接口结果
     /// </summary>
     public class ApiResult
     {
+        /// <summary>
+        /// SUCCESS
+        /// </summary>
         public const ushort SUCCESS_SUCCESS = 1;
+        /// <summary>
+        /// Fail
+        /// </summary>
         public const ushort SUCCESS_FAIL = 0;
         const string MESSAGE_SUCCESS = "SUCCESS";
         const string MESSAGE_ERROR = "ERROR";
 
+        /// <summary>
+        /// code
+        /// </summary>
         public int code { get; set; }
+        /// <summary>
+        /// isSuccess
+        /// </summary>
         public ushort isSuccess { get; set; }
+        /// <summary>
+        /// message
+        /// </summary>
         public string message { get; set; }
-        public dynamic data { get; set; }
+        /// <summary>
+        /// data
+        /// </summary>
+        public object data { get; set; }
 
         /// <summary>
         /// 失败结果初始化
@@ -66,5 +84,17 @@ namespace Matrixden.Utils.Web.Models
                 data = result.Data;
             }
         }
+    }
+}
+
+namespace Matrixden.Utils.Web.Models
+{
+    /// <summary>
+    /// 接口结果
+    /// </summary>
+    [Obsolete("Please use Matrixden.Utils.Models.ApiResult instead.")]
+    public class ApiResult : Matrixden.Utils.Models.ApiResult
+    {
+
     }
 }
