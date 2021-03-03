@@ -73,6 +73,7 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\ColorHelper.cs" />
+    <Compile Include="Diagnostics\ProcessUtil.cs" />
     <Compile Include="Mail.cs" />
     <Compile Include="Models\OperationResult_V2.cs" />
     <Compile Include="Models\OperationResult.cs" />

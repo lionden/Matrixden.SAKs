@@ -54,6 +54,7 @@
     <Compile Include="Models\User\UserInfoModel.cs" />
     <Compile Include="Models\ZionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SAKs\TestProcessUtil.cs" />
     <Compile Include="Utils\TestCommonClass.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +74,7 @@
       <Project>{015e7fad-38ee-49f4-82ff-9f6b9afa5af4}</Project>
       <Name>Matrixden.UnifiedDBAdapter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj">
+    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.SAK.Extensions.csproj">
       <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
       <Name>Matrixden.Utils.Extensions</Name>
     </ProjectReference>
@@ -89,15 +90,11 @@
       <Project>{4de66020-8de9-4c19-b847-1a363b2bd6a5}</Project>
       <Name>Matrixden.Utils.Security</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Matrixden.Utils.Serialization\Matrixden.Utils.Serialization.csproj">
-      <Project>{16899ad5-222b-4e7b-8cf6-38ebc4e3f7d2}</Project>
-      <Name>Matrixden.Utils.Serialization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Matrixden.Utils.Web\Matrixden.Utils.Web.csproj">
       <Project>{a323c69e-24d9-4c54-a860-958e357eb237}</Project>
       <Name>Matrixden.Utils.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Matrixden.Utils\Matrixden.Utils.csproj">
+    <ProjectReference Include="..\Matrixden.Utils\Matrixden.SwissArmyKnives.csproj">
       <Project>{3fbe0a85-b0b8-49d1-b077-5340a2fc02d7}</Project>
       <Name>Matrixden.Utils</Name>
     </ProjectReference>
