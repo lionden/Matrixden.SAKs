@@ -38,23 +38,20 @@ namespace Matrixden.Utils.Models
         /// <summary>
         /// data
         /// </summary>
-        public object data { get; set; }
+        public dynamic data { get; set; }
 
         /// <summary>
         /// 失败结果初始化
         /// </summary>
-        public ApiResult()
-        {
-            this.isSuccess = SUCCESS_FAIL;
-            this.message = MESSAGE_ERROR;
-        }
+        public ApiResult() { }
 
         /// <summary>
         /// 将错误信息, 转为接口结果
         /// </summary>
         /// <param name="errorMsg"></param>
-        public ApiResult(string errorMsg)
+        public ApiResult(string errorMsg) : this()
         {
+
             this.isSuccess = SUCCESS_FAIL;
             this.message = errorMsg;
         }
@@ -63,11 +60,13 @@ namespace Matrixden.Utils.Models
         /// 根据数据实体, 返回接口结果
         /// </summary>
         /// <param name="data"></param>
-        public ApiResult(dynamic data)
+        public ApiResult(object data) : this()
         {
+
             code = data == default(dynamic) ? 0 : 1;
             this.isSuccess = SUCCESS_SUCCESS;
             this.message = MESSAGE_SUCCESS;
+            this.data = data;
         }
 
         /// <summary>

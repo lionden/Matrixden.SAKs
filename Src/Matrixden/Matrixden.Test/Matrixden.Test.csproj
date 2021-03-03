@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="DBUtilities\TestMySqlRepository.cs" />
     <Compile Include="JsonHelperTest.cs" />
+    <Compile Include="Models\TestApiResult.cs" />
     <Compile Include="Models\User\UserInfoModel.cs" />
     <Compile Include="Models\ZionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
