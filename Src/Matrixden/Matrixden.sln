@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.SwissArmyKnives", "Matrixden.Utils\Matrixden.SwissArmyKnives.csproj", "{3FBE0A85-B0B8-49D1-B077-5340A2FC02D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.SwissArmyKnives", "Matrixden.SwissArmyKnives\Matrixden.SwissArmyKnives.csproj", "{3FBE0A85-B0B8-49D1-B077-5340A2FC02D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.SAK.Extensions", "Matrixden.Utils.Extensions\Matrixden.SAK.Extensions.csproj", "{A9209C7E-FCC0-4840-8270-66EA3F116055}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.SAK.Extensions", "Matrixden.SAK.Extensions\Matrixden.SAK.Extensions.csproj", "{A9209C7E-FCC0-4840-8270-66EA3F116055}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Redis", "Matrixden.Utils.Redis\Matrixden.Utils.Redis.csproj", "{06DF54BB-2BDB-4C25-9C47-DBB5CA93B85B}"
 EndProject

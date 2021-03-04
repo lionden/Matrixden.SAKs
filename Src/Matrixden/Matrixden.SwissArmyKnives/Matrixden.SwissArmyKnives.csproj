@@ -90,7 +90,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.SAK.Extensions.csproj">
+    <ProjectReference Include="..\Matrixden.SAK.Extensions\Matrixden.SAK.Extensions.csproj">
       <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
       <Name>Matrixden.SAK.Extensions</Name>
     </ProjectReference>
