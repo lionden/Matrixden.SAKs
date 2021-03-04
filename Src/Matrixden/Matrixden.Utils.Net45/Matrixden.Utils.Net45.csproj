@@ -62,58 +62,58 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Audio\AudioUtil.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Audio\AudioUtil.cs">
       <Link>Audio\AudioUtil.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Audio\TextSpeaker.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Audio\TextSpeaker.cs">
       <Link>Audio\TextSpeaker.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Audio\WavPlayer.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Audio\WavPlayer.cs">
       <Link>Audio\WavPlayer.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\CommonClass.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\CommonClass.cs">
       <Link>CommonClass.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\CommonHelper.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\CommonHelper.cs">
       <Link>CommonHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Constants.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Constants.cs">
       <Link>Constants.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Converters\ColorHelper.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Converters\ColorHelper.cs">
       <Link>Converters\ColorHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\ImageUtil.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\ImageUtil.cs">
       <Link>ImageUtil.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Mail.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Mail.cs">
       <Link>Mail.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Models\OperationResult.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Models\OperationResult.cs">
       <Link>Models\OperationResult.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Models\OperationResult_V2.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Models\OperationResult_V2.cs">
       <Link>Models\OperationResult_V2.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\RandomValueGenerator.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\RandomValueGenerator.cs">
       <Link>RandomValueGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\RegistryUtil.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\RegistryUtil.cs">
       <Link>RegistryUtil.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Serialization\JsonHelper.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Serialization\JsonHelper.cs">
       <Link>Serialization\JsonHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\SystemInfoUtil.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\SystemInfoUtil.cs">
       <Link>SystemInfoUtil.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\TimeUtil.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\TimeUtil.cs">
       <Link>TimeUtil.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Util.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Util.cs">
       <Link>Util.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils\Util_SystemInfo.cs">
+    <Compile Include="..\Matrixden.SwissArmyKnives\Util_SystemInfo.cs">
       <Link>Util_SystemInfo.cs</Link>
     </Compile>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />

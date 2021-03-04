@@ -44,13 +44,13 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils.Extensions\Extension.cs">
+    <Compile Include="..\Matrixden.SAK.Extensions\Extension.cs">
       <Link>Extension.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils.Extensions\SafeConverter.cs">
+    <Compile Include="..\Matrixden.SAK.Extensions\SafeConverter.cs">
       <Link>SafeConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Matrixden.Utils.Extensions\StringHelper.cs">
+    <Compile Include="..\Matrixden.SAK.Extensions\StringHelper.cs">
       <Link>StringHelper.cs</Link>
     </Compile>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
