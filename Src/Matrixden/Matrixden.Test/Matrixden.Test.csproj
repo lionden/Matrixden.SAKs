@@ -75,9 +75,9 @@
       <Project>{015e7fad-38ee-49f4-82ff-9f6b9afa5af4}</Project>
       <Name>Matrixden.UnifiedDBAdapter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.SAK.Extensions.csproj">
+    <ProjectReference Include="..\Matrixden.SAK.Extensions\Matrixden.SAK.Extensions.csproj">
       <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
-      <Name>Matrixden.Utils.Extensions</Name>
+      <Name>Matrixden.SAK.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Matrixden.Utils.PinYin\Matrixden.Utils.PinYin.csproj">
       <Project>{4b1e3dfe-f624-425c-9323-d3aa31ca8dd3}</Project>
@@ -95,9 +95,9 @@
       <Project>{a323c69e-24d9-4c54-a860-958e357eb237}</Project>
       <Name>Matrixden.Utils.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Matrixden.Utils\Matrixden.SwissArmyKnives.csproj">
+    <ProjectReference Include="..\Matrixden.SwissArmyKnives\Matrixden.SwissArmyKnives.csproj">
       <Project>{3fbe0a85-b0b8-49d1-b077-5340a2fc02d7}</Project>
-      <Name>Matrixden.Utils</Name>
+      <Name>Matrixden.SwissArmyKnives</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
