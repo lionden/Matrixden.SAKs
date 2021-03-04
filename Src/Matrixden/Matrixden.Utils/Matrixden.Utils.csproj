@@ -86,6 +86,9 @@
     <Compile Include="..\Matrixden.SwissArmyKnives\Converters\ColorHelper.cs">
       <Link>Converters\ColorHelper.cs</Link>
     </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Diagnostics\ProcessUtil.cs">
+      <Link>Diagnostics\ProcessUtil.cs</Link>
+    </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\ImageUtil.cs">
       <Link>ImageUtil.cs</Link>
     </Compile>
@@ -127,12 +130,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Audio\" />
-    <Folder Include="Converters\" />
-    <Folder Include="Models\" />
-    <Folder Include="Serialization\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj">
       <Project>{ff0d15af-bdb2-44aa-93e9-dd02fa3b6b85}</Project>
