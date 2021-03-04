@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{613AA45D-A703-48E6-A678-6FD477B7E08D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Matrixden.Utils</RootNamespace>
+    <AssemblyName>Matrixden.Utils</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Matrixden.Utils.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\SwissArmyKnife.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AudioSwitcher.AudioApi, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AudioSwitcher.AudioApi.3.0.0\lib\net40\AudioSwitcher.AudioApi.dll</HintPath>
+    </Reference>
+    <Reference Include="AudioSwitcher.AudioApi.CoreAudio, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AudioSwitcher.AudioApi.CoreAudio.3.0.0.1\lib\net40\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Audio\AudioUtil.cs">
+      <Link>Audio\AudioUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Audio\TextSpeaker.cs">
+      <Link>Audio\TextSpeaker.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Audio\WavPlayer.cs">
+      <Link>Audio\WavPlayer.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\CommonClass.cs">
+      <Link>CommonClass.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\CommonHelper.cs">
+      <Link>CommonHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Constants.cs">
+      <Link>Constants.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Converters\ColorHelper.cs">
+      <Link>Converters\ColorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\ImageUtil.cs">
+      <Link>ImageUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Mail.cs">
+      <Link>Mail.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Models\OperationResult.cs">
+      <Link>Models\OperationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Models\OperationResult_V2.cs">
+      <Link>Models\OperationResult_V2.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\RandomValueGenerator.cs">
+      <Link>RandomValueGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\RegistryUtil.cs">
+      <Link>RegistryUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Serialization\JsonHelper.cs">
+      <Link>Serialization\JsonHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\SystemInfoUtil.cs">
+      <Link>SystemInfoUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\TimeUtil.cs">
+      <Link>TimeUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Util.cs">
+      <Link>Util.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Util_SystemInfo.cs">
+      <Link>Util_SystemInfo.cs</Link>
+    </Compile>
+    <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Audio\" />
+    <Folder Include="Converters\" />
+    <Folder Include="Models\" />
+    <Folder Include="Serialization\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Matrixden.Utils.Extensions\Matrixden.Utils.Extensions.csproj">
+      <Project>{ff0d15af-bdb2-44aa-93e9-dd02fa3b6b85}</Project>
+      <Name>Matrixden.Utils.Extensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\SwissArmyKnife.ico">
+      <Link>SwissArmyKnife.ico</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
