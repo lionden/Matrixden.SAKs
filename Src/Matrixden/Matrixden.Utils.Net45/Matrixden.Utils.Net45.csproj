@@ -83,6 +83,9 @@
     <Compile Include="..\Matrixden.SwissArmyKnives\Converters\ColorHelper.cs">
       <Link>Converters\ColorHelper.cs</Link>
     </Compile>
+    <Compile Include="..\matrixden.swissarmyknives\diagnostics\ProcessUtil.cs">
+      <Link>Diagnostics\ProcessUtil.cs</Link>
+    </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\ImageUtil.cs">
       <Link>ImageUtil.cs</Link>
     </Compile>
