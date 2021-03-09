@@ -131,7 +131,7 @@ namespace Matrixden.SwissArmyKnives.Diagnostics
         /// </summary>
         /// <param name="path">进程全路径</param>
         /// <returns></returns>
-        public static bool Start(string path) => TryStart(path, string.Empty).Result;
+        public static bool Start(string path) => TryStart(path).Result;
 
         /// <summary>
         /// 结束进程树
