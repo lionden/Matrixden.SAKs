@@ -45,7 +45,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Constants.cs" />
     <Compile Include="UnifiedRequestHelper.cs" />
-    <Compile Include="UnifiedRequestHelper_V2.cs" />
     <Compile Include="UnifiedResponseHelper.cs" />
   </ItemGroup>
   <ItemGroup>
