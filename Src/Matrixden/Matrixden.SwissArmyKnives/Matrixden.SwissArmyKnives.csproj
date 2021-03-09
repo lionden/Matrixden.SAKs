@@ -25,11 +25,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\nuget packages\_build\Matrixden.SwissArmyKnives\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Matrixden.SwissArmyKnives.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\nuget packages\_build\Matrixden.SwissArmyKnives\Matrixden.SwissArmyKnives.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>..\SwissArmyKnife.ico</ApplicationIcon>
