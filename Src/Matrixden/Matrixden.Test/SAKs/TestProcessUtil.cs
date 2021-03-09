@@ -42,5 +42,14 @@ namespace Matrixden.Test.SAKs
 
             TestGets();
         }
+
+        [TestMethod]
+        public void TestWorkingDirectory()
+        {
+            var b = ProcessUtil.TryStart(@"B:\Program Files\Jieyun Info\JBSS Client\Authentication.Tray.exe");
+            Assert.IsTrue(b.Result);
+
+            Assert.IsNotNull(b.Data);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Matrixden.Utils.Extensions;
 using Matrixden.Utils.Logging;
+using Matrixden.Utils.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -93,9 +94,10 @@ namespace Matrixden.SwissArmyKnives.Diagnostics
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="path">进程全路径</param>
+        /// <param name="path">The name of an application file to run in the process.</param>
+        /// <param name="arguments">Command-line arguments to pass when starting the process.</param>
         /// <returns></returns>
-        public static bool Start(string path)
+        public static OperationResult<Process> TryStart(string path, string arguments)
         {
             if (path.IsNullOrEmptyOrWhiteSpace())
                 throw new ArgumentNullException("process path");
@@ -105,16 +107,31 @@ namespace Matrixden.SwissArmyKnives.Diagnostics
 
             try
             {
-                var p = Process.Start(path);
+                var p = Process.Start(path, arguments);
+                p.StartInfo.WorkingDirectory = Path.GetDirectoryName(path);
 
-                return true;
+                return new OperationResult<Process>(p);
             }
             catch (Exception ex)
             {
                 log.FatalException($"Failed to start process: {path}.", ex);
-                return false;
+                return new OperationResult<Process>(ex.Message);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path">进程全路径</param>
+        /// <returns></returns>
+        public static OperationResult<Process> TryStart(string path) => TryStart(path, string.Empty);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path">进程全路径</param>
+        /// <returns></returns>
+        public static bool Start(string path) => TryStart(path, string.Empty).Result;
 
         /// <summary>
         /// 结束进程树
