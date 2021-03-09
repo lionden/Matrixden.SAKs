@@ -62,8 +62,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GlobalAssemblyInfo.cs">
-      <Link>GlobalAssemblyInfo.cs</Link>
+    <Compile Include="..\GlobalAssemblyInfo.legacy.cs">
+      <Link>Properties\GlobalAssemblyInfo.legacy.cs</Link>
     </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\Audio\AudioUtil.cs">
       <Link>Audio\AudioUtil.cs</Link>

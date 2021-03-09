@@ -39,8 +39,8 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GlobalAssemblyInfo.cs">
-      <Link>GlobalAssemblyInfo.cs</Link>
+    <Compile Include="..\GlobalAssemblyInfo.legacy.cs">
+      <Link>Properties\GlobalAssemblyInfo.legacy.cs</Link>
     </Compile>
     <Compile Include="..\Matrixden.SAK.Extensions\Extension.cs">
       <Link>Extension.cs</Link>
