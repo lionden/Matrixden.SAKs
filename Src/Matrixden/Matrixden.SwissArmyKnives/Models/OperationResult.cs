@@ -29,10 +29,27 @@ namespace Matrixden.Utils.Models
             }
         }
 
+        private int code;
         /// <summary>
-        /// 错误代码
+        /// 错误代码。如未特别指明，0: 结果集为空，1: 结果正常且有数据。
         /// </summary>
-        public int Code { get; set; }
+        public int Code
+        {
+            get
+            {
+                if (Result)
+                    if (Data == null)
+                        code = 0;
+                    else if (Data != null && code == 0)
+                        code = 1;
+
+                return this.code;
+            }
+            set
+            {
+                this.code = value;
+            }
+        }
 
         /// <summary>
         /// 操作消息
