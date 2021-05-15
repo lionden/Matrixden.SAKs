@@ -76,10 +76,10 @@ namespace Matrixden.Utils.Models
         public ApiResult(OperationResult result)
         {
             message = result.Message;
+            code = result.Code;
             if (result.Result)
             {
                 isSuccess = SUCCESS_SUCCESS;
-                code = 1;
                 data = result.Data;
             }
         }
