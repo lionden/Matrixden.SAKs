@@ -554,6 +554,25 @@ namespace Matrixden.Utils.Extensions
         }
 
         /// <summary>
+        /// 检核给定字符串是否是BASE64加密格式
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static bool IsBase64Encoded(this string @this)
+        {
+            //1. Should not be null
+            if (@this.IsNullOrEmptyOrWhiteSpace())
+                return false;
+
+            //2.Length should be multiple of 4
+            if (@this.Length % 4 != 0)
+                return false;
+
+            //3.Check the chars
+            return Regex.IsMatch(@this, "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
+        }
+
+        /// <summary>
         /// 将字符串转为GUID.
         /// </summary>
         /// <param name="source"></param>
