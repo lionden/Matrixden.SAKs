@@ -2,6 +2,7 @@
 {
     using Matrixden.Utils.Extensions.Logging;
     using System;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -129,6 +130,40 @@
                 return false;
 
             return tar.Any(t => @this.Equals(t));
+        }
+
+        #endregion
+
+        #region -- DirectoryInfo --
+
+        /// <summary>
+        /// Extension method for DirectoryInfo.GetFiles.
+        /// Support '|' as separator between search patterns.
+        /// Returns a file list from the current directory matching the given search patterns.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="searchPatterns">Support '|' as separator between search patterns.</param>
+        /// <returns>An array of type System.IO.FileInfo.</returns>
+        public static FileInfo[] GetFiles2(this DirectoryInfo @this, string searchPatterns) => @this.GetFiles2(searchPatterns, SearchOption.TopDirectoryOnly);
+
+        /// <summary>
+        /// Extension method for DirectoryInfo.GetFiles.
+        /// Support '|' as separator between search patterns.
+        /// Returns a file list from the current directory matching the given search patterns.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="searchPatterns">Support '|' as separator between search patterns.</param>
+        /// <param name="searchOption"></param>
+        /// <returns>An array of type System.IO.FileInfo.</returns>
+        public static FileInfo[] GetFiles2(this DirectoryInfo @this, string searchPatterns, SearchOption searchOption)
+        {
+            if (@this == null || !@this.Exists)
+                return new FileInfo[0];
+
+            if (searchPatterns.IsNullOrEmptyOrWhiteSpace())
+                return @this.GetFiles();
+
+            return searchPatterns.Split('|').SelectMany(f => @this.GetFiles(f, searchOption)).ToArray();
         }
 
         #endregion

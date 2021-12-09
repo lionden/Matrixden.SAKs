@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SAKs\TestProcessUtil.cs" />
     <Compile Include="SAKs\TestStringHelper.cs" />
+    <Compile Include="SAKs\TestExtension.cs" />
     <Compile Include="Utils\TestCommonClass.cs" />
   </ItemGroup>
   <ItemGroup>
