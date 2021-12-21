@@ -82,6 +82,7 @@
     <Compile Include="RandomValueGenerator.cs" />
     <Compile Include="Serialization\JsonHelper.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="Util_Network.cs" />
     <Compile Include="Util_SystemInfo.cs" />
   </ItemGroup>
   <ItemGroup>
