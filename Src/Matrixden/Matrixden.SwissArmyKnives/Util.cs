@@ -123,22 +123,8 @@ namespace Matrixden.Utils
         /// 获取局域网本地IP
         /// </summary>
         /// <returns></returns>
-        public static string GetLocalIp()
-        {
-            string localIp = "127.0.0.1";
-
-            try
-            {
-                IPAddress[] ipAddr = Dns.GetHostEntry(Dns.GetHostName()).AddressList;   //获得当前IP地址
-                localIp = ipAddr.LastOrDefault().ToString();
-            }
-            catch (Exception ex)
-            {
-                log.ErrorException("Failed to local public ip.", ex);
-            }
-
-            return localIp;
-        }
+        [Obsolete("Use \"Matrixden.SwissArmyKnives.Util.GetLocalIPv4\" instead.")]
+        public static string GetLocalIp() => SwissArmyKnives.Util.GetLocalIPv4();
 
         /// <summary>
         /// 获取机器MAC地址.

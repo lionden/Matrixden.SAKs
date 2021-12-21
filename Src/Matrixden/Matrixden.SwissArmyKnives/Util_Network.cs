@@ -9,8 +9,6 @@ namespace Matrixden.SwissArmyKnives
 {
     public partial class Util
     {
-        private static readonly ILog log = LogProvider.GetCurrentClassLogger();
-
         /// <summary>
         /// 获取局域网IP
         /// </summary>

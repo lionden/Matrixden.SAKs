@@ -34,7 +34,7 @@ namespace Matrixden.Utils
             try
             {
                 PublicIP = Util.GetPublicIp();
-                LocalIp = Util.GetLocalIp();
+                LocalIp = SwissArmyKnives.Util.GetLocalIPv4();
                 Mac = Util.GetMacAddress();
                 DiskSN = Util.GetDiskSN();
                 MotherboardSN = Util.GetMotherboardSN();

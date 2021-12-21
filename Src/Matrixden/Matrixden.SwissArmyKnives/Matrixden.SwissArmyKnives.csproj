@@ -84,6 +84,7 @@
     <Compile Include="Util.cs" />
     <Compile Include="Util_Network.cs" />
     <Compile Include="Util_SystemInfo.cs" />
+    <Compile Include="Util_V2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
