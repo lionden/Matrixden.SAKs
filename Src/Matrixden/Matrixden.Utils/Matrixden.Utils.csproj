@@ -119,8 +119,14 @@
     <Compile Include="..\Matrixden.SwissArmyKnives\Util.cs">
       <Link>Util.cs</Link>
     </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Util_Network.cs">
+      <Link>Util_Network.cs</Link>
+    </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\Util_SystemInfo.cs">
       <Link>Util_SystemInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Util_V2.cs">
+      <Link>Util_V2.cs</Link>
     </Compile>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
