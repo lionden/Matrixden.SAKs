@@ -347,6 +347,23 @@ namespace Matrixden.Utils.Extensions
         }
 
         /// <summary>
+        /// Removes leading string from the current System.String object.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <param name="trimStr">Giving leader</param>
+        /// <returns></returns>
+        public static string TrimStart(this string val, string trimStr)
+        {
+            if (val.IsNullOrEmptyOrWhiteSpace() || trimStr.IsNullOrEmptyOrWhiteSpace())
+                return val;
+
+            if (!val.StartsWith(trimStr))
+                return val;
+
+            return val.TrimStart(trimStr.Length);
+        }
+
+        /// <summary>
         /// Removes trailing character(s) in an array from the current System.String object.
         /// </summary>
         /// <param name="val"></param>
@@ -358,6 +375,23 @@ namespace Matrixden.Utils.Extensions
                 return val;
 
             return val.Substring(0, val.Length - len);
+        }
+
+        /// <summary>
+        /// Removes trailing string from the current System.String object.
+        /// </summary>
+        /// <param name="val"></param>
+        /// <param name="trimStr">Giving trailer</param>
+        /// <returns></returns>
+        public static string TrimEnd(this string val, string trimStr)
+        {
+            if (val.IsNullOrEmptyOrWhiteSpace() || trimStr.IsNullOrEmptyOrWhiteSpace())
+                return val;
+
+            if (!val.EndsWith(trimStr))
+                return val;
+
+            return val.TrimEnd(trimStr.Length);
         }
 
         /// <summary>
