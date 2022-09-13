@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.SwissArmyKnives", "Matrixden.SwissArmyKnives\Matrixden.SwissArmyKnives.csproj", "{3FBE0A85-B0B8-49D1-B077-5340A2FC02D7}"
 EndProject
@@ -39,8 +39,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.Utils.Net45", "Matrixden.Utils.Net45\Matrixden.Utils.Net45.csproj", "{00F1948E-0C4A-44E5-9C95-81E467E39A32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrixden.WebAPI.Tracking", "Matrixden.WebAPI.Tracking\Matrixden.WebAPI.Tracking.csproj", "{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.Server", "NuGet.Server\NuGet.Server.csproj", "{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Matrixden.Utils", "Matrixden.Utils", "{A29D8BB8-5CE2-4829-813D-F65E8C33DC8C}"
 EndProject
@@ -120,10 +118,6 @@ Global
 		{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D20C3F8-36BC-4FA3-8B0D-DDEAE48B5458}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B91EB48-8FEE-4C62-BAA3-0FD325133E11}.Release|Any CPU.Build.0 = Release|Any CPU
 		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B4E156-9ADC-4753-8E11-F7DED1BD6B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
