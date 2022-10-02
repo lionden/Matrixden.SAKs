@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using Matrixden.SwissArmyKnives;
 using Matrixden.Utils.Extensions;
+using Matrixden.Utils.Models;
 
 namespace Matrixden.Test
 {
@@ -14,6 +15,23 @@ namespace Matrixden.Test
     {
         [TestMethod]
         public void TestValidateMethod()
+        {
+            HandleEmailAddr(a =>
+            {
+                return EmailHelper.Validate(a);
+            });
+        }
+
+        [TestMethod]
+        public void TestSend()
+        {
+            HandleEmailAddr(a =>
+            {
+                return new EmailHelper(a,"Matrix Bot").Send();
+            });
+        }
+
+        private void HandleEmailAddr(Func<string, OperationResult> func)
         {
             //文件路径
             string filePath = @"D:\Users\Lionden\Downloads\Emails.txt";
@@ -30,7 +48,7 @@ namespace Matrixden.Test
                     if (l.IsNullOrEmptyOrWhiteSpace())
                         continue;
 
-                    var or = EmailHelper.Validate(l);
+                    var or = func(l);
                     Debug.WriteLine($"{l}: {(or.Result ? "OK" : or.Message)}");
                 }
             }
