@@ -14,5 +14,14 @@ namespace Matrixden.Utils
         internal const int PublicIpVendor_StartIdentity_Length = 9;
         internal const string PublicIpVendor_EndIdentity = "\", \"cid\": \"";
         #endregion
+
+        #region -- Regular pattern --
+
+        /// <summary>
+        /// Email pattern
+        /// </summary>
+        internal const string EMAIL_PATTERN = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
+
+        #endregion
     }
 }
