@@ -85,6 +85,8 @@
     <Compile Include="Util_Network.cs" />
     <Compile Include="Util_SystemInfo.cs" />
     <Compile Include="Util_V2.cs" />
+    <Compile Include="WindowsHook\HookType.cs" />
+    <Compile Include="WindowsHook\WPARAM.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
