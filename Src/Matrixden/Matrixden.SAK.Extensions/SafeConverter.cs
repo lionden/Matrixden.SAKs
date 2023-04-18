@@ -46,6 +46,37 @@ namespace Matrixden.Utils.Extensions
         }
 
         /// <summary>
+        /// Safe converts the string representation of a number in a specified base to an equivalent 32-bit signed integer.
+        /// </summary>
+        /// <param name="val">A string that contains the number to convert.</param>
+        /// <param name="defaultVal">Default value when exception occured.</param>
+        /// <param name="fromBase">The base of the number in value, which must be 2, 8, 10, or 16.</param>
+        /// <returns>A 32-bit signed integer that is equivalent to the number in value, or 0 (zero) if value is null, or default value when exception occured..</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static int ToInt32(this string val, int defaultVal, int fromBase)
+        {
+            if (fromBase != 2 && fromBase != 8 && fromBase != 10 && fromBase != 16)
+            {
+                throw new ArgumentException($"{fromBase} is invalid base.");
+            }
+
+            try
+            {
+                defaultVal = Convert.ToInt32(val, fromBase);
+            }
+            catch (FormatException fEx)
+            {
+                _logger.ErrorException("Failed to convert [{0}] from base [{1}].", fEx, val, fromBase);
+            }
+            catch (OverflowException ofEx)
+            {
+                _logger.ErrorException($"The value [{val}] is over flow for convert from base [{fromBase}].", ofEx);
+            }
+
+            return defaultVal;
+        }
+
+        /// <summary>
         /// Safe Convert a string value to an Int64 value.
         /// </summary>
         /// <param name="this"></param>

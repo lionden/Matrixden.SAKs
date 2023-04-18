@@ -70,5 +70,20 @@ namespace Matrixden.Test.SAKs
             Assert.IsFalse(s2.IsBase64Encoded(), "Giving string is not BASE64 value");
             Assert.IsTrue(s3.IsBase64Encoded(), "Giving string is BASE64 value");
         }
+
+        [TestMethod]
+        public void TestToInt32()
+        {
+            var s1 = "a14b";
+            string s2 = null;
+            var s3 = "vb12";
+
+           var i1= s1.ToInt32(0, 16);
+            var i2= s2.ToInt32(0, 10);
+            var i3= s3.ToInt32(0, 16);
+
+            var i4=s1.ToInt32(0, 8);
+            var i5 = $"2147483648".ToInt32(0, 10);
+        }
     }
 }
