@@ -5,7 +5,7 @@
 // associated with an assembly.
 [assembly: AssemblyCompany("matrixden.top")]
 [assembly: AssemblyProduct("Matrixden")]
-[assembly: AssemblyCopyright("Copyright © Lionden 2018 - 2021")]
+[assembly: AssemblyCopyright("Copyright © Lionden 2018 - 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,5 +20,5 @@
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")
 //↓↓↓ Product version
-[assembly: AssemblyInformationalVersion("3.1.2304.14.1@LPC")]
-[assembly: AssemblyVersion("3.1.2304.11")]
+[assembly: AssemblyInformationalVersion("3.1.2304.18.1@LPC")]
+[assembly: AssemblyVersion("3.1.2304.18")]
