@@ -46,6 +46,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -88,6 +89,9 @@
     <Compile Include="Util_V2.cs" />
     <Compile Include="WindowsHook\HookType.cs" />
     <Compile Include="WindowsHook\WPARAM.cs" />
+    <Compile Include="Windows\MLine.cs" />
+    <Compile Include="Windows\MPoint.cs" />
+    <Compile Include="Windows\MPointExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
