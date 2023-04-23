@@ -7,7 +7,7 @@ namespace Matrixden.SwissArmyKnives.Windows
     /// Represents an Matrixden 2D point object.
     /// Named as BMW's MPower😀.
     /// </summary>
-    public class MPoint
+    public struct MPoint
     {
         /// <summary>
         /// X-axis value
@@ -62,7 +62,23 @@ namespace Matrixden.SwissArmyKnives.Windows
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return X.GetHashCode() ^ Y.GetHashCode();
+        }
+
+        /// <summary>
+        /// Compares two <see cref="T:Matrixden.SwissArmyKnives.Windows.MPoint" /> structures for equality.
+        /// </summary>
+        /// <param name="point1">The first point to compare.</param>
+        /// <param name="point2">The second point to compare.</param>
+        /// <returns></returns>
+        public static bool Equals(MPoint point1, MPoint point2)
+        {
+            if (point1.X.Equals(point2.X))
+            {
+                return point1.Y.Equals(point2.Y);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -72,16 +88,19 @@ namespace Matrixden.SwissArmyKnives.Windows
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-                return this == null;
-
-            if (this == null) return false;
-
-            if (!(obj is MPoint))
+            if (obj == null || !(obj is MPoint))
                 return false;
 
             var pnt = (MPoint)obj;
-            return this.X == pnt.X && this.Y == pnt.Y;
+            return Equals(this, pnt);
+        }
+
+        /// <summary>Compares two <see cref="T:Matrixden.SwissArmyKnives.Windows.MPoint" /> structures for equality.</summary>
+        /// <returns>true if both <see cref="T:Matrixden.SwissArmyKnives.Windows.MPoint" /> structures contain the same <see cref="P:Matrixden.SwissArmyKnives.Windows.MPoint.X" /> and <see cref="P:Matrixden.SwissArmyKnives.Windows.MPoint.Y" /> values; otherwise, false.</returns>
+        /// <param name="value">The point to compare to this instance.</param>
+        public bool Equals(MPoint value)
+        {
+            return Equals(this, value);
         }
 
         /// <summary>
@@ -126,5 +145,115 @@ namespace Matrixden.SwissArmyKnives.Windows
         /// </summary>
         /// <param name="v"></param>
         public static explicit operator MPoint(Point v) => new MPoint(v);
+
+        /// <summary>
+        /// Convert a <c>MPoint</c> object to <c>System.Draw.Point</c>.
+        /// </summary>
+        /// <param name="default">The default value when the input is null or any other illegal value.</param>
+        /// <returns></returns>
+        public Point ToDPoint(Point @default)
+        {
+            if (this == null)
+                return @default;
+
+            return new Point((int)this.X, (int)this.Y);
+        }
+
+        /// <summary>
+        /// Convert a <c>MPoint</c> object to <c>System.Draw.Point</c>.
+        /// </summary>
+        /// <returns></returns>
+        public Point ToDPoint() => this.ToDPoint(new Point());
+
+        /// <summary>
+        /// Convert a <c>MPoint</c> object to <c>System.Windows.Point</c>.
+        /// </summary>
+        /// <returns></returns>
+        public System.Windows.Point ToWPoint()
+        {
+            if (this == null)
+                return new System.Windows.Point();
+
+            return new System.Windows.Point(this.X, this.Y);
+        }
+
+        /// <summary>
+        /// Make a offset of the current object.
+        /// </summary>
+        /// <param name="x">X-axis offset</param>
+        /// <param name="y">Y-axis offset</param>
+        /// <returns></returns>
+        public MPoint Offset(double x, double y)
+        {
+            if (this == null)
+                return new MPoint(0 - x, 0 - y);
+
+            return new MPoint(this.X - x, this.Y - y);
+        }
+
+        /// <summary>
+        /// Make a offset with single value of the current object when the x and y-axis are equal.
+        /// </summary>
+        /// <param name="val">The offset value</param>
+        /// <returns></returns>
+        public MPoint Offset(double val) => this.Offset(val, val);
+
+        /// <summary>
+        /// Get the axisymmetric point of given point by line.
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NotImplementedException"></exception>
+        public MPoint AxisymmetricPoint(MLine line)
+        {
+            if (line == null)
+                throw new ArgumentNullException("line");
+
+            if ((line.Direction & Directions.XAxis) == Directions.XAxis || (line.Direction & Directions.XAxis_Anti) == Directions.XAxis_Anti)
+            {
+                return this.Offset(0, (line.StartPoint.Y - this.Y) * 2);
+            }
+            else if ((line.Direction & Directions.YAxis) == Directions.YAxis || (line.Direction & Directions.YAxis_Anti) == Directions.YAxis_Anti)
+            {
+                return this.Offset((line.StartPoint.X - this.X) * 2, 0);
+            }
+            else
+                throw new NotImplementedException("not support titl line.");
+        }
+
+        /// <summary>
+        /// Get the axisymmetric point of given rectangle's cross line.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="direct"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NotImplementedException"></exception>
+        public MPoint AxisymmetricPoint(Rectangle rect, Directions direct)
+        {
+            if (rect == null)
+                throw new ArgumentNullException("rect");
+
+            MLine line;
+            switch (direct)
+            {
+                case Directions.XAxis:
+                case Directions.XAxis_Anti:
+                case Directions.XParalle:
+                    line = new MLine(new MPoint(rect.X, rect.Y + rect.Height / 2), Directions.XParalle, rect.Width);
+                    break;
+
+                case Directions.YAxis:
+                case Directions.YAxis_Anti:
+                case Directions.YParalle:
+                    line = new MLine(new MPoint(rect.X + rect.Width / 2, rect.Y), Directions.YParalle, rect.Height);
+                    break;
+                default:
+                    throw new NotImplementedException("not support titl line.");
+            }
+
+            return this.AxisymmetricPoint(line);
+        }
     }
 }

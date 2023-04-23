@@ -8,7 +8,8 @@ using System.Windows.Forms;
 namespace Matrixden.SwissArmyKnives.Windows
 {
     /// <summary>
-    /// 
+    /// Represents an Matrixden line object.
+    /// Named as BMW's MPower😀.
     /// </summary>
     public class MLine
     {
@@ -106,19 +107,19 @@ namespace Matrixden.SwissArmyKnives.Windows
             {
                 case Directions.XAxis:
                     StartPoint = point;
-                    EndPoint = point.Off(length, 0);
+                    EndPoint = point.Offset(length, 0);
                     break;
                 case Directions.YAxis:
                     StartPoint = point;
-                    EndPoint = point.Off(0, length);
+                    EndPoint = point.Offset(0, length);
                     break;
                 case Directions.XAxis_Anti:
                     StartPoint = point;
-                    EndPoint = point.Off(length * -1, 0);
+                    EndPoint = point.Offset(length * -1, 0);
                     break;
                 case Directions.YAxis_Anti:
                     StartPoint = point;
-                    EndPoint = point.Off(0, length * -1);
+                    EndPoint = point.Offset(0, length * -1);
                     break;
                 default:
                     break;
