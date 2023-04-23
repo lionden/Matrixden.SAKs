@@ -120,5 +120,11 @@ namespace Matrixden.SwissArmyKnives.Windows
 
             return Math.Sqrt((Math.Pow(right.X - left.X, 2) + Math.Pow(right.Y - left.Y, 2)));
         }
+
+        /// <summary>
+        /// Cast a point value to MPoint object.
+        /// </summary>
+        /// <param name="v"></param>
+        public static explicit operator MPoint(Point v) => new MPoint(v);
     }
 }
