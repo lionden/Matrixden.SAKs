@@ -71,27 +71,6 @@ namespace Matrixden.SwissArmyKnives.Windows
         /// <returns></returns>
         public static MPoint Off(this MPoint @this, double val) => @this.Off(val, val);
 
-        #endregion
-
-        #region -- System.Draw.Point --
-
-        /// <summary>
-        /// Make a offset of the current object.
-        /// </summary>
-        /// <param name="this"></param>
-        /// <param name="x">X-axis offset</param>
-        /// <param name="y">Y-axis offset</param>
-        /// <returns></returns>
-        public static Point Off(this Point @this, double x, double y) => new MPoint(@this).Off(x, y).ToDPoint();
-
-        /// <summary>
-        /// Make a offset with single value of the current object when the x and y-axis are equal.
-        /// </summary>
-        /// <param name="this"></param>
-        /// <param name="val">The offset value</param>
-        /// <returns></returns>
-        public static Point Off(this Point @this, double val) => new MPoint(@this).Off(val).ToDPoint();
-
         /// <summary>
         /// Get the axisymmetric point of given point by line.
         /// </summary>
@@ -100,7 +79,7 @@ namespace Matrixden.SwissArmyKnives.Windows
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="NotImplementedException"></exception>
-        public static Point AxisymmetricPoint(this Point @this, MLine line)
+        public static MPoint AxisymmetricPoint(this MPoint @this, MLine line)
         {
             if (line == null)
                 throw new ArgumentNullException("line");
@@ -126,7 +105,7 @@ namespace Matrixden.SwissArmyKnives.Windows
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="NotImplementedException"></exception>
-        public static Point AxisymmetricPoint(this Point @this, Rectangle rect, Directions direct)
+        public static MPoint AxisymmetricPoint(this MPoint @this, Rectangle rect, Directions direct)
         {
             if (rect == null)
                 throw new ArgumentNullException("rect");
@@ -151,6 +130,48 @@ namespace Matrixden.SwissArmyKnives.Windows
 
             return @this.AxisymmetricPoint(line);
         }
+
+        #endregion
+
+        #region -- System.Draw.Point --
+
+        /// <summary>
+        /// Make a offset of the current object.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="x">X-axis offset</param>
+        /// <param name="y">Y-axis offset</param>
+        /// <returns></returns>
+        public static MPoint Off(this Point @this, double x, double y) => new MPoint(@this).Off(x, y);
+
+        /// <summary>
+        /// Make a offset with single value of the current object when the x and y-axis are equal.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="val">The offset value</param>
+        /// <returns></returns>
+        public static MPoint Off(this Point @this, double val) => new MPoint(@this).Off(val);
+
+        /// <summary>
+        /// Get the axisymmetric point of given point by line.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NotImplementedException"></exception>
+        public static MPoint AxisymmetricPoint(this Point @this, MLine line) => ((MPoint)@this).AxisymmetricPoint(line);
+
+        /// <summary>
+        /// Get the axisymmetric point of given rectangle's cross line.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="rect"></param>
+        /// <param name="direct"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NotImplementedException"></exception>
+        public static MPoint AxisymmetricPoint(this Point @this, Rectangle rect, Directions direct) => ((MPoint)@this).AxisymmetricPoint(rect, direct);
 
         #endregion
     }
