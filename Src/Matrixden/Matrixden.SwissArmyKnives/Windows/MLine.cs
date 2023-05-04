@@ -106,10 +106,12 @@ namespace Matrixden.SwissArmyKnives.Windows
             switch (direction)
             {
                 case Directions.XAxis:
+                case Directions.XParalle:
                     StartPoint = point;
                     EndPoint = point.Offset(length, 0);
                     break;
                 case Directions.YAxis:
+                case Directions.YParalle:
                     StartPoint = point;
                     EndPoint = point.Offset(0, length);
                     break;
