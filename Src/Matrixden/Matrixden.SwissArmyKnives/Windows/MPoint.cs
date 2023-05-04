@@ -188,7 +188,7 @@ namespace Matrixden.SwissArmyKnives.Windows
             if (this == null)
                 return new MPoint(0 - x, 0 - y);
 
-            return new MPoint(this.X - x, this.Y - y);
+            return new MPoint(this.X + x, this.Y + y);
         }
 
         /// <summary>
