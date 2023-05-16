@@ -11,13 +11,14 @@ namespace Matrixden.Test.Windows
         [TestMethod]
         public void TestAxisymmetricPoint()
         {
-            var mp = new MPoint(955, 443);
-            var tmir = new MPoint(955, 545);
+            var mp = new MPoint(1317, 365);
+            var tmir = new MPoint(1317, 763);
+            var rect = new Rectangle(417, 245, 1055, 638);
 
-            var mrp = mp.AxisymmetricPoint(new Rectangle(327, 283, 1008, 422), Directions.XParalle);
+            var mrp = mp.AxisymmetricPoint(rect, Directions.XParalle);
             Assert.AreEqual(tmir, mrp);
 
-            var mrp2 = tmir.AxisymmetricPoint(new Rectangle(327, 283, 1008, 422), Directions.XParalle);
+            var mrp2 = tmir.AxisymmetricPoint(rect, Directions.XParalle);
             Assert.AreEqual(mp, mrp2);
         }
     }

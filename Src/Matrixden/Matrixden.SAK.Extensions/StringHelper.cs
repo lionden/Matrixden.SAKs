@@ -574,6 +574,7 @@ namespace Matrixden.Utils.Extensions
         /// </summary>
         /// <param name="this"></param>
         /// <returns></returns>
+        [Obsolete("Use JsonHelper.IsJson instead.", true)]
         public static bool IsJson(this string @this)
         {
             if (@this.IsNullOrEmptyOrWhiteSpace())
