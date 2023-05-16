@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Matrixden.Utils.Extensions
 {
+    /// <summary>
+    /// Safe converter without <c>System.ArgumentNullException</c>.
+    /// </summary>
     public static class SafeConverter
     {
         private static readonly ILog _logger = LogProvider.GetCurrentClassLogger();
