@@ -69,5 +69,18 @@ namespace Matrixden.Test
 
             Assert.AreEqual(1, ar.isSuccess);
         }
+
+        [TestMethod]
+        public void TestIsJson()
+        {
+            var s1 = string.Empty;
+            Assert.IsFalse(s1.IsJson(), "should be false.");
+
+            var s2 = " {a:1,b:2}";
+            Assert.IsTrue(s2.IsJson(), "should be true.");
+
+            var s3 = "[]";
+            Assert.IsTrue(s3.IsJson(), "should be true.");
+        }
     }
 }

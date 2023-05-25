@@ -217,4 +217,31 @@
 
         #endregion
     }
+
+    /// <summary>
+    /// 扩展方法.
+    /// </summary>
+    public static class Extensions
+    {
+        /// <summary>
+        /// 判断字符串是否是JSON格式
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static bool IsJson(this string @this)
+        {
+            if (@this.IsNullOrEmptyOrWhiteSpace())
+                return false;
+
+            try
+            {
+                JToken.Parse(@this);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
 }
