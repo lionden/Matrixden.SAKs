@@ -20,6 +20,25 @@ namespace Matrixden.SwissArmyKnives
     {
         private static readonly ILog log = Utils.Logging.LogProvider.GetCurrentClassLogger();
 
+        /// <summary>
+        /// Regex-based email validation
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsValidEmail(string value)
+        {
+            if (value.IsNullOrEmptyOrWhiteSpace())
+                return false;
+
+            value = value.Trim();
+
+            var options = RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
+            var _emailRegex = new Regex(Constants._emailExpression, options, TimeSpan.FromSeconds(2.0));
+
+            return _emailRegex.IsMatch(value);
+        }
+
+
         const string _fromAddr = "Reactor@matrixden.top";
         private SmtpClient _SmtpClient { get; set; }
         private MailMessage _MailMessage { get; set; }
