@@ -33,7 +33,7 @@ namespace Matrixden.SwissArmyKnives
             value = value.Trim();
 
             var options = RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
-            var _emailRegex = new Regex(Constants._emailExpression, options, TimeSpan.FromSeconds(2.0));
+            var _emailRegex = new Regex(Constants.EMAIL_PATTERN, options, TimeSpan.FromSeconds(2.0));
 
             return _emailRegex.IsMatch(value);
         }
