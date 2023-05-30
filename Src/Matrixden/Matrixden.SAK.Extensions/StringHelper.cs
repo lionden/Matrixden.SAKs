@@ -570,25 +570,6 @@ namespace Matrixden.Utils.Extensions
         }
 
         /// <summary>
-        /// 判断字符串是否是JSON格式
-        /// </summary>
-        /// <param name="this"></param>
-        /// <returns></returns>
-        [Obsolete("Use JsonHelper.IsJson instead.", true)]
-        public static bool IsJson(this string @this)
-        {
-            if (@this.IsNullOrEmptyOrWhiteSpace())
-                return false;
-
-            @this = @this.CleanUp();
-            if ((@this.StartsWith("{") && @this.EndsWith("}")) || //For object
-                (@this.StartsWith("[") && @this.EndsWith("]"))) //For array
-                return true;
-
-            return false;
-        }
-
-        /// <summary>
         /// 检核给定字符串是否是BASE64加密格式
         /// </summary>
         /// <param name="this"></param>
