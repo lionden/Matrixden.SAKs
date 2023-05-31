@@ -92,6 +92,7 @@
     <Compile Include="Windows\MLine.cs" />
     <Compile Include="Windows\MPoint.cs" />
     <Compile Include="Windows\MPointExtensions.cs" />
+    <Compile Include="Windows\MRectangleExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
