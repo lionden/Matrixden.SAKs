@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Matrixden.Utils</RootNamespace>
     <AssemblyName>Matrixden.Utils</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -86,11 +86,17 @@
     <Compile Include="..\matrixden.swissarmyknives\diagnostics\ProcessUtil.cs">
       <Link>Diagnostics\ProcessUtil.cs</Link>
     </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Email\EmailHelper.cs">
+      <Link>Email\EmailHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\ImageUtil.cs">
       <Link>ImageUtil.cs</Link>
     </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\Mail.cs">
       <Link>Mail.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Models\ApiResult.cs">
+      <Link>Models\ApiResult.cs</Link>
     </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\Models\OperationResult.cs">
       <Link>Models\OperationResult.cs</Link>
@@ -124,6 +130,24 @@
     </Compile>
     <Compile Include="..\Matrixden.SwissArmyKnives\Util_V2.cs">
       <Link>Util_V2.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\WindowsHook\HookType.cs">
+      <Link>WindowsHook\HookType.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\WindowsHook\WPARAM.cs">
+      <Link>WindowsHook\WPARAM.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Windows\MLine.cs">
+      <Link>Windows\MLine.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Windows\MPoint.cs">
+      <Link>Windows\MPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Windows\MPointExtensions.cs">
+      <Link>Windows\MPointExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Matrixden.SwissArmyKnives\Windows\MRectangleExtensions.cs">
+      <Link>Windows\MRectangleExtensions.cs</Link>
     </Compile>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
