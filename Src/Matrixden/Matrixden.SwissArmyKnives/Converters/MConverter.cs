@@ -1,6 +1,7 @@
 ﻿using Matrixden.Utils.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,17 +33,17 @@ namespace Matrixden.SwissArmyKnives
         }
 
         /// <summary>
-        /// Convert hex string to general string(ASCⅡ chars).
+        /// Convert hex string to byte array.
         /// </summary>
         /// <param name="hexStr"></param>
         /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
         /// <returns></returns>
-        public static string HexString2String(string hexStr, char splitter = default(char))
+        public static byte[] HexString2ByteArray(string hexStr, char splitter = default)
         {
             hexStr = hexStr.CleanUp();
-            if (hexStr.IsNullOrEmptyOrWhiteSpace()) return string.Empty;
+            if (hexStr.IsNullOrEmptyOrWhiteSpace()) return default;
 
-            byte[] hex = default(byte[]);
+            byte[] hex = default;
             if (splitter == default(char))
             {
                 hex = new byte[hexStr.Length / 2];
@@ -57,7 +58,29 @@ namespace Matrixden.SwissArmyKnives
                 hex = hexStr.Split(splitter).Select(s => Convert.ToByte(s, 16)).ToArray();
             }
 
-            return Hex2String(hex);
+            return hex;
+        }
+
+        /// <summary>
+        /// Convert hex string to general string(ASCⅡ chars).
+        /// </summary>
+        /// <param name="hexStr"></param>
+        /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
+        /// <returns></returns>
+        public static string HexString2String(string hexStr, char splitter = default) => Hex2String(HexString2ByteArray(hexStr, splitter));
+
+        /// <summary>
+        /// Convert hex string to image.
+        /// </summary>
+        /// <param name="hexStr"></param>
+        /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
+        /// <returns></returns>
+        public static Image HexString2Image(string hexStr, char splitter = default)
+        {
+            var hex = HexString2ByteArray(hexStr, splitter);
+            var ms = new System.IO.MemoryStream(hex);
+
+            return Image.FromStream(ms);
         }
     }
 }
