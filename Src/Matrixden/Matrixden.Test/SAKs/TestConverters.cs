@@ -13,7 +13,8 @@ namespace Matrixden.Test.SAKs
             var hs = "50 44 4b 39 36 35 30 39 7c 32 ";
             var tar = "PDK96509|2";
 
-            Assert.AreEqual(tar, MConverter.HexString2String(hs,' '));
+            Assert.AreEqual(tar, MConverter.HexString2String(hs, ' '));
+            Assert.AreEqual(tar, MConverter.HexString2String(string.Join("", hs.Split(' '))));
         }
     }
 }
