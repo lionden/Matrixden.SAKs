@@ -74,6 +74,7 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\ColorHelper.cs" />
+    <Compile Include="Converters\MConverter.cs" />
     <Compile Include="Diagnostics\ProcessUtil.cs" />
     <Compile Include="Email\EmailHelper.cs" />
     <Compile Include="Mail.cs" />
