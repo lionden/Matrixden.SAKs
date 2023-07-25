@@ -1,6 +1,7 @@
 ﻿using Matrixden.Utils.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Matrixden.Test.SAKs
@@ -24,6 +25,18 @@ namespace Matrixden.Test.SAKs
 
             files = bd.GetFiles2("*.flac|*.MP3|*.WaV");
             Assert.IsNotNull(files, "Files should not be null");
+        }
+
+        [TestMethod]
+        public void TestInt2Hex()
+        {
+            var a = 1235;
+            var astr = "00 04 D3";
+
+            Debug.WriteLine(default(char));
+
+            Debug.WriteLine(a.HexString(6));
+            Assert.AreEqual(astr, a.HexString(6, ' '));
         }
     }
 }

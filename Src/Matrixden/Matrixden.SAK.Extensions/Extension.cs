@@ -73,6 +73,29 @@
             return values.Any(a => @this.Equals(a));
         }
 
+        /// <summary>
+        /// Convert int value to hex string.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="totalWidth">Total chars without whitespace.</param>
+        /// <param name="separator">Separator between two bytes.</param>
+        /// <returns></returns>
+        public static string HexString(this Int32 @this, UInt16 totalWidth, char separator = default)
+        {
+            var hs = @this.ToString("X2").PadLeft(totalWidth, '0');
+            if (separator == default)
+                return hs;
+
+            var ca = hs.ToCharArray();
+            var g = new string[ca.Length / 2];
+            for (int i = 0; i < g.Length; i++)
+            {
+                g[i] = $"{ca[2 * i]}{ca[2 * i + 1]}";
+            }
+
+            return string.Join($"{separator}", g);
+        }
+
         #endregion
 
         #region -- Int64 --
