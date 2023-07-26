@@ -3,12 +3,12 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace Matrixden.Utils
+namespace Matrixden.SwissArmyKnives
 {
     /// <summary>
     /// 图片帮助类
     /// </summary>
-    public class ImageUtil
+    public class MImageConverter
     {
         /// <summary>
         /// 图片文件转bytes
@@ -68,6 +68,20 @@ namespace Matrixden.Utils
 
             return Bytes2Image(b);
         }
+
+        /// <summary>
+        /// Convert hex string to image.
+        /// </summary>
+        /// <param name="hexStr"></param>
+        /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
+        /// <returns></returns>
+        public static Image HexString2Image(string hexStr, char splitter = default)
+        {
+            var hex = MConverter.HexString2ByteArray(hexStr, splitter);
+            var ms = new System.IO.MemoryStream(hex);
+
+            return Image.FromStream(ms);
+        }
     }
 
     /// <summary>
@@ -80,6 +94,6 @@ namespace Matrixden.Utils
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static byte[] Bytes(this Image image) => ImageUtil.Image2Bytes(image);
+        public static byte[] Bytes(this Image image) => MImageConverter.Image2Bytes(image);
     }
 }

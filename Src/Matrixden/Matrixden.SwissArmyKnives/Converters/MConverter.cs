@@ -38,7 +38,7 @@ namespace Matrixden.SwissArmyKnives
         /// <param name="hexStr"></param>
         /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
         /// <returns></returns>
-        public static byte[] HexString2ByteArray(string hexStr, char splitter = default)
+        public static byte[] HexString2ByteArray(string hexStr, char splitter = ' ')
         {
             hexStr = hexStr.CleanUp();
             if (hexStr.IsNullOrEmptyOrWhiteSpace()) return default;
@@ -67,20 +67,6 @@ namespace Matrixden.SwissArmyKnives
         /// <param name="hexStr"></param>
         /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
         /// <returns></returns>
-        public static string HexString2String(string hexStr, char splitter = default) => Hex2String(HexString2ByteArray(hexStr, splitter));
-
-        /// <summary>
-        /// Convert hex string to image.
-        /// </summary>
-        /// <param name="hexStr"></param>
-        /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
-        /// <returns></returns>
-        public static Image HexString2Image(string hexStr, char splitter = default)
-        {
-            var hex = HexString2ByteArray(hexStr, splitter);
-            var ms = new System.IO.MemoryStream(hex);
-
-            return Image.FromStream(ms);
-        }
+        public static string HexString2String(string hexStr, char splitter = ' ') => Hex2String(HexString2ByteArray(hexStr, splitter));
     }
 }
