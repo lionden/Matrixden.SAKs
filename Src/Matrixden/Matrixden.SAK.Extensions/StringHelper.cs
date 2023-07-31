@@ -215,6 +215,27 @@ namespace Matrixden.Utils.Extensions
         }
 
         /// <summary>
+        /// Safe subcut string.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="length"></param>
+        /// <returns>If the string is null (or empty or white space), or the start index (or length) is out of range, return the string default.</returns>
+        public static string Substring2(this string @this, int startIndex, int length)
+        {
+            if (@this.IsNullOrEmptyOrWhiteSpace() || startIndex < 0 || length < 0)
+                return @this;
+
+            if (startIndex >= @this.Length)
+                return @this;
+
+            if (startIndex + length >= @this.Length)
+                return @this.Substring(startIndex);
+
+            return @this.Substring(startIndex, length);
+        }
+
+        /// <summary>
         /// Get a string's byte array.
         /// </summary>
         /// <param name="sourceStr"></param>

@@ -14,6 +14,27 @@ namespace Matrixden.SwissArmyKnives
     public class MConverter
     {
         /// <summary>
+        /// Convert byte array to hex string.
+        /// </summary>
+        /// <param name="bd"></param>
+        /// <param name="splitter">Normally, the splitter can be '-', ' ' or NULL.</param>
+        /// <returns></returns>
+        public static string ByteArray2HexStr(byte[] bd, char splitter = ' ')
+        {
+            if (bd == default(byte[]) || bd.Length <= 0)
+                return string.Empty;
+
+            var hs = BitConverter.ToString(bd);
+            if (splitter == '-')
+                return hs;
+
+            if (splitter == default(char))
+                return hs.Replace("-", string.Empty);
+
+            return hs.Replace('-', splitter);
+        }
+
+        /// <summary>
         /// Convert byte array to general string(ASCⅡ chars).
         /// </summary>
         /// <param name="hex"></param>

@@ -27,5 +27,12 @@ namespace Matrixden.Test.SAKs
             var img = MImageConverter.HexString2Image(hs, '-');
             img.Save("D:\\img.jpg");
         }
+
+        [TestMethod]
+        public void TestFile2HexStr()
+        {
+            var path = "B:\\Users\\Lionden\\Downloads\\config.bin";
+            var str = MFileConverter.File2HexStr(path);
+        }
     }
 }

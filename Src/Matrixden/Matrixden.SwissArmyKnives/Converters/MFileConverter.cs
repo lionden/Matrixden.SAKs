@@ -28,14 +28,8 @@ namespace Matrixden.SwissArmyKnives
                 return string.Empty;
 
             var bd = File.ReadAllBytes(filePath);
-            var hs = BitConverter.ToString(bd);
-            if (splitter == '-')
-                return hs;
 
-            if (splitter == default(char))
-                return hs.Replace("-", string.Empty);
-
-            return hs.Replace('-', splitter);
+            return MConverter.ByteArray2HexStr(bd);
         }
 
         /// <summary>
