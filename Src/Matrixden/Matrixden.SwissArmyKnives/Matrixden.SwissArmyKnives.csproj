@@ -87,6 +87,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomValueGenerator.cs" />
     <Compile Include="Serialization\JsonHelper.cs" />
+    <Compile Include="MDateTime.cs" />
+    <Compile Include="MTimer.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Util_Network.cs" />
     <Compile Include="Util_SystemInfo.cs" />

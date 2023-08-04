@@ -60,6 +60,7 @@
     <Compile Include="SAKs\TestStringHelper.cs" />
     <Compile Include="SAKs\TestExtension.cs" />
     <Compile Include="SAKs\TestConverters.cs" />
+    <Compile Include="SAKs\TestMTimer.cs" />
     <Compile Include="TestEmailHelper.cs" />
     <Compile Include="UtilTest.cs" />
     <Compile Include="Utils\TestCommonClass.cs" />
