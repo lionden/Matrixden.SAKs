@@ -43,6 +43,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
+    <Compile Include="EnumerableExtension.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="SafeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

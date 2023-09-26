@@ -174,7 +174,7 @@ namespace Matrixden.SwissArmyKnives
         /// <summary>
         /// Initializes a new instance of the Timer class.
         /// </summary>
-        /// <param name="interval">Time between Tick events</param>
+        /// <param name="interval">Time between Tick events in milliseconds.</param>
         public MTimer(int interval) : this()
         {
             Interval = interval;
