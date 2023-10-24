@@ -1,6 +1,7 @@
 ﻿using Matrixden.SwissArmyKnives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 
 namespace Matrixden.Test
 {
@@ -20,6 +21,16 @@ namespace Matrixden.Test
         {
             var ip = Util.GetLocalIPv4();
 
+        }
+
+        [TestMethod]
+        public void TestMEnvironment()
+        {
+            Trace.WriteLine(MEnvironment.Desktop);
+            Trace.WriteLine(MEnvironment.DesktopDirectory);
+            Trace.WriteLine(MEnvironment.Startup);
+
+            Assert.IsTrue(true);
         }
     }
 }
