@@ -28,7 +28,7 @@ namespace Matrixden.SwissArmyKnives
         /// <param name="comment">描述</param>
         /// <param name="icon">图标地址</param>
         /// <returns>成功或失败</returns>
-        public OperationResult CreateShortcut(string location, string name, string target, string startIn = null, string comment = null, string icon = null)
+        public static OperationResult CreateShortcut(string location, string name, string target, string startIn = null, string comment = null, string icon = null)
         {
             OperationResult or = new();
             try
@@ -59,15 +59,15 @@ namespace Matrixden.SwissArmyKnives
             return or;
         }
 
-        public OperationResult CreateStartupQuick(string target) => CreateShortcut(MEnvironment.Startup, Path.GetFileName(target), target);
+        public static OperationResult CreateStartupQuick(string target) => CreateShortcut(MEnvironment.Startup, Path.GetFileName(target), target);
 
-        public OperationResult CreateDesktopQuick(string target) => CreateShortcut(MEnvironment.Desktop, Path.GetFileName(target), target);
+        public static OperationResult CreateDesktopQuick(string target) => CreateShortcut(MEnvironment.Desktop, Path.GetFileName(target), target);
 
         /// <summary>
         /// 设置开机自动启动-只需要调用改方法就可以了参数里面的bool变量是控制开机启动的开关的，默认为开启自启启动
         /// </summary>
         /// <param name="onOff">自启开关</param>
-        public void AddToStartup(string targetPath)
+        public static void AddToStartup(string targetPath)
         {
             //获取启动路径应用程序快捷方式的路径集合
             List<string> shortcutPaths = GetQuicksByPath(MEnvironment.Startup, targetPath);
@@ -86,7 +86,7 @@ namespace Matrixden.SwissArmyKnives
         /// 设置开机自动启动-只需要调用改方法就可以了参数里面的bool变量是控制开机启动的开关的，默认为开启自启启动
         /// </summary>
         /// <param name="onOff">自启开关</param>
-        public void RemoveFromStartup(string targetPath)
+        public static void RemoveFromStartup(string targetPath)
         {
             //获取启动路径应用程序快捷方式的路径集合
             List<string> shortcutPaths = GetQuicksByPath(MEnvironment.Startup, targetPath);
@@ -103,7 +103,7 @@ namespace Matrixden.SwissArmyKnives
         /// <param name="directory">文件夹</param>
         /// <param name="targetPath">目标应用程序路径</param>
         /// <returns>目标应用程序的快捷方式</returns>
-        private List<string> GetQuicksByPath(string directory, string targetPath)
+        private static List<string> GetQuicksByPath(string directory, string targetPath)
         {
             List<string> tempStrs = new List<string>();
             string[] files = Directory.GetFiles(directory, "*.lnk");
@@ -130,7 +130,7 @@ namespace Matrixden.SwissArmyKnives
         /// </summary>
         /// <param name="shortcutPath"></param>
         /// <returns></returns>
-        private string GetTargetFromQuick(string shortcutPath)
+        private static string GetTargetFromQuick(string shortcutPath)
         {
             //快捷方式文件的路径 = @"d:\Test.lnk";
             if (File.Exists(shortcutPath))

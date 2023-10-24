@@ -82,7 +82,6 @@
     <Compile Include="Email\EmailHelper.cs" />
     <Compile Include="Converters\MImageConverter.cs" />
     <Compile Include="Mail.cs" />
-    <Compile Include="UniversalM-Classes\MEnvironment.cs" />
     <Compile Include="Models\ApiResult.cs" />
     <Compile Include="Models\OperationResult_V2.cs" />
     <Compile Include="Models\OperationResult.cs" />
@@ -93,6 +92,7 @@
     <Compile Include="MDateTime.cs" />
     <Compile Include="MTimer.cs" />
     <Compile Include="SystemInfoUtil.cs" />
+    <Compile Include="UniversalM-Classes\MEnvironment.cs" />
     <Compile Include="UniversalM-Classes\MSystem.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Util_Network.cs" />
