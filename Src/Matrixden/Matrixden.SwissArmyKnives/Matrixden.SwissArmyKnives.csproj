@@ -82,6 +82,7 @@
     <Compile Include="Email\EmailHelper.cs" />
     <Compile Include="Converters\MImageConverter.cs" />
     <Compile Include="Mail.cs" />
+    <Compile Include="Math\PiecewiseLinearFunction.cs" />
     <Compile Include="Models\ApiResult.cs" />
     <Compile Include="Models\OperationResult_V2.cs" />
     <Compile Include="Models\OperationResult.cs" />
