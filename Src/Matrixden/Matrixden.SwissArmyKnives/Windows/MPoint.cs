@@ -137,7 +137,7 @@ namespace Matrixden.SwissArmyKnives.Windows
                 right = new MPoint(0);
             }
 
-            return Math.Sqrt((Math.Pow(right.X - left.X, 2) + Math.Pow(right.Y - left.Y, 2)));
+            return System.Math.Sqrt((System.Math.Pow(right.X - left.X, 2) + System.Math.Pow(right.Y - left.Y, 2)));
         }
 
         /// <summary>
