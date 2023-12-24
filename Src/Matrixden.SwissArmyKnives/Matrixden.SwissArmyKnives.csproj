@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Matrixden.SwissArmyKnives</RootNamespace>
     <AssemblyName>Matrixden.SwissArmyKnives</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>10.0</LangVersion>
     <TargetFrameworkProfile />
@@ -82,7 +82,7 @@
     <Compile Include="Email\EmailHelper.cs" />
     <Compile Include="Converters\MImageConverter.cs" />
     <Compile Include="Mail.cs" />
-    <Compile Include="Math\PiecewiseLinearFunction.cs" />
+    <Compile Include="MPower\MEnumerable.cs" />
     <Compile Include="Models\ApiResult.cs" />
     <Compile Include="Models\OperationResult_V2.cs" />
     <Compile Include="Models\OperationResult.cs" />
@@ -90,9 +90,14 @@
     <Compile Include="RandomValueGenerator.cs" />
     <Compile Include="RegistryUtil.cs" />
     <Compile Include="Serialization\JsonHelper.cs" />
-    <Compile Include="MDateTime.cs" />
-    <Compile Include="MTimer.cs" />
+    <Compile Include="MPower\MDateTime.cs" />
+    <Compile Include="MPower\MTimer.cs" />
     <Compile Include="SystemInfoUtil.cs" />
+    <Compile Include="SystemInfo\DeviceSpecifications.cs" />
+    <Compile Include="SystemInfo\MSerialDevice.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SystemInfo\WindowsSpecifications.cs" />
     <Compile Include="UniversalM-Classes\MEnvironment.cs" />
     <Compile Include="UniversalM-Classes\MSystem.cs" />
     <Compile Include="Util.cs" />
