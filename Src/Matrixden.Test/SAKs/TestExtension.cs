@@ -1,6 +1,9 @@
-﻿using Matrixden.Utils.Extensions;
+﻿using Matrixden.SAK.Extensions;
+using Matrixden.Utils.Extensions;
+using Matrixden.Zion.Models.User;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -37,6 +40,17 @@ namespace Matrixden.Test.SAKs
 
             Debug.WriteLine(a.HexString(6));
             Assert.AreEqual(astr, a.HexString(6, ' '));
+        }
+
+        [TestMethod]
+        public void TestEnumerableIndexOf()
+        {
+            var ls = new List<UserInfoModel> { new() { Name = "Jack" }, new() { Name = "Bob" }, new() { Name = "Tom" } };
+            UserInfoModel u = new() { Name = "Jerry" }, u2 = new() { Name = "Tom" };
+
+            Assert.AreEqual(-1, ls.IndexOf(u2, "name"));
+            Assert.AreEqual(2, ls.IndexOf(u2, "Name"));
+            Assert.AreEqual(-1, ls.IndexOf(u));
         }
     }
 }

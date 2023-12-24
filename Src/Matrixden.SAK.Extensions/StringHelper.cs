@@ -1,5 +1,4 @@
-﻿using Matrixden.Utils.Extensions.Logging;
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;

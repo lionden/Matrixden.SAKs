@@ -1,6 +1,7 @@
-﻿namespace Matrixden.Utils.Extensions
+﻿global using Matrixden.Utils.Extensions.Logging;
+
+namespace Matrixden.Utils.Extensions
 {
-    using Matrixden.Utils.Extensions.Logging;
     using System;
     using System.IO;
     using System.Linq;
@@ -11,7 +12,7 @@
     /// <summary>
     /// Extend methods.
     /// </summary>
-    public static class Extension
+    public static partial class Extension
     {
         private static readonly ILog _LOG = LogProvider.GetCurrentClassLogger();
         /// <summary>

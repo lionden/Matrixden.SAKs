@@ -13,19 +13,5 @@ namespace Matrixden.Test.SAKs
         {
             var r = DeviceSpecifications.SerialDevices();
         }
-
-        [TestMethod]
-        public void TestCheckAndInstallDotNetVersion()
-        {
-            WindowsSpecifications.CheckAndInstallDotNetVersion("6.0.0", r =>
-            {
-                if (!r.Result)
-                {
-                    return MessageBoxResult.Yes;
-                }
-
-                return default;
-            });
-        }
     }
 }
