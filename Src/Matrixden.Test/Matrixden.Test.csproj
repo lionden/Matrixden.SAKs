@@ -50,7 +50,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBUtilities\TestMySqlRepository.cs" />
     <Compile Include="JsonHelperTest.cs" />
     <Compile Include="Models\TestApiResult.cs" />
     <Compile Include="Models\User\UserInfoModel.cs" />
@@ -71,18 +70,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Matrixden.DBUtilities.Attributes\Matrixden.DBUtilities.Attributes.csproj">
-      <Project>{40d9cb53-48e7-4616-991f-d988ea1d9a39}</Project>
-      <Name>Matrixden.DBUtilities.Attributes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Matrixden.DBUtilities\Matrixden.DBUtilities.csproj">
-      <Project>{03731e72-947f-4bc5-b22a-561641b46db1}</Project>
-      <Name>Matrixden.DBUtilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Matrixden.UnifiedDBAdapter\Matrixden.UnifiedDBAdapter.csproj">
-      <Project>{015e7fad-38ee-49f4-82ff-9f6b9afa5af4}</Project>
-      <Name>Matrixden.UnifiedDBAdapter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Matrixden.SAK.Extensions\Matrixden.SAK.Extensions.csproj">
       <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
       <Name>Matrixden.SAK.Extensions</Name>
@@ -92,7 +79,9 @@
       <Name>Matrixden.SwissArmyKnives</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DBUtilities\" />
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

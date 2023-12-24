@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Matrixden.DBUtilities.Attributes;
 
 namespace Matrixden.Zion.Models.User
 {
-    [Table("user_info")]
     public class UserInfoModel : ZionModel
     {
         public int UserNO { get; set; }
