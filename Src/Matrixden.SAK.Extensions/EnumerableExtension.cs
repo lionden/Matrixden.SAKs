@@ -128,10 +128,13 @@ namespace Matrixden.SAK.Extensions
         /// <param name="item"></param>
         /// <param name="fieldToBeCompare"></param>
         /// <returns>The zero-based index of the first occurrence of value within the entire sequence if found; otherwise, –1.</returns>
-        public static int IndexOf<T>(this IEnumerable<T> source, T item, string fieldToBeCompare = default) where T : class, new()
+        public static int IndexOf<T>(this IEnumerable<T> source, T item, string fieldToBeCompare = default)
         {
-            if (source == default || item == default)
+            if (source == default)
                 return -1;
+
+            if (typeof(T).IsPrimitive)
+                fieldToBeCompare = default;
 
             if (fieldToBeCompare.IsNullOrEmptyOrWhiteSpace())
             {

@@ -48,6 +48,7 @@ namespace Matrixden.Test.SAKs
             var ls = new List<UserInfoModel> { new() { Name = "Jack" }, new() { Name = "Bob" }, new() { Name = "Tom" } };
             UserInfoModel u = new() { Name = "Jerry" }, u2 = new() { Name = "Tom" };
 
+            Assert.AreEqual(-1, new List<int>().IndexOf(1, default));
             Assert.AreEqual(-1, ls.IndexOf(u2, "name"));
             Assert.AreEqual(2, ls.IndexOf(u2, "Name"));
             Assert.AreEqual(-1, ls.IndexOf(u));
