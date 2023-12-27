@@ -27,17 +27,15 @@ namespace Matrixden.SAK.Extensions
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
-        /// <param name="predicate"></param>
+        /// <param name="action"></param>
         /// <returns></returns>
-        public static IEnumerable<TSource> ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> predicate)
+        public static IEnumerable<TSource> ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
-            if (source == default)
+            if (source == default || !source.Any() || action == default)
                 return source;
 
             foreach (TSource item in source)
-            {
-                predicate(item);
-            }
+                action(item);
 
             return source;
         }
@@ -75,20 +73,18 @@ namespace Matrixden.SAK.Extensions
         /// Traversal the whole list, do the given action. It'll return the item's index.
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        public static IEnumerable<TSource> For<TSource>(this IEnumerable<TSource> source, Action<TSource, int> predicate)
+        /// <param name="source">When it is null, return it directly.</param>
+        /// <param name="action">When it is null, return source directly.</param>
+        public static IEnumerable<TSource> For<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
         {
-            if (source == default)
+            if (source == default || !source.Any() || action == default)
                 return source;
 
-            IList<TSource> list = (source as IList<TSource>) ?? source.ToList();
-            for (int i = 0; i < list.Count; i++)
-            {
-                predicate(list[i], i);
-            }
+            var i = 0;
+            foreach (TSource item in source)
+                action(item, i++);
 
-            return list;
+            return source;
         }
 
         /// <summary>
@@ -121,7 +117,7 @@ namespace Matrixden.SAK.Extensions
         public static IEnumerable For<T>(this IEnumerable source, Action<T, int> action) => source.For((o, i) => action((T)o, i));
 
         /// <summary>
-        /// Searches for the specified object and returns the index of the first occurrence within the entire <c>IEnumerable<T></c>.
+        /// Searches for the specified object and returns the index of the first occurrence within the entire <see cref="T:System.Collections.Generic.IEnumerable`1" />.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -130,7 +126,7 @@ namespace Matrixden.SAK.Extensions
         /// <returns>The zero-based index of the first occurrence of value within the entire sequence if found; otherwise, –1.</returns>
         public static int IndexOf<T>(this IEnumerable<T> source, T item, string fieldToBeCompare = default)
         {
-            if (source == default)
+            if (source == default || !source.Any())
                 return -1;
 
             if (typeof(T).IsPrimitive)
@@ -147,6 +143,29 @@ namespace Matrixden.SAK.Extensions
 
                 return Array.IndexOf(source.Select(s => s.Value(fieldToBeCompare)).ToArray(), item.Value(fieldToBeCompare));
             }
+        }
+
+        /// <summary>
+        /// Safely appends a value to the end of the sequence.
+        /// This also provide an append method for project with NET462 or earlier.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="element"></param>
+        /// <returns>A new sequence that ends with element.</returns>
+        public static IEnumerable<T> Append2<T>(this IEnumerable<T> source, T element)
+        {
+            if (source == default || !source.Any())
+                return new T[] { element };
+
+            var array = new T[source.Count() + 1];
+            array[array.Length - 1] = element;
+            source.For((s, i) =>
+            {
+                array[i] = s;
+            });
+
+            return array;
         }
     }
 }

@@ -53,9 +53,11 @@
   <ItemGroup>
     <Compile Include="JsonHelperTest.cs" />
     <Compile Include="Models\TestApiResult.cs" />
+    <Compile Include="Models\UserRoleStruct.cs" />
     <Compile Include="Models\User\UserInfoModel.cs" />
     <Compile Include="Models\ZionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SAKs\TestEnumerableExtension.cs" />
     <Compile Include="SAKs\TestMPower.cs" />
     <Compile Include="SAKs\TestProcessUtil.cs" />
     <Compile Include="SAKs\TestStringHelper.cs" />
