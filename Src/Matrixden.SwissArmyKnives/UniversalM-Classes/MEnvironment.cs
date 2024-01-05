@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static System.Environment;
 
 namespace Matrixden.SwissArmyKnives
 {
@@ -11,9 +7,14 @@ namespace Matrixden.SwissArmyKnives
     /// </summary>
     public class MEnvironment
     {
-        public static string Desktop => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        public static string DesktopDirectory => Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        public static string Desktop => SpecialFolder.Desktop.FolderPath();
+        public static string DesktopDirectory => SpecialFolder.DesktopDirectory.FolderPath();
 
-        public static string Startup => Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+        public static string Startup => SpecialFolder.Startup.FolderPath();
+    }
+
+    public static class SpecialFolderExtensions
+    {
+        public static string FolderPath(this SpecialFolder @this) => GetFolderPath(@this);
     }
 }
