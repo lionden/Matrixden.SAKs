@@ -15,5 +15,15 @@ namespace Matrixden.SwissArmyKnives
         public FileInfo File { get; set; }
 
         public bool Exists => File.Exists;
+
+        public void MoveTo(string destPath)
+        {
+            if (!Exists) return;
+
+            if (!Directory.Exists(destPath))
+                Directory.CreateDirectory(destPath);
+
+            File.MoveTo(Path.Combine(destPath, File.Name));
+        }
     }
 }
