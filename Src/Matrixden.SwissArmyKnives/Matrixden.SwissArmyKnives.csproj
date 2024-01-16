@@ -98,8 +98,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SystemInfo\WindowsSpecifications.cs" />
+    <Compile Include="UniversalM-Classes\MDirectory.cs" />
     <Compile Include="UniversalM-Classes\MEnvironment.cs" />
+    <Compile Include="UniversalM-Classes\MFile.cs" />
     <Compile Include="UniversalM-Classes\MSystem.cs" />
+    <Compile Include="UniversalM-Classes\TFile.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Util_Network.cs" />
     <Compile Include="Util_SystemInfo.cs" />
