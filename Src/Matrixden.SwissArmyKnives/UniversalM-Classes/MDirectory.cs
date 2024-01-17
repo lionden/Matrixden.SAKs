@@ -54,7 +54,7 @@ namespace Matrixden.SwissArmyKnives
         /// Move current folder into given folder (destFolder).
         /// </summary>
         /// <param name="destFolder"></param>
-        public void MoveTo(string destFolder)
+        public void MoveTo(string destFolder, bool autoDeleteSourceFolder = true)
         {
             if (!Exists) return;
             if (!System.IO.Directory.Exists(destFolder))
@@ -69,7 +69,7 @@ namespace Matrixden.SwissArmyKnives
             }
 
             SearchFiles.ForEach(f => f.MoveTo(destFolder, true));
-            if (Exists && IsEmpty)
+            if (autoDeleteSourceFolder && Exists && IsEmpty)
                 DInfo.Delete();
         }
 
@@ -81,7 +81,7 @@ namespace Matrixden.SwissArmyKnives
         public static void Move(string sourceFolder, string destFolder)
         {
             if (sourceFolder.IsNullOrEmptyOrWhiteSpace() || destFolder.IsNullOrEmptyOrWhiteSpace()) return;
-            new MDirectory(sourceFolder).MoveTo(destFolder);
+            new MDirectory(sourceFolder).MoveTo(destFolder, false);
         }
     }
 }
