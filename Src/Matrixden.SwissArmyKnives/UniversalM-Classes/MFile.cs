@@ -6,28 +6,37 @@ namespace Matrixden.SwissArmyKnives
     {
         public MFile(FileInfo file)
         {
-            File = file;
+            FInfo = file;
         }
         public MFile(string file) : this(new FileInfo(file))
         {
         }
 
-        public FileInfo File { get; set; }
+        public FileInfo FInfo { get; set; }
 
-        public bool Exists => File.Exists;
+        public bool Exists => FInfo.Exists;
 
         /// <summary>
         /// Move current file into given folder (destFolder).
         /// </summary>
         /// <param name="destFolder"></param>
-        public void MoveTo(string destFolder)
+        public void MoveTo(string destFolder, bool overwrite = false)
         {
             if (!Exists) return;
 
+            var df = Path.Combine(destFolder, FInfo.Name);
             if (!Directory.Exists(destFolder))
                 Directory.CreateDirectory(destFolder);
+            else if (File.Exists(df))
+                if (overwrite)
+                {
+                    File.SetAttributes(df, FileAttributes.Normal);
+                    File.Delete(df);
+                }
+                else
+                    return;
 
-            File.MoveTo(Path.Combine(destFolder, File.Name));
+            FInfo.MoveTo(df);
         }
     }
 }
