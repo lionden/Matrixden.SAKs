@@ -49,23 +49,32 @@ namespace Matrixden.SwissArmyKnives
 
         public MDirectory Parent => new(Directory.Parent, string.Empty);
 
-        public void MoveTo(string destinationFolder)
+        /// <summary>
+        /// Move current folder into given folder (destFolder).
+        /// </summary>
+        /// <param name="destFolder"></param>
+        public void MoveTo(string destFolder)
         {
             if (!Exists) return;
             if (HasSubdirectories)
             {
-                Subdirectories.ForEach(f => f.MoveTo(destinationFolder));
+                Subdirectories.ForEach(f => f.MoveTo(Path.Combine(destFolder, f.Name)));
             }
 
-            SearchFiles.ForEach(f => f.MoveTo(destinationFolder));
+            SearchFiles.ForEach(f => f.MoveTo(destFolder));
             if (Exists && IsEmpty)
                 Directory.Delete();
         }
 
-        public static void Move(string sourceFolder, string destinationFolder)
+        /// <summary>
+        /// Move all files (or folders) under source folder to dest folder.
+        /// </summary>
+        /// <param name="sourceFolder"></param>
+        /// <param name="destFolder"></param>
+        public static void Move(string sourceFolder, string destFolder)
         {
-            if (sourceFolder.IsNullOrEmptyOrWhiteSpace() || destinationFolder.IsNullOrEmptyOrWhiteSpace()) return;
-            new MDirectory(sourceFolder).MoveTo(destinationFolder);
+            if (sourceFolder.IsNullOrEmptyOrWhiteSpace() || destFolder.IsNullOrEmptyOrWhiteSpace()) return;
+            new MDirectory(sourceFolder).MoveTo(destFolder);
         }
     }
 }
