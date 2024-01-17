@@ -54,10 +54,10 @@ namespace Matrixden.SwissArmyKnives
             if (!Exists) return;
             if (HasSubdirectories)
             {
-                Subdirectories.ForEach(f => f.MoveTo(Path.Combine(destinationFolder, f.Parent.Name)));
+                Subdirectories.ForEach(f => f.MoveTo(destinationFolder));
             }
 
-            SearchFiles.ForEach(f => f.MoveTo(Path.Combine(destinationFolder, Name)));
+            SearchFiles.ForEach(f => f.MoveTo(destinationFolder));
             if (Exists && IsEmpty)
                 Directory.Delete();
         }
