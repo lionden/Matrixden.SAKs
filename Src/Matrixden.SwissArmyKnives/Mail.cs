@@ -117,13 +117,33 @@ namespace Matrixden.Utils
         /// Gets or sets the subject line for this e-mail message.
         /// </summary>
         /// <returns>A <see cref="T:System.String" /> that contains the subject content.</returns>
-        public string Subject { get; set; }
+        public string Subject
+        {
+            get
+            {
+                return MailMessage.Subject;
+            }
+            set
+            {
+                MailMessage.Subject = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the message body.
         /// </summary>
         /// <returns>A <see cref="T:System.String" /> value that contains the body text.</returns>
-        public string Body { get; set; }
+        public string Body
+        {
+            get
+            {
+                return MailMessage.Body;
+            }
+            set
+            {
+                MailMessage.Body = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the encoding used to encode the message body.
@@ -342,70 +362,6 @@ namespace Matrixden.Utils
             {
                 log.ErrorException("Failed to send E-Mail.", ex);
             }
-        }
-
-        /// <summary>
-        /// Auto send back request error.
-        /// </summary>
-        /// <param name="mail"></param>
-        public static void SendRequestError(Mail mail)
-        {
-            try
-            {
-                mail.DisplayName = "Auto Feedback";
-                mail.Priority = MailPriority.High;
-                mail.SenderServerHost = "smtp.exmail.qq.com";
-                mail.SenderServerPort = 25;
-                mail.EnablePwdAuthentication = true;
-                mail.SenderUsername = "reactor@xunmall.com";
-                mail.SenderPassword = "X7kzDChRDDtfc3Bv";
-                mail.MailMessage.To.Add("erpbs@xunmall.net");
-
-                mail.Send();
-            }
-            catch (Exception ex)
-            {
-                log.ErrorException("Failed to send E-Mail.", ex);
-            }
-        }
-
-        /// <summary>
-        /// Auto send back request error.
-        /// </summary>
-        /// <param name="info"></param>
-        public static void SendRequestError(string info)
-        {
-            Mail mail = new Mail("[Auto Feedback] Send from ERP server", info, false);
-            SendRequestError(mail);
-        }
-
-        /// <summary>
-        /// Auto send back request error async.
-        /// </summary>
-        /// <param name="info"></param>
-        public static async void SendRequestErrorAsync(string info)
-        {
-            await Task.Run(() => SendRequestError(info));
-        }
-
-        /// <summary>
-        /// Auto send back API error.
-        /// </summary>
-        /// <param name="msgHeader"></param>
-        public static void SendRequestError(string uri, string msgHeader)
-        {
-            Mail mail = new Mail("[API REQUEST ERROR] " + uri, msgHeader, true);
-            mail.Send();
-        }
-
-        /// <summary>
-        /// Auto send back API error async.
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="msgHeader"></param>
-        public static async void SendRequestErrorAsync(string uri, string msgHeader)
-        {
-            await Task.Run(() => SendRequestError(uri, msgHeader));
         }
     }
 }
