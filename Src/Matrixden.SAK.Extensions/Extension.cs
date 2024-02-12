@@ -191,5 +191,42 @@ namespace Matrixden.Utils.Extensions
         }
 
         #endregion
+
+        /// <summary>
+        /// 将SourceModel里面与TargetModel里面字段名一样的数据拷贝到TargetModel里
+        /// </summary>
+        /// <typeparam name="S"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sourceModel"></param>
+        /// <param name="targetModel"></param>
+        /// <exception cref="System.ArgumentNullException">Throw out ArgumentNullException when either source or target model is null.</exception>
+        public static void Sync<T>(this object sourceModel, T targetModel) where T : class, new()
+        {
+            if (sourceModel == null || targetModel == null)
+            {
+                throw new ArgumentNullException("Both source and target model cannot be NULL.");
+            }
+
+            var ps = typeof(T).GetProperties();
+            if (ps == null || ps.Length <= 0)
+                return;
+
+            foreach (var t in ps.Where(w => w.CanWrite))
+            {
+                var v = sourceModel.Value(t.Name);
+                if (v != null)
+                {
+                    t.SetValue(targetModel, v);
+                }
+            }
+        }
+
+        public static T Sync<T>(this object source) where T : class, new()
+        {
+            T t = new();
+            source.Sync(t);
+
+            return t;
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace Matrixden.Test.SAKs
         [TestMethod]
         public void TestForEach()
         {
-            IEnumerable<UserInfoModel> arr = default, arr2 = new List<UserInfoModel>(), arr3 = arr2.Append(new());
+            IEnumerable<UserInfoModel> arr = default, arr2 = new List<UserInfoModel>(), arr3 = arr2.AppendM(new());
             Assert.AreEqual(0, arr.ForEach(a => { }).Count());
             Assert.AreEqual(0, arr2.ForEach(a => { }).Count());
             Assert.AreEqual(1, arr3.ForEach(a => { }).Count());
@@ -40,10 +40,18 @@ namespace Matrixden.Test.SAKs
         public void TestEnumerableAppend()
         {
             IEnumerable<UserInfoModel> arr = default;
-            Assert.ThrowsException<ArgumentNullException>(() => arr.Append(new()));
+            Assert.ThrowsException<ArgumentNullException>(() => arr.AppendM(new()));
 
-            Assert.IsNotNull(arr.Append2(new()));
+            Assert.IsNotNull(arr.AppendM(new()));
             Assert.IsNull(arr);
+        }
+
+        [TestMethod]
+        public void TestEnumerableSelect()
+        {
+            var ls = new List<int> { 1, 2, 3, 4 };
+
+            var r = ls.SelectM((s, i) => $"{s}-{i}");
         }
     }
 }

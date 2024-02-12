@@ -1,4 +1,5 @@
 ﻿using Matrixden.SAK.Extensions;
+using Matrixden.SwissArmyKnives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
@@ -21,6 +22,12 @@ namespace Matrixden.Test.SAKs
             MEnumerable.Range(3, 1).ForEach(x => Trace.Write(x + " "));
             Trace.WriteLine("");
             MEnumerable.Range(3, -2).ForEach(x => Trace.Write(x + " "));
+        }
+
+        [TestMethod]
+        public void TestDirectoryMovement()
+        {
+            MDirectory.Move("D:\\tmp\\0\\simulator test tool", "D:\\tmp\\1");
         }
     }
 }

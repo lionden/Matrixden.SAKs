@@ -153,7 +153,7 @@ namespace Matrixden.SAK.Extensions
         /// <param name="source"></param>
         /// <param name="element"></param>
         /// <returns>A new sequence that ends with element.</returns>
-        public static IEnumerable<T> Append2<T>(this IEnumerable<T> source, T element)
+        public static IEnumerable<T> AppendM<T>(this IEnumerable<T> source, T element)
         {
             if (source == default || !source.Any())
                 return new T[] { element };
@@ -166,6 +166,30 @@ namespace Matrixden.SAK.Extensions
             });
 
             return array;
+        }
+
+        public static IEnumerable<TResult> SelectM<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, int, TResult> selector)
+        {
+            int i = 0;
+            return source.Select(s => selector(s, i++));
+        }
+
+        public static List<T> DeepCopy<T>(this List<T> source) where T : class, new()
+        {
+            List<T> newList = new();
+            source.ForEach(f =>
+            {
+                if (f is ICloneable)
+                {
+                    newList.Add((T)(f as ICloneable).Clone());
+                }
+                else
+                {
+                    newList.Add(f.Sync<T>());
+                }
+            });
+
+            return newList;
         }
     }
 }
