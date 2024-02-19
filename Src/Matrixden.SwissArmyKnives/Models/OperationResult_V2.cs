@@ -1,12 +1,13 @@
 ﻿/**
  * 一些复合工具实体类型.
  */
-
 namespace Matrixden.Utils.Models
 {
-    using Matrixden.Utils.Serialization;
-    using System;
+    public class OperationResult<T> : SwissArmyKnives.Models.OperationResult<T> where T : class, new() { }
+}
 
+namespace Matrixden.SwissArmyKnives.Models
+{
     /// <summary>
     /// 操作结果实体
     /// </summary>

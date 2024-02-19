@@ -1,11 +1,11 @@
-﻿using Matrixden.Utils.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Matrixden.Utils.Models
+{
+    public class ApiResult : SwissArmyKnives.Models.ApiResult { }
+}
+
+namespace Matrixden.SwissArmyKnives.Models
 {
     /// <summary>
     /// 接口结果
