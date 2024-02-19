@@ -1,8 +1,8 @@
 ﻿using IWshRuntimeLibrary;
 using Matrixden.SAK.Extensions;
+using Matrixden.SwissArmyKnives.Models;
 using Matrixden.Utils.Extensions;
 using Matrixden.Utils.Logging;
-using Matrixden.Utils.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

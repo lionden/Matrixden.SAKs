@@ -1,10 +1,5 @@
 ﻿using System;
 
-namespace Matrixden.Utils.Models
-{
-    public class ApiResult : SwissArmyKnives.Models.ApiResult { }
-}
-
 namespace Matrixden.SwissArmyKnives.Models
 {
     /// <summary>
@@ -86,14 +81,17 @@ namespace Matrixden.SwissArmyKnives.Models
     }
 }
 
+namespace Matrixden.Utils.Models
+{
+    [Obsolete("OBSOLETE! Please use Matrixden.SwissArmyKnives.Models.ApiResult instead.")]
+    public class ApiResult : SwissArmyKnives.Models.ApiResult { }
+}
+
 namespace Matrixden.Utils.Web.Models
 {
     /// <summary>
     /// 接口结果
     /// </summary>
-    [Obsolete("Please use Matrixden.Utils.Models.ApiResult instead.")]
-    public class ApiResult : Matrixden.Utils.Models.ApiResult
-    {
-
-    }
+    [Obsolete("OBSOLETE! Please use Matrixden.SwissArmyKnives.Models.ApiResult instead.")]
+    public class ApiResult : Matrixden.Utils.Models.ApiResult { }
 }

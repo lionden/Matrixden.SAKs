@@ -1,9 +1,37 @@
-﻿/**
+﻿
+using System;
+
+/**
  * 一些复合工具实体类型.
  */
 namespace Matrixden.Utils.Models
 {
-    public class OperationResult<T> : SwissArmyKnives.Models.OperationResult<T> where T : class, new() { }
+    [Obsolete("OBSOLETE! Please use Matrixden.SwissArmyKnives.Models.OperationResult<T> instead.")]
+    public class OperationResult<T> : SwissArmyKnives.Models.OperationResult<T> where T : class, new()
+    {
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
+        public OperationResult() : base() { }
+
+        /// <summary>
+        /// 带错误消息的构造函数
+        /// </summary>
+        /// <param name="errorMsg"></param>
+        public OperationResult(string errorMsg) : base(errorMsg) { }
+
+        /// <summary>
+        /// 仅待失败结果的构造函数
+        /// </summary>
+        /// <param name="result"></param>
+        public OperationResult(bool result) : base(result) { }
+
+        /// <summary>
+        /// 待数据返还的构造函数
+        /// </summary>
+        /// <param name="data"></param>
+        public OperationResult(T data) : base(data) { }
+    }
 }
 
 namespace Matrixden.SwissArmyKnives.Models

@@ -1,9 +1,51 @@
-﻿/**
+﻿
+using System;
+
+/**
  * 一些复合工具实体类型.
  */
 namespace Matrixden.Utils.Models
 {
-    public class OperationResult : SwissArmyKnives.Models.OperationResult { }
+    [Obsolete("OBSOLETE! Please use Matrixden.SwissArmyKnives.Models.OperationResult instead.")]
+    public class OperationResult : SwissArmyKnives.Models.OperationResult
+    {
+
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
+        public OperationResult() : base() { }
+
+        /// <summary>
+        /// 带错误消息的构造函数
+        /// </summary>
+        /// <param name="errorMsg"></param>
+        public OperationResult(string errorMsg) : base(errorMsg) { }
+
+        /// <summary>
+        /// 带错误消息及错误代码的构造函数
+        /// </summary>
+        /// <param name="errorMsg"></param>
+        /// <param name="errCode"></param>
+        public OperationResult(string errorMsg, int errCode) : base(errorMsg) { }
+
+        /// <summary>
+        /// 带错误代码的构造函数
+        /// </summary>
+        /// <param name="errCode"></param>
+        public OperationResult(int errCode) : base(errCode) { }
+
+        /// <summary>
+        /// 仅待失败结果的构造函数
+        /// </summary>
+        /// <param name="result"></param>
+        public OperationResult(bool result) : base(result) { }
+
+        /// <summary>
+        /// 待数据返还的构造函数
+        /// </summary>
+        /// <param name="data"></param>
+        public OperationResult(object data) : base(data) { }
+    }
 }
 
 namespace Matrixden.SwissArmyKnives.Models

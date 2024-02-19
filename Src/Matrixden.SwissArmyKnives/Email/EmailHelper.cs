@@ -1,18 +1,15 @@
-﻿using Matrixden.Utils;
+﻿using Matrixden.SwissArmyKnives.Models;
+using Matrixden.Utils;
 using Matrixden.Utils.Extensions;
 using Matrixden.Utils.Logging;
-using Matrixden.Utils.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Matrixden.SwissArmyKnives
 {
