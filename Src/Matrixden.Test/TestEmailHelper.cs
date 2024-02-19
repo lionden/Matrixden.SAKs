@@ -1,12 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using static System.Net.Mime.MediaTypeNames;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-using Matrixden.SwissArmyKnives;
+﻿using Matrixden.SwissArmyKnives;
+using Matrixden.SwissArmyKnives.Models;
 using Matrixden.Utils.Extensions;
-using Matrixden.Utils.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Matrixden.Test
 {

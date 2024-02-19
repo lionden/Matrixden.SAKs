@@ -84,7 +84,32 @@ namespace Matrixden.SwissArmyKnives.Models
 namespace Matrixden.Utils.Models
 {
     [Obsolete("OBSOLETE! Please use Matrixden.SwissArmyKnives.Models.ApiResult instead.")]
-    public class ApiResult : SwissArmyKnives.Models.ApiResult { }
+    public class ApiResult : SwissArmyKnives.Models.ApiResult
+    {
+
+        /// <summary>
+        /// 失败结果初始化
+        /// </summary>
+        public ApiResult() : base() { }
+
+        /// <summary>
+        /// 将错误信息, 转为接口结果
+        /// </summary>
+        /// <param name="errorMsg"></param>
+        public ApiResult(string errorMsg) : base(errorMsg) { }
+
+        /// <summary>
+        /// 根据数据实体, 返回接口结果
+        /// </summary>
+        /// <param name="data"></param>
+        public ApiResult(object data) : base(data) { }
+
+        /// <summary>
+        /// 将<c>OperationResult</c>结果转为<c>ApiResult</c>
+        /// </summary>
+        /// <param name="result"></param>
+        public ApiResult(OperationResult result) : base(result) { }
+    }
 }
 
 namespace Matrixden.Utils.Web.Models

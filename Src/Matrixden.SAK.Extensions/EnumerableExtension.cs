@@ -10,7 +10,7 @@ namespace Matrixden.SAK.Extensions
     /// <summary>
     /// Extension methods form IEnumerable collection.
     /// </summary>
-    public static class EnumerableExtension
+    public static partial class EnumerableExtension
     {
         /// <summary>
         /// Traversal the whole list, do the given action.
@@ -89,6 +89,7 @@ namespace Matrixden.SAK.Extensions
 
         /// <summary>
         /// Traversal the whole list, do the given action. It'll return the item's index from 0.
+        /// From .NET 6.0, this feature has already supported by official. Use official function, please.
         /// </summary>
         /// <param name="source"></param>
         /// <param name="action"></param>
@@ -115,7 +116,6 @@ namespace Matrixden.SAK.Extensions
         /// <param name="action"></param>
         /// <returns></returns>
         public static IEnumerable For<T>(this IEnumerable source, Action<T, int> action) => source.For((o, i) => action((T)o, i));
-
         /// <summary>
         /// Searches for the specified object and returns the index of the first occurrence within the entire <see cref="T:System.Collections.Generic.IEnumerable`1" />.
         /// </summary>
@@ -143,6 +143,21 @@ namespace Matrixden.SAK.Extensions
 
                 return Array.IndexOf(source.Select(s => s.Value(fieldToBeCompare)).ToArray(), item.Value(fieldToBeCompare));
             }
+        }
+
+        /// <summary>
+        /// Searches for the specified object and returns the index of the first occurrence within the entire <see cref="T:System.Collections.Generic.IEnumerable`1" />.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="filter"></param>
+        /// <returns>The zero-based index of the first occurrence of value within the entire sequence if found; otherwise, –1.</returns>
+        public static int IndexOf<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> filter)
+        {
+            if (source == default || !source.Any()) return -1;
+            if (filter == null) return -1;
+
+            return Array.IndexOf(source.ToArray(), source.FirstOrDefault(f => filter(f)));
         }
 
         /// <summary>

@@ -34,6 +34,12 @@ namespace Matrixden.Test.SAKs
             Assert.AreEqual(-1, ls.IndexOf(u2, "name"));
             Assert.AreEqual(2, ls.IndexOf(u2, "Name"));
             Assert.AreEqual(-1, ls.IndexOf(u));
+
+            Assert.AreEqual(0, ls.IndexOf(i => i.Name == "Jack"));
+            Assert.AreEqual(-1, ls.IndexOf(i => i.Name == ""));
+
+            Assert.IsTrue(ls.Remove(r => r.Name == "Jack"));
+            Assert.IsTrue(ls.Remove(r => r.Name == ""));
         }
 
         [TestMethod]
