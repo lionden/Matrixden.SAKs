@@ -6,7 +6,13 @@ using System.Text;
 
 namespace Matrixden.Utils
 {
-    public partial class Util
+    [Obsolete("OBSOLETED! Use Matrixden.SwissArmyKnives.RandomValueGenerator instead.")]
+    public partial class Util : Matrixden.SwissArmyKnives.RandomValueGenerator { }
+}
+
+namespace Matrixden.SwissArmyKnives
+{
+    public class RandomValueGenerator
     {
         private static Random RandomObject
         {

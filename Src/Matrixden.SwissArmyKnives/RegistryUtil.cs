@@ -3,15 +3,19 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Matrixden.Utils
 {
     /// <summary>
     /// 注册表工具类
     /// </summary>
+    [Obsolete("OBSOLETED! Use Matrixden.SwissArmyKnives.RegistryUtil instead.")]
+    public class RegistryUtil : Matrixden.SwissArmyKnives.RegistryUtil { }
+}
+
+namespace Matrixden.SwissArmyKnives
+{
     public class RegistryUtil
     {
         private static readonly ILog log = LogProvider.GetCurrentClassLogger();
