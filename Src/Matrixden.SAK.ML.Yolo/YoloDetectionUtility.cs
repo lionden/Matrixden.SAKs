@@ -1,4 +1,5 @@
-﻿using Matrixden.SwissArmyKnives.Models;
+﻿using Matrixden.SAK.ML.Yolo.Models;
+using Matrixden.SwissArmyKnives.Models;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using OpenCvSharp;
@@ -12,12 +13,13 @@ namespace Matrixden.SAK.ML.Yolo
     public class YoloDetectionUtility
     {
         string _yoloPath;
-        public double scoreThreshold { get; set; }
-        public double nmsThreshold { get; set; }
+        public double ScoreThreshold { get; set; }
+        public double NmsThreshold { get; set; }
+        public string[] Labels { get; set; }
 
         private YoloDetectionUtility()
         {
-
+            Labels = [];
         }
 
         public YoloDetectionUtility(string yoloPath, ResizeModes resizeMode) : this()
@@ -40,7 +42,7 @@ namespace Matrixden.SAK.ML.Yolo
         /// ImageDetectionWithYolo
         /// </summary>
         /// <param name="image"></param>
-        /// <returns>List`RotatedRect</returns>
+        /// <returns>List`DetectionResult</returns>
         /// <exception cref="FileNotFoundException"></exception>
         public OperationResult ImageDetectionWithYolo(Mat image)
         {
@@ -155,7 +157,7 @@ namespace Matrixden.SAK.ML.Yolo
                     out min_classId_point, out max_classId_point);
                 // Confidence level between 0 ~ 1
                 // Obtain identification box information
-                if (max_score > scoreThreshold)
+                if (max_score > ScoreThreshold)
                 {
                     float cx = result_mat.At<float>(i, 0);
                     float cy = result_mat.At<float>(i, 1);
@@ -172,6 +174,7 @@ namespace Matrixden.SAK.ML.Yolo
                         Width = width,
                         Height = height
                     };
+
                     position_boxes.Add(box);
                     class_ids.Add(max_classId_point.X);
                     confidences.Add((float)max_score);
@@ -180,8 +183,8 @@ namespace Matrixden.SAK.ML.Yolo
             }
 
             // NMS 
-            CvDnn.NMSBoxes(position_boxes, confidences, (float)scoreThreshold, (float)nmsThreshold, out int[] indexes);
-            List<RotatedRect> rotated_rects = [];
+            CvDnn.NMSBoxes(position_boxes, confidences, (float)ScoreThreshold, (float)NmsThreshold, out int[] indexes);
+            List<DetectionResult> detectionResults = [];
             for (int i = 0; i < indexes.Length; i++)
             {
                 int index = indexes[i];
@@ -194,15 +197,15 @@ namespace Matrixden.SAK.ML.Yolo
                 float h_ = w > h ? h : w;
                 r = (float)((w > h ? r : (float)(r + System.Math.PI / 2)) % System.Math.PI);
                 RotatedRect rotate = new(new Point2f(x, y), new Size2f(w_, h_), (float)(r * 180.0 / System.Math.PI));
-                rotated_rects.Add(rotate);
-#if DEBUG
-                Console.WriteLine($"YoloDetectionUtility.Result{i}: {string.Join(' ', rotate.Points())}");
-#endif
+
+                DetectionResult result = new(rotate, confidences[index], Labels.Length > index ? Labels[index] : string.Empty);
+                Console.WriteLine($"YoloDetectionUtility.Result{i}: {result}");
+                detectionResults.Add(result);
             }
 
-            if (rotated_rects.Count <= 0) return OperationResult.False;
+            if (detectionResults.Count <= 0) return OperationResult.False;
 
-            return new(rotated_rects);
+            return new(detectionResults);
         }
     }
 
