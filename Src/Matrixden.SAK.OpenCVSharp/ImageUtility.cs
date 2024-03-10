@@ -28,6 +28,9 @@ namespace Matrixden.SAK.OpenCVSharp
             var sortedPoints = SortPointsClockwise(points);
 #if DEBUG
             var r = string.Empty;
+            var tp = $"{Path.GetTempPath()}MatrixDen";
+            if (!Directory.Exists(tp))
+                Directory.CreateDirectory(tp);
 #if DebugMode
             r = RandomValueGenerator.GetRandomString();
             var pts = points.Select(s => (Point)s);
@@ -39,11 +42,11 @@ namespace Matrixden.SAK.OpenCVSharp
             Cv2.Polylines(hull_mat, new Point[][] { convexHull }, true, Scalar.Red, 2, LineTypes.AntiAlias);
 
             // 显示图像
-            hull_mat.SaveImage($"{Path.GetTempPath()}IRA\\{nameof(RotateThenExtraction)}5.imageWithDetectedRect.hull_mat.{r}.png");
+            hull_mat.SaveImage($"{tp}\\{nameof(RotateThenExtraction)}5.imageWithDetectedRect.hull_mat.{r}.png");
 #endif
             using Mat rec_mat = image.Clone();
             Cv2.Rectangle(rec_mat, sortedPoints[0].ToPoint(), sortedPoints[2].ToPoint(), Scalar.Green, 2);
-            rec_mat.SaveImage($"{Path.GetTempPath()}IRA\\{nameof(RotateThenExtraction)}5.imageWithDetectedRect.rec_mat.{r}.png");
+            rec_mat.SaveImage($"{tp}\\{nameof(RotateThenExtraction)}5.imageWithDetectedRect.rec_mat.{r}.png");
 #endif
 
             // 定义目标矩形的宽高
@@ -52,12 +55,12 @@ namespace Matrixden.SAK.OpenCVSharp
 
             // 定义目标矩形的四个顶点坐标
             Point2f[] targetPoints =
-            [
+                [
                     new(0, 0),
-                new(width, 0),
-                new(width, height),
-                new(0, height)
-            ];
+                    new(width, 0),
+                    new(width, height),
+                    new(0, height)
+                ];
 
             // 计算透视变换矩阵
             var matrix = Cv2.GetPerspectiveTransform(sortedPoints, targetPoints);
@@ -67,7 +70,7 @@ namespace Matrixden.SAK.OpenCVSharp
             Cv2.WarpPerspective(image, warpedImage, matrix, new Size(width, height));
 #if DEBUG
             // 显示抠图结果
-            warpedImage.SaveImage($"{Path.GetTempPath()}IRA\\{nameof(RotateThenExtraction)}6.warpedImage.{r}.png");
+            warpedImage.SaveImage($"{tp}\\{nameof(RotateThenExtraction)}6.warpedImage.{r}.png");
 #endif
 
             return warpedImage;
