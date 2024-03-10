@@ -198,7 +198,7 @@ namespace Matrixden.SAK.ML.Yolo
                 r = (float)((w > h ? r : (float)(r + System.Math.PI / 2)) % System.Math.PI);
                 RotatedRect rotate = new(new Point2f(x, y), new Size2f(w_, h_), (float)(r * 180.0 / System.Math.PI));
 
-                DetectionResult result = new(rotate, confidences[index], Labels.Length > index ? Labels[index] : string.Empty);
+                DetectionResult result = new(index, confidences[index], rotate, Labels.Length > index ? Labels[index] : string.Empty);
                 Console.WriteLine($"YoloDetectionUtility.Result{i}: {result}");
                 detectionResults.Add(result);
             }

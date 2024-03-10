@@ -4,15 +4,17 @@ namespace Matrixden.SAK.ML.Yolo.Models
 {
     public class DetectionResult
     {
-        public RotatedRect Rect { get; set; }
-        public double Score { get; set; }
+        public int Index { get; set; }
         public string Label { get; set; }
+        public double Score { get; set; }
+        public RotatedRect Rect { get; set; }
 
         public DetectionResult() { }
-        public DetectionResult(RotatedRect rect, double score, string label) : this()
+        public DetectionResult(int index, double score, RotatedRect rect, string label = "") : this()
         {
-            Rect = rect;
+            Index = index;
             Score = score;
+            Rect = rect;
             Label = label;
         }
 
@@ -21,7 +23,7 @@ namespace Matrixden.SAK.ML.Yolo.Models
             if (this == default || Rect == default)
                 return string.Empty;
             else
-                return $"Label: {Label}; Score: {Score}; Rect: {string.Join(", ", Rect.Points())}";
+                return $"Index: {Index}; Label: {Label}; Score: {Score}; Rect: {string.Join(", ", Rect.Points())}";
         }
     }
 }
