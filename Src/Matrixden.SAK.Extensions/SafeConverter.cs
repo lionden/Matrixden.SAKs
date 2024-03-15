@@ -74,6 +74,22 @@ namespace Matrixden.Utils.Extensions
             return defaultVal;
         }
 
+        public static UInt16 ToUInt16(this string @this, UInt16 defaultVal = default)
+        {
+            if (UInt16.TryParse(@this, out UInt16 r))
+                return r;
+            else
+                return defaultVal;
+        }
+
+        public static float ToFloat(this string @this, float defaultVal = default)
+        {
+            if (float.TryParse(@this, out float f))
+                return f;
+            else
+                return defaultVal;
+        }
+
         /// <summary>
         /// Safe Convert a string value to an Int64 value.
         /// </summary>
@@ -193,6 +209,11 @@ namespace Matrixden.Utils.Extensions
 
         #region -- Object --
 
+        static T Bash<T>(object obj, Func<string, T> func)
+        {
+            return func(obj.ToString2());
+        }
+
         /// <summary>
         /// Safe Convert an object value to an Int16 value.
         /// </summary>
@@ -220,6 +241,10 @@ namespace Matrixden.Utils.Extensions
 
             return val.ToString().ToInt32(defaultVal);
         }
+
+        public static UInt16 ToUInt16(this object obj, UInt16 defaultVal = default) => Bash(obj, (val) => val.ToUInt16(defaultVal));
+
+        public static float ToFloat(this object obj, float defaultVal = default) => Bash(obj, (val) => val.ToFloat(defaultVal));
 
         /// <summary>
         /// Safe Convert an object value to an Int64 value.
