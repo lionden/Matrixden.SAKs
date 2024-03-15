@@ -42,6 +42,9 @@
     <Reference Include="AudioSwitcher.AudioApi.CoreAudio, Version=3.0.0.209, Culture=neutral, PublicKeyToken=fda5729e2db3a64f, processorArchitecture=MSIL">
       <HintPath>..\packages\AudioSwitcher.AudioApi.CoreAudio.3.0.0.1\lib\net40\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
     </Reference>
+    <Reference Include="Matrixden.SAK.Extensions, Version=3.3.2312.211, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Matrixden.SAK.Extensions.3.3.2402.192\lib\net462\Matrixden.SAK.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -120,12 +123,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Matrixden.SAK.Extensions\Matrixden.SAK.Extensions.csproj">
-      <Project>{a9209c7e-fcc0-4840-8270-66ea3f116055}</Project>
-      <Name>Matrixden.SAK.Extensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\SwissArmyKnife.ico">
