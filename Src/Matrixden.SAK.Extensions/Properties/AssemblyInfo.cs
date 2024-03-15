@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Matrixden.Utils.Extensions")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Matrixden.SAK.Extensions")]
+[assembly: AssemblyDescription("A library for extending .net object method.")]
 [assembly: AssemblyConfiguration("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

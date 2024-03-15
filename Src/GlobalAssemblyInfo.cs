@@ -3,9 +3,9 @@
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyCompany("matrixden.top")]
-[assembly: AssemblyProduct("Matrixden")]
-[assembly: AssemblyCopyright("Copyright © Lionden 2018 - 2023")]
+[assembly: AssemblyCompany("MatrixDen")]
+[assembly: AssemblyProduct("Matrixden.SwissArmyKnives")]
+[assembly: AssemblyCopyright("Copyright © Lionden 2018 - 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,5 +20,5 @@
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")
 //↓↓↓ Product version
-[assembly: AssemblyInformationalVersion("3.3.2312.21.1@LPC")]
-[assembly: AssemblyVersion("3.3.2312.211")]
+[assembly: AssemblyInformationalVersion("3.3.2403.16.1@15G6")]
+[assembly: AssemblyVersion("3.3.2403.161")]
