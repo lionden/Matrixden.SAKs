@@ -33,7 +33,7 @@ namespace Matrixden.SwissArmyKnives.Models
         /// <summary>
         /// data
         /// </summary>
-        public dynamic data { get; set; }
+        public object data { get; set; }
 
         /// <summary>
         /// 失败结果初始化
