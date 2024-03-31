@@ -31,7 +31,9 @@ namespace Matrixden.SwissArmyKnives
         public int SearchFileCount => (SearchFiles ?? new List<MFile>()).Count;
 
         public List<MFile> Files => DInfo.GetFiles().Select(s => new MFile(s)).ToList();
-        public int FileCount => (SearchFiles ?? new List<MFile>()).Count;
+        public int FileCount => (Files ?? new List<MFile>()).Count;
+
+        public bool HasMatchedFiles => SearchFileCount > 0;
 
         public bool Exists => DInfo.Exists;
 
@@ -51,13 +53,39 @@ namespace Matrixden.SwissArmyKnives
         public MDirectory Parent => new(DInfo.Parent, string.Empty);
 
         /// <summary>
+        /// Copy current folder into given folder (destFolder).
+        /// </summary>
+        /// <param name="destFolder"></param>
+        public void CopyTo(string destFolder)
+        {
+            if (!Exists) return;
+            if (!Directory.Exists(destFolder))
+            {
+                var di = Directory.CreateDirectory(destFolder);
+                di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
+            }
+
+            if (HasSubdirectories)
+            {
+                Subdirectories.ForEach(f => f.CopyTo(Path.Combine(destFolder, f.Name)));
+            }
+
+            SearchFiles.ForEach(f => f.CopyTo(destFolder, true));
+        }
+
+        /// <summary>
         /// Move current folder into given folder (destFolder).
         /// </summary>
         /// <param name="destFolder"></param>
         public void MoveTo(string destFolder, bool autoDeleteSourceFolder = true)
         {
+            CopyTo(destFolder);
+            if (autoDeleteSourceFolder && Exists && IsEmpty)
+                DInfo.Delete();
+
+
             if (!Exists) return;
-            if (!System.IO.Directory.Exists(destFolder))
+            if (!Directory.Exists(destFolder))
             {
                 var di = System.IO.Directory.CreateDirectory(destFolder);
                 di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
@@ -71,6 +99,18 @@ namespace Matrixden.SwissArmyKnives
             SearchFiles.ForEach(f => f.MoveTo(destFolder, true));
             if (autoDeleteSourceFolder && Exists && IsEmpty)
                 DInfo.Delete();
+        }
+
+        /// <summary>
+        /// Deletes the directory and matched files recursively.
+        /// NOTE: If the directory contains other files unmatched given pattern, the directory will NOT be delete.
+        /// </summary>
+        public void Delete()
+        {
+            if (!Exists) return;
+            if (HasMatchedFiles) SearchFiles.ForEach(f => f.Delete());
+            if (HasSubdirectories) Subdirectories.ForEach(f => f.Delete());
+            if (IsEmpty) DInfo.Delete();
         }
 
         /// <summary>
