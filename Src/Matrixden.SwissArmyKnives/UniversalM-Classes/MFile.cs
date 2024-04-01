@@ -73,5 +73,17 @@ namespace Matrixden.SwissArmyKnives
             File.SetAttributes(FInfo.FullName, FileAttributes.Normal);
             FInfo.Delete();
         }
+
+        /// <summary>
+        /// Rename a file.
+        /// </summary>
+        /// <param name="newName"></param>
+        public void Rename(string newName)
+        {
+            if (!Exists) return;
+
+            File.SetAttributes(FInfo.FullName, FileAttributes.Normal);
+            FInfo.MoveTo(Path.Combine(FInfo.DirectoryName, newName));
+        }
     }
 }

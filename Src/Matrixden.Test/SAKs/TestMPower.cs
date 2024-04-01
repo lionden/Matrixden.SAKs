@@ -29,5 +29,12 @@ namespace Matrixden.Test.SAKs
         {
             MDirectory.Move("D:\\tmp\\0\\simulator test tool", "D:\\tmp\\1");
         }
+
+        [TestMethod]
+        public void TestFileRename()
+        {
+            MFile file = new(@"D:\tmp\1.txt");
+            file.Rename("1.txt.bk");
+        }
     }
 }
