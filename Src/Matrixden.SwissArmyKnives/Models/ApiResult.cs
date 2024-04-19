@@ -46,7 +46,7 @@ namespace Matrixden.SwissArmyKnives.Models
         /// <param name="errorMsg"></param>
         public ApiResult(string errorMsg) : this()
         {
-
+            this.code = 0;
             this.isSuccess = SUCCESS_FAIL;
             this.message = errorMsg;
         }
@@ -58,7 +58,7 @@ namespace Matrixden.SwissArmyKnives.Models
         public ApiResult(object data) : this()
         {
 
-            code = data == default(dynamic) ? 0 : 1;
+            code = data == default ? -1 : 0;
             this.isSuccess = SUCCESS_SUCCESS;
             this.message = MESSAGE_SUCCESS;
             this.data = data;
